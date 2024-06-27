@@ -1,9 +1,11 @@
 import UserModel from "@/Model/User";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
 
-async function POST(request: Request) {
+export async function POST(request: Request) {
   try {
+    await dbConnect();
     const { username, email, password } = await request.json();
 
     const ExistingUserbyUsername = await UserModel.findOne({
@@ -14,9 +16,8 @@ async function POST(request: Request) {
     if (ExistingUserbyUsername) {
       return Response.json({
         success: false,
-        status: 400,
         message: "User already exists",
-      });
+      },{status: 400,});
     }
 
     const ExistingUserbyemail = await UserModel.findOne({
@@ -28,10 +29,9 @@ async function POST(request: Request) {
     if (ExistingUserbyemail) {
       if (ExistingUserbyemail.isVerified) {
         return Response.json({
-          status: 400,
           message: "User already exists",
           success:false,
-        });
+        },{status: 400});
       } else {
         const hashedPasword = await bcrypt.hash(password, 10);
         const expiryDate = new Date();
@@ -62,28 +62,25 @@ async function POST(request: Request) {
     }
 
     // send verification email
-      const emailResponse = await sendVerificationEmail(email,username,password);
+      const emailResponse = await sendVerificationEmail(email,username,verifyCode);
       
       if(!emailResponse.success){
         return Response.json({
           messgae:"error sending email",
           success:false,
-          status:500,
-        })
+        },{status:500,})
       }
 
       return Response.json({
         messgae:"User registered successfully, please verify your email",
         success:true,
-        status:200,
-      })
+      },{status:200,})
 
   } catch (error) {
     console.log("Error singning up");
     return Response.json({
-      status: 500,
       success: false,
       message: "Failed to signup",
-    });
+    },{status: 500,});
   }
 }

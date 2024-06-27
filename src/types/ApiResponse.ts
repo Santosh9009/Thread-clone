@@ -6,3 +6,4 @@ export interface ApiResponse{
   isAccesptingMessage?: boolean,
   Messages?: Array<Message>
 }
+
