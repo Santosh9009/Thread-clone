@@ -1,4 +1,5 @@
 import UserModel from "@/Model/User";
+import { SignupSchema } from "@/ZodSchema/ValidationSchema";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
@@ -7,6 +8,14 @@ export async function POST(request: Request) {
   try {
     await dbConnect();
     const { username, email, password } = await request.json();
+    
+    const result = SignupSchema.safeParse({username,email,password})
+    if(!result.success){
+      return Response.json({
+        success: false,
+        message: "Invalid input parameters",
+      },{status: 400,});
+    }
 
     const ExistingUserbyUsername = await UserModel.findOne({
       username,
@@ -17,7 +26,7 @@ export async function POST(request: Request) {
       return Response.json({
         success: false,
         message: "User already exists",
-      },{status: 400,});
+      },{status: 409,});
     }
 
     const ExistingUserbyemail = await UserModel.findOne({
@@ -31,7 +40,7 @@ export async function POST(request: Request) {
         return Response.json({
           message: "User already exists",
           success:false,
-        },{status: 400});
+        },{status: 409});
       } else {
         const hashedPasword = await bcrypt.hash(password, 10);
         const expiryDate = new Date();
