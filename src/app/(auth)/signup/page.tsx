@@ -1,12 +1,11 @@
 "use client";
-
 import { SignupSchema } from "@/ZodSchema/ValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import axios, { AxiosError } from "axios";
-import { useDebounceCallback, useDebounceValue } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
 import { ApiResponse } from "@/types/ApiResponse";
 import {
   Form,
@@ -21,7 +20,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export default function Signup() {
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -31,6 +31,7 @@ export default function Signup() {
   const { toast } = useToast();
   const router = useRouter();
   const debouncedUsername = useDebounceCallback(setUsername, 800);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof SignupSchema>>({
     resolver: zodResolver(SignupSchema),
@@ -54,8 +55,8 @@ export default function Signup() {
         } catch (error) {
           const axioserror = error as AxiosError<ApiResponse>;
           setUsernameMessage(
-            axioserror.response?.data.message ?? "error checking username"
-          )
+            axioserror.response?.data.message ?? "Error checking username"
+          );
         } finally {
           setIsCheckingUsername(false);
         }
@@ -69,15 +70,16 @@ export default function Signup() {
     try {
       const response = await axios.post("/api/signup", data);
       toast({
-        title: "success",
+        title: "Success",
         description: response.data.message,
       });
       router.replace(`/verify/${username}`);
     } catch (error) {
       const axioserror = error as AxiosError<ApiResponse>;
       toast({
-        title: "failure",
-        description: axioserror.response?.data.message ?? "Error Signing up",
+        title: "Failure",
+        description: axioserror.response?.data.message ?? "Error signing up",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -85,9 +87,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center w-full">
-      <div className="max-w-md mx-auto shadow-xl space-y-8 p-9">
-        <div className="text-center text-2xl font-medium ">Signup to join</div>
+    <div className="h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-md">
+        <div className="text-center text-2xl font-semibold mb-6">Signup to Join</div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
@@ -98,7 +100,7 @@ export default function Signup() {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="username"
+                      placeholder="Username"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -106,16 +108,16 @@ export default function Signup() {
                       }}
                     />
                   </FormControl>
-                  {isCheckingUsername && <Loader2 className="animate-spin" />}
+                  {isCheckingUsername && <Loader2 className="animate-spin mt-2" />}
                   {!isCheckingUsername && usernameMessage && (
                     <p
-                      className={`text-sm ${
-                        usernameMessage === 'username is unique'
-                          ? 'text-green-500'
-                          : 'text-red-500'
+                      className={`text-sm mt-2 ${
+                        usernameMessage === "Username is unique"
+                          ? "text-green-500"
+                          : "text-red-500"
                       }`}
                     >
-                      This {usernameMessage}
+                      {usernameMessage}
                     </p>
                   )}
                   <FormMessage />
@@ -129,7 +131,7 @@ export default function Signup() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Input placeholder="Email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -142,15 +144,42 @@ export default function Signup() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 focus:outline-none"
+                      >
+                        {showPassword ? <Eye /> : <EyeOff />}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-           <Button type="submit">{isSubmitting ? <><Loader2 className="animate-spin"/> Please wait</> : "Signup"}</Button>
+            <Button type="submit" className="w-full">
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin mr-2" /> Please wait
+                </>
+              ) : (
+                "Signup"
+              )}
+            </Button>
           </form>
         </Form>
+        <div className="mt-5 text-center text-slate-600 text-sm">
+          Already have an account?{" "}
+          <Link className="text-blue-500" href="/login">
+            Login
+          </Link>
+        </div>
       </div>
     </div>
   );

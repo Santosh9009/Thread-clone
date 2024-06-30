@@ -1,28 +1,53 @@
 import UserModel from "@/Model/User";
-import { UsernameSchema } from "@/ZodSchema/ValidationSchema";
+import { verifySchema } from "@/ZodSchema/ValidationSchema";
 import dbConnect from "@/lib/dbConnect";
 import { NextRequest } from "next/server";
 
-export async function GET(request:NextRequest,{params}:{params:{name:string}}){
+export async function POST(request:NextRequest,{params}:{params:{name:string}}){
   try{
     await dbConnect();
     const username = params.name;
+    const { verifyCode } = await request.json();
+    console.log(verifyCode)
 
-    const result = UsernameSchema.safeParse(username);
+    const result = verifySchema.safeParse({verifyCode});
     if(!result.success){
       return Response.json({
         success:false,
-        message:"Invalid username parameters"
+        message:"Invalid parameters"
       },{
         status:400
       })
     }
 
-    await UserModel.updateOne({username},{isVerified:true})
-    return Response.json({
-      success:true,
-        message:"Email verified Successfully",
-    },{status:200})
+    const user = await UserModel.findOne({username})
+    if(!user){
+      return Response.json({
+        success:false,
+        message:"User not found",
+      },{status:404})
+    }
+
+
+    if(user){
+
+     if(user?.verifyCode === verifyCode){
+      user.isVerified = true;
+      await user?.save();
+      return Response.json({
+        success:true,
+          message:"Email verified Successfully",
+      },{status:200})
+
+    }else{
+      return Response.json({
+        success:false,
+          message:"Invalid Verification Code",
+      },{status:200})
+    }
+
+  }
+    
 
 
   }catch{
