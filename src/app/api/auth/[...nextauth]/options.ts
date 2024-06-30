@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import UserModel from "@/Model/User";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import dbConnect from '@/lib/dbConnect';
 
 
 export const authOptions: NextAuthOptions = {
@@ -15,6 +16,8 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials):Promise<any> {
         try{
+          await dbConnect();
+          
           const user = await UserModel.findOne({
             email:credentials?.email
           })
@@ -33,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           }
           
         }catch(err:any){
-          throw new Error(err);
+          throw new Error("An Unexpected error occured");
         }
         
       },
@@ -66,6 +69,6 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages:{
-    signIn: 'api/auth/login'
+    signIn: '/login'
   }
 };

@@ -166,7 +166,7 @@ export default function Signup() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" disabled={isSubmitting && true} className="w-full">
               {isSubmitting ? (
                 <>
                   <Loader2 className="animate-spin mr-2" /> Please wait

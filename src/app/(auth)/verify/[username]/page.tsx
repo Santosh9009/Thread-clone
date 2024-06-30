@@ -30,7 +30,7 @@ export default function VerifyForm({params}:{params:{username:string}}) {
     },
   })
   
-  async function onSubmit(data: typeof verifySchema){
+  async function onSubmit(data: z.infer<typeof verifySchema>){
     try{
       const response = await axios.post(`/api/verify/${params.username}`,data)
       if(response.status===200){
