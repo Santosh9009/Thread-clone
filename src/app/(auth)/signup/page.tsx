@@ -87,7 +87,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
       <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-md">
         <div className="text-center text-2xl font-semibold mb-6">Signup to Join</div>
         <Form {...form}>
@@ -112,7 +112,7 @@ export default function Signup() {
                   {!isCheckingUsername && usernameMessage && (
                     <p
                       className={`text-sm mt-2 ${
-                        usernameMessage === "Username is unique"
+                        usernameMessage === "username is unique"
                           ? "text-green-500"
                           : "text-red-500"
                       }`}
@@ -133,6 +133,9 @@ export default function Signup() {
                   <FormControl>
                     <Input placeholder="Email" {...field} />
                   </FormControl>
+                  <FormDescription>
+                 A verification code will be sent to your email 
+              </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

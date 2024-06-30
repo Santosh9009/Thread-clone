@@ -1,5 +1,4 @@
 "use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -16,9 +15,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { verifySchema } from "@/ZodSchema/ValidationSchema"
+import axios, { AxiosError } from "axios"
+import { toast } from "@/components/ui/use-toast"
+import { ApiResponse } from "@/types/ApiResponse"
+import { useRouter } from "next/navigation"
 
-export default function VerifyForm() {
-
+export default function VerifyForm({params}:{params:{username:string}}) {
+  const router = useRouter();
+  
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
     defaultValues: {
@@ -26,8 +30,26 @@ export default function VerifyForm() {
     },
   })
   
-  async function onSubmit(){
-    // const response = axios.post()
+  async function onSubmit(data: typeof verifySchema){
+    try{
+      const response = await axios.post(`/api/verify/${params.username}`,data)
+      if(response.status===200){
+        router.replace('/login')
+      }
+      toast({
+        title:response.status===200?"Success":"Failure",
+        description:response.data.messgage,
+        variant:response.status===200?'default':'destructive'
+      })
+     
+    }catch(error){
+      const axioserror = error as AxiosError<ApiResponse>
+      toast({
+        title:"Failure",
+        description:axioserror.response?.data.message,
+        variant:"destructive"
+      })
+    }
   }
   
   return (
@@ -38,7 +60,7 @@ export default function VerifyForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="verifyCode"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Verification Code</FormLabel>
@@ -46,7 +68,7 @@ export default function VerifyForm() {
                 <Input placeholder="123456" {...field} />
               </FormControl>
               <FormDescription>
-                Enter your verification code here
+                 Verification code sent to your email 
               </FormDescription>
               <FormMessage />
             </FormItem>

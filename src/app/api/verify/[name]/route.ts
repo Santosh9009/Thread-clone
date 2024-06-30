@@ -43,7 +43,7 @@ export async function POST(request:NextRequest,{params}:{params:{name:string}}){
       return Response.json({
         success:false,
           message:"Invalid Verification Code",
-      },{status:200})
+      },{status:401})
     }
 
   }
