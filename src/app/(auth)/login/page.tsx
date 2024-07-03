@@ -56,9 +56,9 @@ export default function Login() {
   }
 
   return (
-    <div className="h-screen flex justify-center items-center font-sans p-4">
-      <div className="w-full max-w-md mx-auto rounded-md p-5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] space-y-6">
-        <h1 className="text-2xl font-semibold text-center my-5">Login</h1>
+    <div className="h-screen flex justify-center items-center font-sans p-4 bg-gray-100">
+      <div className="w-full max-w-sm mx-auto rounded-lg p-6 shadow-[0_3px_10px_rgb(0,0,0,0.2)] space-y-6 bg-white">
+        <h1 className="text-2xl font-semibold text-center my-4">Login</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -66,9 +66,9 @@ export default function Login() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email or Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@gmail.com" {...field} />
+                    <Input placeholder="John@gmail.com or John_doe" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -87,7 +87,7 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" disabled={isLoading}>
               {isLoading ?  <LucideLoader2 className="animate-spin mr-2" /> : "Login"}
             </Button>
           </form>

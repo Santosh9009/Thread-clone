@@ -53,8 +53,8 @@ export default function VerifyForm({params}:{params:{username:string}}) {
   }
   
   return (
-    <div className="h-screen flex justify-center items-center font-sans p-4">
-      <div className="w-full max-w-md mx-auto rounded-md p-5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] space-y-6">
+    <div className="h-screen flex justify-center items-center font-sans p-4 bg-gray-200">
+      <div className="max-w-md mx-auto w-full rounded-md p-5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] space-y-6 bg-white">
         <h1 className="text-2xl font-semibold text-center my-5">Verify your Account</h1>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -68,7 +68,7 @@ export default function VerifyForm({params}:{params:{username:string}}) {
                 <Input placeholder="123456" {...field} />
               </FormControl>
               <FormDescription>
-                 Verification code sent to your email 
+                 Enter the verification code sent to your email 
               </FormDescription>
               <FormMessage />
             </FormItem>
