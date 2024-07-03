@@ -1,44 +1,37 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface Message extends Document {
-  content: string;
-  createdAt: Date;
-}
-
-const MessageSchema : Schema<Message> = new Schema({
-  content: {
-    type:String,
-    required:true
-  },
-  createdAt: {
-    type:Date,
-    required:true,
-    default:Date.now()
-  }
-})
-
 export interface User extends Document {
+  name:string,
   username:string,
   email:string,
   password:string,
   verifyCode:string,
   verifyCodeExpiry:Date,
   isVerified:boolean,
-  isAcceptingMessage:boolean,
-  Messages:Message[],
+  followers:mongoose.Types.ObjectId[],
+  following:mongoose.Types.ObjectId[],
+  bio:string,
+  avatarUrl:string,
+  createdAt:Date,
 }
 
 const UserSchema : Schema<User> = new Schema({
+  name:{
+    type:String,
+    required:[true,'Name required'],
+  },
   username:{
     type:String,
     required:[true,"Username required"],
     unique:true,
+    trim: true,
   },
   email:{
     type:String,
     required:[true,"email required"],
     unique:true,
-    match:[/^\S+@\S+\.\S+$/,"use valid email"]
+    match:[/^\S+@\S+\.\S+$/,"use valid email"],
+    trim:true
   },
   password:{
     type:String,
@@ -53,15 +46,30 @@ const UserSchema : Schema<User> = new Schema({
     type:Date,
     required:true,
   },
-  isAcceptingMessage:{
-    type: Boolean,
-    default:true,
-  },
   isVerified:{
     type:Boolean,
     default:false,
   },
-  Messages:[MessageSchema]
+   bio: {
+    type: String,
+    trim: true,
+  },
+  avatarUrl: {
+    type: String,
+    trim: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  followers:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  }],
+  following:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  }]
 })
 
 const UserModel = (mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>("User",UserSchema))
