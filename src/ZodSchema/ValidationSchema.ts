@@ -16,14 +16,12 @@ export const SigninSchema : z.ZodSchema = z.object({
   password: z.string().min(5,{message:"Password must be atleast 5 character"}),
 })
 
-export const AcceptMessageSchema : z.ZodSchema = z.object({
-  acceptMessage: z.boolean(),
-})
-
-export const MessageSchema : z.ZodSchema = z.object({
-  content:z.string().min(8,{message:"message must be atleast 8 characters"}).max(300,{message:"message must not be more than 300 characters"}),
-})
-
 export const UsernameSchema :z.ZodSchema = z.object({
   username:z.string().min(3).max(20)
+})
+
+export const onboardSchema : z.ZodSchema = z.object({
+  name:z.string(),
+  username:z.string().min(3).max(20),
+  bio:z.string().max(100)
 })
