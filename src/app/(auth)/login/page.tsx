@@ -18,6 +18,7 @@ import { toast } from "@/components/ui/use-toast"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Loader, Loader2Icon, LoaderCircle, LoaderPinwheel, LucideLoader, LucideLoader2 } from "lucide-react"
+import Link from "next/link"
 
 export default function Login() {
   const router = useRouter()
@@ -56,7 +57,7 @@ export default function Login() {
   }
 
   return (
-    <div className="h-screen flex justify-center items-center font-sans p-4 bg-gray-100">
+    <div className="h-screen flex justify-center items-center font-sans p-4">
       <div className="w-full max-w-sm mx-auto rounded-lg p-6 shadow-[0_3px_10px_rgb(0,0,0,0.2)] space-y-6 bg-white">
         <h1 className="text-2xl font-semibold text-center my-4">Login</h1>
         <Form {...form}>
@@ -92,6 +93,12 @@ export default function Login() {
             </Button>
           </form>
         </Form>
+        <div className="mt-5 text-center text-slate-600 text-sm">
+          Already have an account?{" "}
+          <Link className="text-blue-500" href="/signup">
+            Signup
+          </Link>
+        </div>
       </div>
     </div>
   )

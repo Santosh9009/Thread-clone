@@ -53,7 +53,7 @@ export default function VerifyForm({params}:{params:{username:string}}) {
   }
   
   return (
-    <div className="h-screen flex justify-center items-center font-sans p-4 bg-gray-200">
+    <div className="h-screen flex justify-center items-center font-sans p-4 ">
       <div className="max-w-md mx-auto w-full rounded-md p-5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] space-y-6 bg-white">
         <h1 className="text-2xl font-semibold text-center my-5">Verify your Account</h1>
     <Form {...form}>
