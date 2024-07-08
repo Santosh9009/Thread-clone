@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import Menu from "../uiCompoents/Menu";
-import Logo from "../../../public/assests/icons8-threads.svg";
-import Image from "next/image";
 import { navLinks } from "@/constants";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -25,7 +23,7 @@ export default function Topbar() {
 
   return (
     <div>
-      {!session ? (
+      {!session?.user ? (
         <div className="fixed top-0 w-full hidden md:block p-3">
           <div className="flex justify-evenly items-center mx-auto">
             <div>
@@ -54,9 +52,11 @@ export default function Topbar() {
                 </button>
               ))}
             </div>
-            <Button className="bg-white text-black hover:bg-slate-300">
-              Login
-            </Button>
+            <Link href="/login">
+              <Button className="bg-white text-black hover:bg-slate-300 text-sm">
+                Login
+              </Button>
+            </Link>
           </div>
         </div>
       ) : (
@@ -72,9 +72,11 @@ export default function Topbar() {
             {session ? (
               <Menu />
             ) : (
-              <Button className="bg-white text-black active:bg-slate-300 text-sm">
-                <Link href={"/login"}>Login</Link>
-              </Button>
+              <Link href="/login">
+                <Button className="bg-white text-black active:bg-slate-300 text-sm">
+                  Login
+                </Button>
+              </Link>
             )}
           </div>
         </div>

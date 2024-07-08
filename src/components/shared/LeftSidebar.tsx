@@ -1,7 +1,5 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Logo from "../../../public/assests/icons8-threads.svg";
 import { navLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -24,7 +22,7 @@ export default function LeftSidebar() {
     <div>
       {session.data?.user && (
         <div className="fixed left-0 h-screen hidden md:block">
-          <div className="h-full flex flex-col justify-between items-center py-5 px-1">
+          <div className="h-screen flex flex-col justify-between items-center py-5 px-1">
           <Link href="/">
             {/* <Image alt="Logo" src={Logo} /> */}
             <div className="w-8">{ThreadIcon()}</div>

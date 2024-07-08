@@ -4,6 +4,10 @@
 
 @layer base {
   :root {
+    --mainColor:#5051F9;
+    
+    --main-hover:#4444cf;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 

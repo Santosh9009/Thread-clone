@@ -17,7 +17,7 @@ import { SigninSchema } from "@/ZodSchema/ValidationSchema"
 import { toast } from "@/components/ui/use-toast"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { Loader, Loader2Icon, LoaderCircle, LoaderPinwheel, LucideLoader, LucideLoader2 } from "lucide-react"
+import { LucideLoader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function Login() {

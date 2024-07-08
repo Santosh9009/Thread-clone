@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       },{status:200,})
 
   } catch (error) {
-    console.log("Error singning up");
+    console.log("Error singning up",error);
     return Response.json({
       success: false,
       message: "Failed to signup",

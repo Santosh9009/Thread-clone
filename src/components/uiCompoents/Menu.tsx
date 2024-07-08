@@ -7,8 +7,8 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import menu from '../../../public/assests/bars-solid.svg';
 import { MenuIcon } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 export default function Menu() {
   return (
@@ -21,7 +21,7 @@ export default function Menu() {
             <MenubarSeparator />
             <MenubarItem>Settings</MenubarItem>
             <MenubarSeparator />
-            <MenubarItem>Logout</MenubarItem>
+            <MenubarItem onClick={()=>signOut()}>Logout</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
