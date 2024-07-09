@@ -1,5 +1,4 @@
 import {
-  BarIcon,
   HeartIcon,
   SearchIcon,
   ProfileIcon,

@@ -7,6 +7,7 @@ declare module 'next-auth' {
     _id?:string;
     isVerified?:boolean;
     username?:string;
+    isOnboarded?:boolean
     } & DefaultSession["user"];
   }
 
@@ -14,6 +15,7 @@ declare module 'next-auth' {
     _id?:string;
     isVerified?:boolean;
     username?:string;
+    isOnboarded?:boolean
   }
 
 }
@@ -23,5 +25,6 @@ declare module "next-auth/jwt" {
     _id?:string;
     isVerified?:boolean;
     username?:string;
+    isOnboarded?:boolean
   }
 }

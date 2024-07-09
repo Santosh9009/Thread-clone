@@ -21,7 +21,14 @@ export default function RootLayout({
           <main>
             <LeftSidebar />
             <section className="main-container">
-              <div className="w-full max-w-xl mx-auto">{children}</div>
+              <div className="w-full max-w-2xl mx-auto">
+                <div className="h-[10vh] flex justify-center items-center text-xl">
+                  
+                </div>
+                <div className="bg-[#181818] border-[0.01rem] border-[#323232] min-h-[90vh] rounded-xl overflow-y-auto">
+                {children}
+                </div>
+                </div>
             </section>
             <RightSidebar />
           </main>

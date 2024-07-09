@@ -29,6 +29,7 @@ export default function Login() {
     defaultValues: {
       email: "",
       password: "",
+      ProfilePic:null
     },
   })
 
@@ -52,7 +53,7 @@ export default function Login() {
         title: "Success",
         description: "Login Successfully",
       })
-      router.replace('/')
+      router.replace('/onboarding')
     }
   }
 

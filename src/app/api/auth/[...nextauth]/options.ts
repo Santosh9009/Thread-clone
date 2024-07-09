@@ -63,6 +63,7 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name,
         token.email = user.email;
         token.isVerified = user.isVerified;
+        token.isOnboarded = user.isOnboarded
       }
       return token;
     },
@@ -73,6 +74,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name,
         session.user.email = token.email;
         session.user.isVerified = token.isVerified;
+        session.user.isOnboarded = token.isOnboarded;
       }
       return session;
     },

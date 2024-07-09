@@ -13,6 +13,7 @@ export interface User extends Document {
   bio:string,
   avatarUrl:string,
   createdAt:Date,
+  isOnboarded:boolean
 }
 
 const UserSchema : Schema<User> = new Schema({
@@ -69,7 +70,11 @@ const UserSchema : Schema<User> = new Schema({
   following:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User"
-  }]
+  }],
+  isOnboarded:{
+    type:Boolean,
+    default:false
+  }
 })
 
 const UserModel = (mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>("User",UserSchema))
