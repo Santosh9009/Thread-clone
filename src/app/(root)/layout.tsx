@@ -4,7 +4,7 @@ import RightSidebar from "@/components/shared/RightSidebar";
 import Topbar from "@/components/shared/Topbar";
 import { Inter } from "next/font/google";
 import Provider from "../Provider";
-import '../globals.css';
+import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +21,8 @@ export default function RootLayout({
           <main>
             <LeftSidebar />
             <section className="main-container">
-              <div className="w-full max-w-2xl mx-auto">
-                <div className="h-[10vh] flex justify-center items-center text-xl">
-                  
-                </div>
-                <div className="bg-[#181818] border-[0.01rem] border-[#323232] min-h-[90vh] rounded-xl overflow-y-auto">
+              <div className="max-w-2xl mx-auto">
                 {children}
-                </div>
                 </div>
             </section>
             <RightSidebar />

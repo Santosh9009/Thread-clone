@@ -1,7 +1,7 @@
 // components/MetaThreadCard.tsx
 import React from 'react';
 import Image from 'next/image';
-import { CommentIcon, RepostIcon } from '../../../public/assests/Images';
+import { CommentIcon, RepostIcon, ThreeDotIcon } from '../../../public/assests/Images';
 import { Share2Icon } from 'lucide-react';
 import DummyUserIcon from '../../../public/assests/profile-picture.png';
 
@@ -29,7 +29,7 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
   timestamp,
 }) => {
   return (
-    <div className="bg-[181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] p-5">
+    <div className="bg-[181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] py-4 px-8">
       <div className="flex items-start">
         <Image
           src={DummyUserIcon}
@@ -39,17 +39,17 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
         <div className="ml-4 flex-1">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-base font-semibold text-white">{author}</h3>
+              <h3 className="text-base font-semibold text-slate-200">{author}</h3>
               {/* <p className="text-gray-400 text-sm">@{authorUsername} • {new Date(timestamp).toLocaleDateString()}</p> */}
             </div>
             <div className="text-gray-400">
               {/* Add options icon here */}
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
+              <button>
+              {ThreeDotIcon({ fill: "#9CA3AF",width:15,  height: 18 })}
+              </button>
             </div>
           </div>
-          <p className="text-gray-300 mt-2">{contentSnippet}</p>
+          <p className="text-gray-300 mt-2 font-light">{contentSnippet}</p>
           <div className="flex justify-start mt-4 text-gray-400 space-x-8">
             <div className="flex items-center space-x-2">
               <button>

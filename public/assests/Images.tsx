@@ -123,6 +123,21 @@ export const RepostIcon = ({ fill = '#ffffff', width = 30, height = 30 }) => (
 );
 
 
+export const ThreeDotIcon = ({ fill = '#000000', width = 30, height = 30 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 128 512"
+    width={width}
+    height={height}
+  >
+    <path
+      fill={fill}
+      d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"
+    />
+  </svg>
+);
+
+
 
 
 
