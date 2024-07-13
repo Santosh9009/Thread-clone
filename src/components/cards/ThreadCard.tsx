@@ -29,7 +29,7 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
   timestamp,
 }) => {
   return (
-    <div className="bg-[181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] py-4 px-8">
+    <div className="bg-[#181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] py-4 px-8">
       <div className="flex items-start">
         <Image
           src={DummyUserIcon}

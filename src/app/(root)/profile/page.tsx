@@ -3,9 +3,9 @@ import MainCardWrapper from "@/components/cards/MainCardWrapper";
 export default function Profile() {
   return (
     <div>
-      <div className="h-[10vh]"></div>
+      <div className="md:h-[10vh]"></div>
       <MainCardWrapper>
-      this is profile
+      sfsjfsjfslj    
       </MainCardWrapper>
     </div>
   );

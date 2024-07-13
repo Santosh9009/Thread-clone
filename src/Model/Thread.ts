@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 interface Threadtype {
+  parentId?:mongoose.Types.ObjectId[];
   content?: string;
   author: mongoose.Types.ObjectId;
   createdAt: Date;
@@ -10,11 +11,16 @@ interface Threadtype {
 }
 
 const ThreadSchema : Schema<Threadtype> = new Schema({
+  parentId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Thread",
+    default: null,
+  },
   content:{
     type:String,
     required:true,
     trim:true,
-  },
+  },  
   author:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
@@ -30,11 +36,11 @@ const ThreadSchema : Schema<Threadtype> = new Schema({
   }],
   reposts:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"User",
+    ref:"Thread",
   }],
   comments:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"User",
+    ref:"Thread",
   }],
 })
 

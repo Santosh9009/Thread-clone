@@ -1,11 +1,13 @@
+import CreateThread from "@/components/cards/CreateThread";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
 
 export default function Home() {
   return (
     <div>
-      <div className="h-[10vh]"></div>
+      <div className="md:h-[10vh] flex justify-center items-center font-medium">Home</div>
       <MainCardWrapper>
+        <CreateThread/>
         <ThreadCard
           title="How to Use Next.js with Tailwind CSS"
           author="Jane Doe"
