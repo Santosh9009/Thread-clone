@@ -5,6 +5,7 @@ import Topbar from "@/components/shared/Topbar";
 import { Inter } from "next/font/google";
 import Provider from "../Provider";
 import "../globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,8 +22,9 @@ export default function RootLayout({
           <main>
             <LeftSidebar />
             <section className="main-container">
-              <div className="max-w-2xl mx-auto">
+              <div className="max-w-2xl mx-auto w-full">
                 {children}
+                <Toaster />
                 </div>
             </section>
             <RightSidebar />

@@ -1,5 +1,5 @@
 "use server"
-import UserModel from "@/Model/User";
+import UserModel from "@/lib/Model/User";
 import dbConnect from "../dbConnect";
 
 interface UpdateUserParams {

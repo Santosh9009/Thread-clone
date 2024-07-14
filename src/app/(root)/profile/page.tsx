@@ -5,7 +5,7 @@ export default function Profile() {
     <div>
       <div className="md:h-[10vh]"></div>
       <MainCardWrapper>
-      sfsjfsjfslj    
+        dfgdfg
       </MainCardWrapper>
     </div>
   );

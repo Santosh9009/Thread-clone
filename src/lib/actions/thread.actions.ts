@@ -1,6 +1,8 @@
-import ThreadModel from "@/Model/Thread";
+"use server"
+import ThreadModel from "@/lib/Model/Thread";
 import dbConnect from "../dbConnect";
-import UserModel from "@/Model/User";
+import UserModel from "@/lib/Model/User";
+import { revalidatePath } from "next/cache";
 
 interface createParams {
   content: string;
@@ -8,16 +10,22 @@ interface createParams {
   path: string;
 }
 
-export async function createThread({ content, author, path }: createParams) {
+export async function createThread({
+  content,
+  author,
+  path
+}: createParams): Promise<any> {
   try {
-    dbConnect();
+    await dbConnect();
 
     const newThread = await ThreadModel.create({
       author,
       content,
     });
 
-    return {newThread}
+    return {newThread};
+    revalidatePath(path)
+
   } catch (error) {
     throw new Error("Error creating thread" + error);
   }
@@ -37,7 +45,7 @@ export async function fetchallThreads(pageNumber = 1, pageSize = 20) {
       model: UserModel,
     })
     .populate({
-      path: "children",
+      path: "comments",
       populate: {
         path: "author",
         model: UserModel,

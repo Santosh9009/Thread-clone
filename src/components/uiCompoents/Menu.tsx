@@ -15,7 +15,7 @@ export default function Menu() {
     <div>
       <Menubar className="dark">
         <MenubarMenu>
-          <MenubarTrigger><MenuIcon/></MenubarTrigger>
+          <MenubarTrigger className=""><MenuIcon/></MenubarTrigger>
           <MenubarContent className="dark">
             <MenubarItem>Appearance</MenubarItem>
             <MenubarSeparator />

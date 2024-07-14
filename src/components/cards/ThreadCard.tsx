@@ -6,26 +6,20 @@ import { Share2Icon } from 'lucide-react';
 import DummyUserIcon from '../../../public/assests/profile-picture.png';
 
 interface MetaThreadCardProps {
-  title: string;
-  author: string;
-  authorUsername: string;
+  author: string,
   contentSnippet: string;
   commentsCount: number;
   upvotesCount: number;
   repostCount: number;
-  authorAvatar: string;
   timestamp: Date;
 }
 
 const ThreadCard: React.FC<MetaThreadCardProps> = ({
-  title,
   author,
-  authorUsername,
   contentSnippet,
   commentsCount,
   upvotesCount,
   repostCount,
-  authorAvatar,
   timestamp,
 }) => {
   return (

@@ -1,4 +1,4 @@
-import UserModel from "@/Model/User";
+import UserModel from "@/lib/Model/User";
 import { SignupSchema } from "@/ZodSchema/ValidationSchema";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import dbConnect from "@/lib/dbConnect";

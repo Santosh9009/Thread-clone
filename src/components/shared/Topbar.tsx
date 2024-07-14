@@ -62,7 +62,7 @@ export default function Topbar() {
       ) : (
         <></>
       )}
-      <div className="fixed top-0 w-full md:hidden bg-[#181818]">
+      <div className="w-full md:hidden bg-[#181818]">
         <div className="flex justify-between items-center py-3 px-5">
           <Link href="/">
             {/* <Image alt="Logo" src={Logo} /> */}

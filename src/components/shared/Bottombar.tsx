@@ -27,7 +27,7 @@ export default function Bottombar() {
   };
 
   return (
-    <div className="fixed bottom-0 w-screen md:hidden backdrop-blur-lg">
+    <div className="fixed bottom-0 w-screen md:hidden backdrop-blur-md">
       <div className="w-full h-[.05rem] bg-gray-600"></div>
       <div className="flex justify-center items-start space-x-10 my-3">
         {navLinks.map((link, index) => (

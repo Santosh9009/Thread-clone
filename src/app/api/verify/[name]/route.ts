@@ -1,4 +1,4 @@
-import UserModel from "@/Model/User";
+import UserModel from "@/lib/Model/User";
 import { verifySchema } from "@/ZodSchema/ValidationSchema";
 import dbConnect from "@/lib/dbConnect";
 import { NextRequest } from "next/server";
