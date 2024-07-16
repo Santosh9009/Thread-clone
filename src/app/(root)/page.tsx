@@ -1,10 +1,11 @@
-"use client"
-import { useEffect, useState } from 'react';
+"use client";
+import { useEffect, useState } from "react";
 import CreateThread from "@/components/cards/CreateThread";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
-import { fetchallThreads } from '@/lib/actions/thread.actions';
-import { ThreadType } from '@/lib/Model/Thread';
+import { fetchallThreads } from "@/lib/actions/thread.actions";
+import { ThreadType } from "@/lib/Model/Thread";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [threads, setThreads] = useState<ThreadType[]>([]);
@@ -14,9 +15,11 @@ export default function Home() {
   useEffect(() => {
     async function fetchThreads() {
       try {
-        const { posts, isNext } = await fetchallThreads(pageNumber, 20);
-        setThreads(prevThreads => [...prevThreads, ...posts]);
-        setIsNext(isNext);
+        const pageSize = 5;
+        const { allposts } = await fetchallThreads(pageNumber, pageSize);
+        console.log(allposts);
+        setThreads(prevthread=>[...prevthread,...allposts.posts]);
+        setIsNext(allposts.isNext);
       } catch (error) {
         console.error("Failed to fetch threads:", error);
       }
@@ -30,7 +33,7 @@ export default function Home() {
       <div className="md:h-[10vh] justify-center items-center font-medium md:block hidden"></div>
       <MainCardWrapper>
         <CreateThread />
-        {threads.map((thread,index) => (
+        {threads.map((thread, index) => (
           <ThreadCard
             key={index}
             author={thread.author.toString()}
@@ -41,8 +44,19 @@ export default function Home() {
             timestamp={thread.createdAt}
           />
         ))}
+         {isNext && (
+        <div className="absolute bottom-10 left-24">
+          <Button
+            className=""
+            onClick={() =>
+              setPageNumber((prevPageNumber) => prevPageNumber + 1)
+            }
+          >
+            Load More
+          </Button>
+        </div>
+      )}
       </MainCardWrapper>
-      {isNext && <button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1)}>Load More</button>}
     </div>
   );
 }

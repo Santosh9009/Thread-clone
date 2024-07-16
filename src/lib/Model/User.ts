@@ -13,7 +13,8 @@ export interface User extends Document {
   bio:string,
   avatarUrl:string,
   createdAt:Date,
-  isOnboarded:boolean
+  isOnboarded:boolean,
+  threads:mongoose.Types.ObjectId[],
 }
 
 const UserSchema : Schema<User> = new Schema({
@@ -74,7 +75,11 @@ const UserSchema : Schema<User> = new Schema({
   isOnboarded:{
     type:Boolean,
     default:false
-  }
+  },
+  threads:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Thread"
+  }]
 })
 
 const UserModel = (mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>("User",UserSchema))

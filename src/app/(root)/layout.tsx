@@ -22,7 +22,7 @@ export default function RootLayout({
           <main>
             <LeftSidebar />
             <section className="main-container">
-              <div className="max-w-2xl mx-auto w-full">
+              <div className="max-w-xl mx-auto w-full">
                 {children}
                 <Toaster />
                 </div>
