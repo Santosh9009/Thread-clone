@@ -36,6 +36,7 @@ export default function Home() {
         {threads.map((thread, index) => (
           <ThreadCard
             key={index}
+            id={thread._id}
             // @ts-ignore
             author={thread.author}
             contentSnippet={thread.content}

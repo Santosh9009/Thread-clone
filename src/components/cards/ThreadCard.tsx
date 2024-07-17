@@ -4,9 +4,12 @@ import { CommentIcon, RepostIcon, ThreeDotIcon } from '../../../public/assests/I
 import { Share2Icon } from 'lucide-react';
 import DummyUserIcon from '../../../public/assests/profile-picture.png';
 import { timeAgo } from '@/helpers/CalculateTime';
+import { ObjectId } from 'mongodb';
+import Link from 'next/link';
 
 
 interface MetaThreadCardProps {
+  id:ObjectId,
   author: {
     name:string,
   },
@@ -18,6 +21,7 @@ interface MetaThreadCardProps {
 }
 
 const ThreadCard: React.FC<MetaThreadCardProps> = ({
+  id,
   author,
   contentSnippet,
   commentsCount,
@@ -25,8 +29,10 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
   repostCount,
   timestamp,
 }) => {
+  
 
   return (
+    <Link href={`/thread/${id}`} passHref>
     <div className="bg-[#181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] py-4 px-8">
       <div className="flex items-start">
         <Image
@@ -71,6 +77,7 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
         </div>
       </div>
     </div>
+    </Link>
   );
 };
 

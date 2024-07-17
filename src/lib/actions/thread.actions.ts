@@ -1,9 +1,9 @@
 "use server";
-import ThreadModel from "@/lib/Model/Thread";
+import ThreadModel, { ThreadType } from "@/lib/Model/Thread";
 import dbConnect from "../dbConnect";
 import UserModel from "@/lib/Model/User";
 import { revalidatePath } from "next/cache";
-import { json } from "stream/consumers";
+
 
 interface createParams {
   content: string;
@@ -31,10 +31,6 @@ export async function createThread({
   }
 }
 
-interface fetchthreadTypes {
-  pageNumber: number;
-  pageSize: number;
-}
 
 export async function fetchallThreads(pageNumber:number,pageSize:number): Promise<any> {
   try {
@@ -78,10 +74,50 @@ export async function fetchallThreads(pageNumber:number,pageSize:number): Promis
     const allposts = JSON.parse(JSON.stringify({posts,isNext}))
 
     return { allposts };
-  } catch (error) {
-    console.error("Unable to fetch threads:", error);
-    throw new Error("Unable to fetch threads: " + error);
+  } catch (error:any) {
+    console.error("Unable to fetch threads:", error.message);
+    throw new Error("Unable to fetch threads: " + error.message);
   }
 }
 
 export async function getThread() {}
+
+
+interface commnetparams{
+  threadId:string,
+  commentText:string,
+  author:string,
+  path:string
+}
+
+export async function addCommnet({threadId,commentText,author,path}:commnetparams){
+
+  dbConnect()
+  
+  try{
+    const originalThread = await ThreadModel.findById(threadId);
+
+    if(!originalThread){
+      throw new Error("thread doesn't exists")
+    }
+
+    const comment = new ThreadModel({
+      author:author,
+      content:commentText,
+      parentId:threadId
+    })
+
+    const savedComment = await comment.save();
+
+    // @ts-ignore
+    originalThread.comments.push(savedComment._id)
+
+    await originalThread.save()
+
+    revalidatePath(path);
+
+
+  }catch(error:any){
+    throw new Error("Uable to post comment"+ error.message)
+  }
+}

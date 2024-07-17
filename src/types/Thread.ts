@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import mongoose,{ ObjectId,Document } from 'mongoose';
 
 export interface User {
   threads: ObjectId[];
@@ -28,4 +28,15 @@ export interface PostType {
   comments: ObjectId[];
   createdAt: Date;
   __v: number;
+}
+
+
+export interface CommentType extends Document{
+  parentId?: mongoose.Types.ObjectId;
+  content: string;
+  author: mongoose.Types.ObjectId;
+  createdAt: Date;
+  likes: mongoose.Types.ObjectId[];
+  comments: mongoose.Types.ObjectId[];
+  reposts: mongoose.Types.ObjectId[];
 }
