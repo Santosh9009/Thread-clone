@@ -17,7 +17,6 @@ export default function Home() {
       try {
         const pageSize = 5;
         const { allposts } = await fetchallThreads(pageNumber, pageSize);
-        console.log(allposts);
         setThreads(prevthread=>[...prevthread,...allposts.posts]);
         setIsNext(allposts.isNext);
       } catch (error) {
@@ -37,7 +36,6 @@ export default function Home() {
           <ThreadCard
             key={index}
             id={thread._id}
-            // @ts-ignore
             author={thread.author}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}

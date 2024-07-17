@@ -15,22 +15,7 @@ export default function CreateThread() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleCreateThread = async(content: string) => {
-    const Newthread = await createThread({author:session.data?.user._id,content:content,path:'/'});
-    if(Newthread){
-      toast({
-        title: "Success",
-        description: "A new thread posted",
-      })
-    }else{
-      toast({
-        title: "Failed",
-        description: "Error posting the thread",
-        variant:'destructive'
-      })
-    }
-    
-  };
+ 
 
 
   return (
@@ -59,8 +44,8 @@ export default function CreateThread() {
       <CreateThreadCard
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onSubmit={handleCreateThread}
         username={session.data?.user.username}
+        authorId={session.data?.user._id}
       />
     </div>
   );

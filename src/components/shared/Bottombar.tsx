@@ -31,6 +31,7 @@ export default function Bottombar() {
       <div className="w-full h-[.05rem] bg-gray-600"></div>
       <div className="flex justify-center items-start space-x-10 my-3">
         {navLinks.map((link, index) => (
+          <Link href={link.route==="/profile"?link.route+"/"+session?.user._id:link.route} key={index} passHref>
           <button
             onClick={() => handleButtonClick(link)}
             className={`${
@@ -41,6 +42,7 @@ export default function Bottombar() {
           >
             <div className="w-5">{link.img()}</div>
           </button>
+          </Link>
         ))}
       </div>
       {isModalOpen && <Alert onClose={() => setModalOpen(false)} />}

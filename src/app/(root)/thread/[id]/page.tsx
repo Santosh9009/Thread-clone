@@ -1,26 +1,54 @@
-"use client"
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
-import  PostComment  from "@/components/forms/CommnetForm";
+import PostComment from "@/components/forms/CommnetForm";
+import { getThread } from "@/lib/actions/thread.actions";
+import { CommentThread, ThreadsType } from "@/types/Thread";
 
-  export default function Thread({params}:{params:{id:string}}) {
+async function Thread({ params }: { params: { id: string } }) {
+  if (!params.id) return null;
 
-    return (
-      <div>
-      <div className="md:h-[10vh] flex items-center justify-center">Thread    </div>
-        <MainCardWrapper>
-          <ThreadCard
-          // @ts-ignore
-          id={params.id}
-          author={{name:"santosh"}}
-          contentSnippet="In this thread, we will explore how to set up Next.js with Tailwind CSS for a great development experience."
-          commentsCount={12}
-          upvotesCount={45}
-          repostCount={3}
-          timestamp={new Date("2024-07-01T10:00:00Z")}
-        />    
-        <PostComment ThreadId={params.id}/>
-        </MainCardWrapper>
-      </div>
-    );      
+  // @ts-ignore
+  const thread:ThreadsType | null = await getThread({ threadId: params.id });
+  console.log(thread);
+
+  if(!thread){
+    return <div>Thread not found</div>
   }
+  
+
+  return (
+    <div>
+      <div className="md:h-[10vh] md:flex items-center justify-center hidden">Thread</div>
+       <MainCardWrapper>
+        <ThreadCard
+          id={params.id}
+          author={thread?.author}
+          contentSnippet={thread?.content}
+          commentsCount={thread?.comments.length}
+          upvotesCount={thread?.likes.length}
+          repostCount={thread?.reposts.length}
+          timestamp={thread?.createdAt}
+        />
+        <div className="p-5 font-medium text-lg border-b-[.05rem] border-[#323232]">Replies</div>
+        <PostComment ThreadId={params.id} />
+        <div>
+        {thread?.comments &&
+          thread.comments.map((comment:CommentThread, index:number) => (
+            <ThreadCard
+              key={index}
+              id={params.id}
+              author={comment?.author}
+              contentSnippet={comment?.content}
+              commentsCount={comment?.comments.length}
+              upvotesCount={comment?.likes.length}
+              repostCount={comment?.reposts.length}
+              timestamp={comment?.createdAt}
+            />
+          ))}
+        </div>
+      </MainCardWrapper>
+    </div>
+  );
+}
+
+export default Thread;

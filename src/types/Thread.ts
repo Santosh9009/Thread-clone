@@ -19,7 +19,7 @@ export interface User {
 }
 
 export interface PostType {
-  _id: ObjectId;
+  _id: string;
   parentId: ObjectId | null;
   content: string;
   author: User;
@@ -39,4 +39,24 @@ export interface CommentType extends Document{
   likes: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
   reposts: mongoose.Types.ObjectId[];
+}
+
+export interface CommentThread {
+  _id: string;
+  author: User;
+  content: string;
+  comments: CommentThread[];
+  likes: User[];
+  reposts: User[];
+  createdAt: Date;
+}
+
+export interface ThreadsType {
+  _id: string;
+  author: User;
+  content: string;
+  comments: CommentThread[];
+  likes: User[];
+  reposts: User[];
+  createdAt: Date;
 }

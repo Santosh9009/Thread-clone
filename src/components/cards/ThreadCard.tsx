@@ -4,12 +4,11 @@ import { CommentIcon, RepostIcon, ThreeDotIcon } from '../../../public/assests/I
 import { Share2Icon } from 'lucide-react';
 import DummyUserIcon from '../../../public/assests/profile-picture.png';
 import { timeAgo } from '@/helpers/CalculateTime';
-import { ObjectId } from 'mongodb';
 import Link from 'next/link';
 
 
 interface MetaThreadCardProps {
-  id:ObjectId,
+  id:string,
   author: {
     name:string,
   },
