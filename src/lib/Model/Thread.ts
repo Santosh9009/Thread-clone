@@ -33,7 +33,7 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-  }],
+  }], 
   reposts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Thread",

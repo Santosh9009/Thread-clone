@@ -62,17 +62,14 @@ export async function fetchallThreads(pageNumber:number,pageSize:number): Promis
     });
 
     const posts = await postsfetch.exec();
-    console.log(`Fetched ${posts.length} posts`);
     console.log("posts"+posts)
 
     const totalPosts = await ThreadModel.countDocuments({
       parentId: { $in: [null, undefined] },
     });
-    console.log(`Total posts: ${totalPosts}`);
    
 
     const isNext = totalPosts > skipAmount + posts.length;
-    console.log(`isNext: ${isNext}`);
 
     if(!postsfetch){
       throw new Error("No posts found!")

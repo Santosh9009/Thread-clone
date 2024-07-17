@@ -1,12 +1,15 @@
 // components/MetaThreadCard.tsx
-import React from 'react';
 import Image from 'next/image';
 import { CommentIcon, RepostIcon, ThreeDotIcon } from '../../../public/assests/Images';
 import { Share2Icon } from 'lucide-react';
 import DummyUserIcon from '../../../public/assests/profile-picture.png';
+import { timeAgo } from '@/helpers/CalculateTime';
+
 
 interface MetaThreadCardProps {
-  author: string,
+  author: {
+    name:string,
+  },
   contentSnippet: string;
   commentsCount: number;
   upvotesCount: number;
@@ -22,19 +25,20 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
   repostCount,
   timestamp,
 }) => {
+
   return (
     <div className="bg-[#181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] py-4 px-8">
       <div className="flex items-start">
         <Image
           src={DummyUserIcon}
-          alt={author}
+          alt={author.name}
           className="w-10 rounded-full object-cover"
         />
         <div className="ml-4 flex-1">
           <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-base font-semibold text-slate-200">{author}</h3>
-              {/* <p className="text-gray-400 text-sm">@{authorUsername} • {new Date(timestamp).toLocaleDateString()}</p> */}
+            <div className='flex items-center space-x-2'>
+              <h3 className="text-base font-semibold text-slate-200">{author.name}</h3>
+              <p className="text-gray-400 text-sm"> {timeAgo(timestamp)}</p>
             </div>
             <div className="text-gray-400">
               {/* Add options icon here */}

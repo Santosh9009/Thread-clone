@@ -4,11 +4,11 @@ import CreateThread from "@/components/cards/CreateThread";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchallThreads } from "@/lib/actions/thread.actions";
-import { ThreadType } from "@/lib/Model/Thread";
+import { PostType } from "@/types/Thread";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const [threads, setThreads] = useState<ThreadType[]>([]);
+  const [threads, setThreads] = useState<PostType[]>([]);
   const [isNext, setIsNext] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -36,7 +36,8 @@ export default function Home() {
         {threads.map((thread, index) => (
           <ThreadCard
             key={index}
-            author={thread.author.toString()}
+            // @ts-ignore
+            author={thread.author}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotesCount={thread.likes.length}
