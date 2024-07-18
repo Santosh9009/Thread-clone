@@ -42,3 +42,9 @@ export const navLinks = [
   //   isDisabled: true, // Example if you need to disable the Login link in the future
   // }
 ];
+
+export const tabs = [
+  { name: "Threads", defaultValue: `No Threads found`, value: "" },
+  { name: "Replies", defaultValue: `No Replies found`, value: "" },
+  { name: "Reposts", defaultValue: `No Reposts found`, value: "" },
+];
