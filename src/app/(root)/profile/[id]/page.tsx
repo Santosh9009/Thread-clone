@@ -3,11 +3,15 @@ import ProfileCard from "@/components/cards/Profilecard";
 import { getUser } from "@/lib/actions/user.actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { tabs } from "@/constants";
+import { UserComments, UserThreads } from "@/lib/actions/thread.actions";
+import ThreadCard from "@/components/cards/ThreadCard";
 
 async function Profile({ params }: { params: { id: string } }) {
   const userId = params.id;
 
   const user = await getUser(userId);
+  const userThreads = await UserThreads(userId);
+  const userComments = await UserComments(userId);
 
   return (
     <div>
@@ -21,18 +25,51 @@ async function Profile({ params }: { params: { id: string } }) {
         />
 
         <div className="flex mt-4 w-full">
-          <Tabs defaultValue="account" className="w-full">
+          <Tabs defaultValue="Threads" className="w-full">
             <TabsList className="flex justify-evenly w-full bg-transparent">
               {tabs.map((tab, index) => (
-                <TabsTrigger className="data-[state=active]:text-white data-[state=active]:bg-transparent  data-[state=active]:border-b-2 w-1/3 rounded-none" key={index} value={tab.name}>
+                <TabsTrigger className="border-b-[.01rem] border-[#323232] data-[state=active]:text-white data-[state=active]:bg-transparent  data-[state=active]:border-b-2 data-[state=active]:border-b-white w-1/3 rounded-none pb-3" key={index} value={tab.name}>
                   {tab.name}
                 </TabsTrigger>
               ))}
             </TabsList>
-            <div className="border-b-[0.01rem] border-[#323232]"></div>
             {tabs.map((tab, index) => (
-              <TabsContent className="text-center" key={index} value={tab.name}>
-                {!tab.value ? tab.defaultValue : tab.value}
+              <TabsContent className="" key={index} value={tab.name}>
+                {/* User threads */}
+               {tab.name === "Threads" && (
+                  <>
+                    {userThreads && userThreads.map((thread: any, index: number) => (
+                      <ThreadCard
+                        key={index}
+                        id={thread._id}
+                        author={thread.author.name}
+                        contentSnippet={thread.content}
+                        commentsCount={thread.comments.length}
+                        upvotesCount={thread.likes.length}
+                        repostCount={thread.reposts.length}
+                        timestamp={thread.createdAt}
+                      />
+                    ))|| tab.value}
+                  </>
+                )}
+
+                {/* User comments */}
+               {tab.name === "Replies" && (
+                  <>
+                    {userComments && userComments.map((thread: any, index: number) => (
+                      <ThreadCard
+                        key={index}
+                        id={thread._id}
+                        author={thread.author.name}
+                        contentSnippet={thread.content}
+                        commentsCount={thread.comments.length}
+                        upvotesCount={thread.likes.length}
+                        repostCount={thread.reposts.length}
+                        timestamp={thread.createdAt}
+                      />
+                    ))|| tab.value}
+                  </>
+                )}
               </TabsContent>
             ))}
           </Tabs>

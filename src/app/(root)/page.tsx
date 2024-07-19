@@ -6,6 +6,8 @@ import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchallThreads } from "@/lib/actions/thread.actions";
 import { PostType } from "@/types/Thread";
 import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import CreateThreadPlus from "@/components/cards/createthreadPlus";
 
 export default function Home() {
   const [threads, setThreads] = useState<PostType[]>([]);
@@ -30,13 +32,16 @@ export default function Home() {
   return (
     <div>
       <div className="md:h-[10vh] justify-center items-center font-medium md:block hidden"></div>
+      <div className="hidden md:block">
+        <CreateThreadPlus/>
+      </div>
       <MainCardWrapper>
         <CreateThread />
         {threads.map((thread, index) => (
           <ThreadCard
             key={index}
             id={thread._id}
-            author={thread.author}
+            author={thread.author.name}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotesCount={thread.likes.length}

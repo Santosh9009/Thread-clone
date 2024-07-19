@@ -19,7 +19,7 @@ export interface User {
 }
 
 export interface PostType {
-  _id: string;
+  _id: ObjectId;
   parentId: ObjectId | null;
   content: string;
   author: User;

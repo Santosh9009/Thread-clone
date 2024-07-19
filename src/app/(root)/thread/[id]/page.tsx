@@ -2,16 +2,19 @@ import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
 import PostComment from "@/components/forms/CommnetForm";
 import { getThread } from "@/lib/actions/thread.actions";
-import { CommentThread, ThreadsType } from "@/types/Thread";
+import { ThreadType } from "@/lib/Model/Thread";
+import { CommentThread, CommentType, ThreadsType } from "@/types/Thread";
+import { ObjectId } from "mongoose";
 
-async function Thread({ params }: { params: { id: string } }) {
+async function Thread({ params }: { params: { id: ObjectId } }) {
   if (!params.id) return null;
 
   // @ts-ignore
-  const thread:ThreadsType | null = await getThread({ threadId: params.id });
-  console.log(thread);
+  const {post}:any = await getThread(params.id);
+  const thread = post.thread;
+  // console.log(post.thread)
 
-  if(!thread){
+  if(!post.thread){
     return <div>Thread not found</div>
   }
   
@@ -22,7 +25,8 @@ async function Thread({ params }: { params: { id: string } }) {
        <MainCardWrapper>
         <ThreadCard
           id={params.id}
-          author={thread?.author}
+          // @ts-ignore
+          author={thread?.author.name}
           contentSnippet={thread?.content}
           commentsCount={thread?.comments.length}
           upvotesCount={thread?.likes.length}
@@ -33,13 +37,13 @@ async function Thread({ params }: { params: { id: string } }) {
         <PostComment ThreadId={params.id} />
         <div>
         {thread?.comments &&
-          thread.comments.map((comment:CommentThread, index:number) => (
+          thread.comments.map((comment:any, index:number) => (
             <ThreadCard
               key={index}
-              id={params.id}
-              author={comment?.author}
+              id={comment?._id}
+              author={comment?.author.name}
               contentSnippet={comment?.content}
-              commentsCount={comment?.comments.length}
+              commentsCount={comment.comments.length}
               upvotesCount={comment?.likes.length}
               repostCount={comment?.reposts.length}
               timestamp={comment?.createdAt}

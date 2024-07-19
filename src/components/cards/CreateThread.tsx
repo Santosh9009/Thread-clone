@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { CreateThreadCard } from "./createModal";
 import { useSession } from "next-auth/react";
-import { createThread } from "@/lib/actions/thread.actions";
-import { toast } from "../ui/use-toast";
 
 export default function CreateThread() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,8 +12,6 @@ export default function CreateThread() {
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-
- 
 
 
   return (

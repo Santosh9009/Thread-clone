@@ -13,6 +13,7 @@ import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { useSession } from "next-auth/react";
 import { addCommnet } from "@/lib/actions/thread.actions";
 import { usePathname } from "next/navigation";
+import { ObjectId } from "mongoose";
 
 const commentSchema = z.object({
   comment: z.string().min(1, "Comment is required"),
@@ -24,7 +25,7 @@ interface PostCommentProps {
 }
 
 
-export default function PostComment({ThreadId}:{ThreadId:string}) {
+export default function PostComment({ThreadId}:{ThreadId:ObjectId}) {
   const [isLoading, setIsLoading] = useState(false);
   const session = useSession();
   const pathname = usePathname();

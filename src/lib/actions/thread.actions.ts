@@ -3,6 +3,7 @@ import ThreadModel from "@/lib/Model/Thread";
 import dbConnect from "../dbConnect";
 import UserModel from "@/lib/Model/User";
 import { revalidatePath } from "next/cache";
+import { ObjectId } from "mongoose";
 
 // create thread
 interface createParams {
@@ -85,7 +86,7 @@ export async function fetchallThreads(
 }
 
 interface commnetparams {
-  threadId: string;
+  threadId: ObjectId;
   commentText: string;
   author: string;
   path: string;
@@ -127,39 +128,75 @@ export async function addCommnet({
 }
 
 // get thread by id
-export async function getThread({threadId}:{threadId:string}) {
+export async function getThread(threadId:ObjectId) {
   dbConnect();
 
   try {
-    const thread = ThreadModel.findById(threadId)
+    const thread = await ThreadModel.findById(threadId)
+      .populate('author', '_id name avatarUrl')
       .populate({
-        path: "author",
-        model: UserModel,
-        select: "_id name avatarUrl",
-      })
-      .populate({
-        path: "comments",
+        path: 'comments',
         populate: [
           {
-            path: "author",
+            path: 'author',
             model: UserModel,
-            select: "_id name avatarUrl parentId",
+            select: '_id name avatarUrl',
           },
           {
-            path: "comments",
+            path: 'comments',
             populate: {
-              path: "author",
+              path: 'author',
               model: UserModel,
-              select: "_id name avatarUrl parentId",
+              select: '_id name avatarUrl',
             },
           },
         ],
-      }).exec();
+      });
 
+      
 
-      return thread
+      if (!thread) {
+        throw new Error('Thread not found');
+      }
+      const post = JSON.parse(JSON.stringify({thread}));  
+      console.log(post.thread)    
+   
 
+    return { post };
   } catch (error: any) {
     throw new Error("error getting the thread", error.message);
+  }
+}
+
+export async function UserThreads(userId: string) {
+  dbConnect();
+
+  try {
+    const userThread = await ThreadModel.find({
+      author: {
+        _id: userId,
+      },
+    });
+
+    return userThread;
+  } catch (error: any) {
+    throw new Error("Error fetching user threads");
+  }
+}
+
+export async function UserComments(userId: string) {
+  dbConnect();
+
+  try {
+    const userComments = await ThreadModel.find({
+      author: {
+        _id: userId,
+      },
+      parentId:{$ne:null},
+    });
+
+    return userComments;
+  } catch (error: any) {
+    throw new Error("Error fetching user comments");
   }
 }

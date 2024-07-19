@@ -5,13 +5,12 @@ import { Share2Icon } from 'lucide-react';
 import DummyUserIcon from '../../../public/assests/profile-picture.png';
 import { timeAgo } from '@/helpers/CalculateTime';
 import Link from 'next/link';
+import { ObjectId } from 'mongoose';
 
 
 interface MetaThreadCardProps {
-  id:string,
-  author: {
-    name:string,
-  },
+  id:ObjectId,
+  author:string,
   contentSnippet: string;
   commentsCount: number;
   upvotesCount: number;
@@ -36,13 +35,13 @@ const ThreadCard: React.FC<MetaThreadCardProps> = ({
       <div className="flex items-start">
         <Image
           src={DummyUserIcon}
-          alt={author.name}
+          alt={author}
           className="w-10 rounded-full object-cover"
         />
         <div className="ml-4 flex-1">
           <div className="flex justify-between items-center">
             <div className='flex items-center space-x-2'>
-              <h3 className="text-base font-semibold text-slate-200">{author.name}</h3>
+              <h3 className="text-base font-semibold text-slate-200">{author}</h3>
               <p className="text-gray-400 text-sm"> {timeAgo(timestamp)}</p>
             </div>
             <div className="text-gray-400">
