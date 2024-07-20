@@ -21,7 +21,7 @@ const onboardSchema = z.object({
   profilePic: z.instanceof(File).optional(),
 });
 
-export default function UpdateUserForm({userId}:{userId:string}) {
+export default function OnboardingForm({userId}:{userId:string}) {
   const [isLoading, setIsLoading] = useState(false)
   const [profilePic, setProfilePic] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null);
