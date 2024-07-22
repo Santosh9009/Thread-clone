@@ -5,13 +5,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { tabs } from "@/constants";
 import { UserComments, UserThreads } from "@/lib/actions/thread.actions";
 import ThreadCard from "@/components/cards/ThreadCard";
+import ProfileReplies from "@/components/uiCompoents/Profile-Replies";
 
 async function Profile({ params }: { params: { id: string } }) {
   const userId = params.id;
 
   const user = await getUser(userId);
-  const userThreads = await UserThreads(userId);
-  const userComments = await UserComments(userId);
+  const {userThreads} = await UserThreads(userId);
+  const {comments} = await UserComments(userId);
 
   return (
     <div>
@@ -41,11 +42,11 @@ async function Profile({ params }: { params: { id: string } }) {
                     {userThreads && userThreads.map((thread: any, index: number) => (
                       <ThreadCard
                         key={index}
-                        id={thread._id}
+                        id={thread._id.toString()}
                         author={thread.author.name}
                         contentSnippet={thread.content}
                         commentsCount={thread.comments.length}
-                        upvotesCount={thread.likes.length}
+                        upvotes={thread.likes}
                         repostCount={thread.reposts.length}
                         timestamp={thread.createdAt}
                       />
@@ -56,18 +57,7 @@ async function Profile({ params }: { params: { id: string } }) {
                 {/* User comments */}
                {tab.name === "Replies" && (
                   <>
-                    {userComments && userComments.map((thread: any, index: number) => (
-                      <ThreadCard
-                        key={index}
-                        id={thread._id}
-                        author={thread.author.name}
-                        contentSnippet={thread.content}
-                        commentsCount={thread.comments.length}
-                        upvotesCount={thread.likes.length}
-                        repostCount={thread.reposts.length}
-                        timestamp={thread.createdAt}
-                      />
-                    ))|| tab.value}
+                    {<ProfileReplies comments={comments}/> || tab.value}
                   </>
                 )}
               </TabsContent>

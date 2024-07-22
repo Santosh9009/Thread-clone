@@ -6,7 +6,6 @@ import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchallThreads } from "@/lib/actions/thread.actions";
 import { PostType } from "@/types/Thread";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import CreateThreadPlus from "@/components/cards/createthreadPlus";
 
 export default function Home() {
@@ -44,7 +43,7 @@ export default function Home() {
             author={thread.author.name}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
-            upvotesCount={thread.likes.length}
+            upvotes={thread.likes}
             repostCount={thread.reposts.length}
             timestamp={thread.createdAt}
           />

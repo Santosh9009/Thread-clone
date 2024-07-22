@@ -1,5 +1,5 @@
 import {
-  HeartIcon,
+  HeartedIcon,
   SearchIcon,
   ProfileIcon,
   HomeIcon,
@@ -22,7 +22,7 @@ export const navLinks = [
   },
   {
     label: "Activity",
-    img: HeartIcon,
+    img: HeartedIcon,
     route: "/activity",
     isActive: false,
     isDisabled: false,

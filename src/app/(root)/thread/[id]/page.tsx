@@ -1,7 +1,8 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
 import PostComment from "@/components/forms/CommnetForm";
-import { getThread } from "@/lib/actions/thread.actions";
+import { getThread, togglelike } from "@/lib/actions/thread.actions";
 import { ThreadType } from "@/lib/Model/Thread";
 import { CommentThread, CommentType, ThreadsType } from "@/types/Thread";
 import { ObjectId } from "mongoose";
@@ -29,7 +30,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
           author={thread?.author.name}
           contentSnippet={thread?.content}
           commentsCount={thread?.comments.length}
-          upvotesCount={thread?.likes.length}
+          upvotes={thread?.likes}
           repostCount={thread?.reposts.length}
           timestamp={thread?.createdAt}
         />
@@ -44,7 +45,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
               author={comment?.author.name}
               contentSnippet={comment?.content}
               commentsCount={comment.comments.length}
-              upvotesCount={comment?.likes.length}
+              upvotes={comment?.likes}
               repostCount={comment?.reposts.length}
               timestamp={comment?.createdAt}
             />
