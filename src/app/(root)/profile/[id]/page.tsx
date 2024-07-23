@@ -43,7 +43,8 @@ async function Profile({ params }: { params: { id: string } }) {
                       <ThreadCard
                         key={index}
                         id={thread._id.toString()}
-                        author={thread.author.name}
+                        author={thread.author.username}
+                        authorId={thread.author._id}
                         contentSnippet={thread.content}
                         commentsCount={thread.comments.length}
                         upvotes={thread.likes}

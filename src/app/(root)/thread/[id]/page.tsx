@@ -27,7 +27,8 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
         <ThreadCard
           id={params.id}
           // @ts-ignore
-          author={thread?.author.name}
+          author={thread?.author.username}
+          authorId={thread.author._id}
           contentSnippet={thread?.content}
           commentsCount={thread?.comments.length}
           upvotes={thread?.likes}
@@ -42,7 +43,8 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
             <ThreadCard
               key={index}
               id={comment?._id}
-              author={comment?.author.name}
+              author={comment?.author.username}
+              authorId={comment.author._id}
               contentSnippet={comment?.content}
               commentsCount={comment.comments.length}
               upvotes={comment?.likes}

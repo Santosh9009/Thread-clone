@@ -18,7 +18,7 @@ export default function Home() {
       try {
         const pageSize = 5;
         const { allposts } = await fetchallThreads(pageNumber, pageSize);
-        setThreads(prevthread=>[...prevthread,...allposts.posts]);
+        setThreads((prevthread) => [...prevthread, ...allposts.posts]);
         setIsNext(allposts.isNext);
       } catch (error) {
         console.error("Failed to fetch threads:", error);
@@ -32,7 +32,7 @@ export default function Home() {
     <div>
       <div className="md:h-[10vh] justify-center items-center font-medium md:block hidden"></div>
       <div className="hidden md:block">
-        <CreateThreadPlus/>
+        <CreateThreadPlus />
       </div>
       <MainCardWrapper>
         <CreateThread />
@@ -40,7 +40,8 @@ export default function Home() {
           <ThreadCard
             key={index}
             id={thread._id}
-            author={thread.author.name}
+            authorId={thread.author._id}
+            author={thread.author.username}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotes={thread.likes}
@@ -48,18 +49,18 @@ export default function Home() {
             timestamp={thread.createdAt}
           />
         ))}
-         {isNext && (
-        <div className="absolute bottom-10 left-24">
-          <Button
-            className=""
-            onClick={() =>
-              setPageNumber((prevPageNumber) => prevPageNumber + 1)
-            }
-          >
-            Load More
-          </Button>
-        </div>
-      )}
+        {isNext && (
+          <div className="absolute bottom-10 left-24">
+            <Button
+              className=""
+              onClick={() =>
+                setPageNumber((prevPageNumber) => prevPageNumber + 1)
+              }
+            >
+              Load More
+            </Button>
+          </div>
+        )}
       </MainCardWrapper>
     </div>
   );

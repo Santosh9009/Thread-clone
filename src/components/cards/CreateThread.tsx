@@ -20,7 +20,7 @@ export default function CreateThread() {
         <Image
           src={DummyUserIcon}
           alt="author"
-          className="w-10 h-10 rounded-full object-cover"
+          className="w-12 rounded-full object-cover"
         />
       </Link>
       <div className="relative w-full" onClick={handleOpenModal}>

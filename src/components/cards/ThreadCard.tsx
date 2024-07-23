@@ -19,11 +19,13 @@ interface ThreadCardProps {
   upvotes: any[]; // Assuming upvotes is an array of user ids
   repostCount: number;
   timestamp: Date;
+  authorId:any,
 }
 
 const ThreadCard: React.FC<ThreadCardProps> = ({
   id,
   author,
+  authorId,
   contentSnippet,
   commentsCount,
   upvotes,
@@ -42,9 +44,11 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
           <div className="ml-4 flex-1">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2">
-                <h3 className="text-base font-semibold text-slate-200">
-                  {author}
+                <Link href={`/profile/${authorId}`}>
+                <h3 className="text-base font-semibold text-slate-200 hover:underline">
+                  {author && "@"+author}
                 </h3>
+                </Link>
                 <p className="text-gray-400 text-sm">
                   {timeAgo(timestamp)}
                 </p>

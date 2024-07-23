@@ -26,6 +26,7 @@ export async function createThread({
     });
 
     revalidatePath(path);
+    revalidatePath("/profile");
 
     return { newThread };
   } catch (error) {
@@ -170,12 +171,17 @@ export async function UserThreads(userId: string) {
 
   try {
     const userThreads = await ThreadModel.find({
-      author: {
-        _id: userId,
-      },
-    });
+      parentId: { $in: [null, undefined] },
+      author: userId,
+    })
+    .populate({
+      path:'author',
+      model:UserModel,
+      select:"username"
+    })
+    .sort({ createdAt: "desc" });
 
-    return {userThreads};
+    return { userThreads };
   } catch (error: any) {
     throw new Error("Error fetching user threads");
   }
@@ -186,17 +192,23 @@ export async function UserComments(userId: string) {
 
   try {
     const userComments = ThreadModel.find({
-      parentId : { $nin: [null] },
+      parentId: { $nin: [null] },
       author: userId,
-    }).populate({
-      path: 'parentId',
-      model: ThreadModel,
-    });
+    })
+      .populate({
+        path: "parentId",
+        model: ThreadModel,
+        populate:{
+          path:'author',
+          model:UserModel,
+        }
+      })
+      .sort({ createdAt: "desc" });
 
     const comments = await userComments.exec();
     console.log(comments);
 
-    return {comments};
+    return { comments };
   } catch (error: any) {
     throw new Error("Error fetching user comments");
   }
@@ -204,10 +216,10 @@ export async function UserComments(userId: string) {
 
 // like thread
 interface liketype {
-  threadId:any,
-  userId:string,
+  threadId: any;
+  userId: string;
 }
-export async function togglelike({threadId,userId}:liketype) {
+export async function togglelike({ threadId, userId }: liketype) {
   dbConnect();
   try {
     const thread = await ThreadModel.findOne({ _id: threadId });
@@ -229,6 +241,6 @@ export async function togglelike({threadId,userId}:liketype) {
 
     return true;
   } catch (error) {
-    throw new Error("Unable toogle like"+error);
+    throw new Error("Unable toogle like" + error);
   }
 }
