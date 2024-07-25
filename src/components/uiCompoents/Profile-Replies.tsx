@@ -3,10 +3,12 @@ import ThreadCard from "../cards/ThreadCard";
 
 export default function ProfileReplies({
   comments,
+  user
 }: {
-  comments: ThreadType[];
+  comments: ThreadType[],
+  user:string,
 }) {
-  // console.log(comments);
+  console.log(comments);
   return (
     <div>
       {comments &&
@@ -25,11 +27,12 @@ export default function ProfileReplies({
                   upvotes={thread.parentId.likes}
                   repostCount={thread.parentId.reposts.length}
                   timestamp={thread.parentId.createdAt}
+                  br={false}
                 />
               )}
               <div
-                style={{ height: "calc(100% - 2.5rem)" }}
-                className="absolute w-[0.2rem] bg-slate-600 top-14 left-12"
+                style={{ height: "calc(100% - 4rem)" }}
+                className="absolute w-[0.18rem] bg-[#333638] top-[4rem] left-[3.1rem]"
               ></div>
             </div>
 
@@ -37,7 +40,7 @@ export default function ProfileReplies({
             <ThreadCard
               key={index}
               id={thread._id.toString()}
-              author={thread.author.name}
+              author={user}
               authorId={thread.author._id}
               contentSnippet={thread.content}
               commentsCount={thread.comments.length}

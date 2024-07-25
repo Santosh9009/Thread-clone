@@ -58,7 +58,7 @@ async function Profile({ params }: { params: { id: string } }) {
                 {/* User comments */}
                {tab.name === "Replies" && (
                   <>
-                    {<ProfileReplies comments={comments}/> || tab.value}
+                    {<ProfileReplies user={user.username} comments={comments}/> || tab.value}
                   </>
                 )}
               </TabsContent>

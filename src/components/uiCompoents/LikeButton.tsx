@@ -1,5 +1,5 @@
 // components/LikeButton.tsx
-"use client"
+"use client";
 import { useState, useEffect, useCallback } from "react";
 import { Heart } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -49,7 +49,10 @@ const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
 
   return (
     <>
-      <button onClick={handleHeartClick}>
+      <button
+        className="flex items-center space-x-2"
+        onClick={handleHeartClick}
+      >
         <Heart
           className="transition-colors duration-150"
           height={20}
@@ -57,8 +60,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
           color={isLike ? "red" : "#9CA3AF"}
           fill={isLike ? "red" : ""}
         />
+        <span className="">{likeCount}</span>
       </button>
-      <span className="">{likeCount}</span>
       {isModalOpen && <Alert onClose={() => setModalOpen(false)} />}
     </>
   );

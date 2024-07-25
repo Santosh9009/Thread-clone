@@ -8,10 +8,12 @@ import {
 import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { timeAgo } from "@/helpers/CalculateTime";
 import Link from "next/link";
-import { Share2Icon } from "lucide-react";
 import LikeButton from "../uiCompoents/LikeButton";
+import { Sharepop } from "../uiCompoents/Sharepop";
+import Threadbutton from "../uiCompoents/Threadbutton";
 
 interface ThreadCardProps {
+  br?: boolean;
   id: any;
   author: string;
   contentSnippet: string;
@@ -19,10 +21,11 @@ interface ThreadCardProps {
   upvotes: any[]; // Assuming upvotes is an array of user ids
   repostCount: number;
   timestamp: Date;
-  authorId:any,
+  authorId: any;
 }
 
 const ThreadCard: React.FC<ThreadCardProps> = ({
+  br = true,
   id,
   author,
   authorId,
@@ -32,9 +35,20 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
   repostCount,
   timestamp,
 }) => {
+
+
+  // function handleclick(event: React.MouseEvent) {
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  // }
+
   return (
     <Link href={`/thread/${id}`} passHref>
-      <div className="bg-[#181818] shadow-md overflow-hidden border-b-[.05rem] border-[#323232] py-4 px-8">
+      <div
+        className={`bg-[#181818] shadow-md overflow-hidden ${
+          br ? "border-b-[.05rem] border-[#323232" : ""
+        }] py-4 px-8`}
+      >
         <div className="flex items-start">
           <Image
             src={DummyUserIcon}
@@ -45,13 +59,11 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2">
                 <Link href={`/profile/${authorId}`}>
-                <h3 className="text-base font-semibold text-slate-200 hover:underline">
-                  {author && "@"+author}
-                </h3>
+                  <h3 className="text-base font-semibold text-slate-200 hover:underline">
+                    {author && "@" + author}
+                  </h3>
                 </Link>
-                <p className="text-gray-400 text-sm">
-                  {timeAgo(timestamp)}
-                </p>
+                <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
               </div>
               <div className="text-gray-400">
                 <button>
@@ -63,39 +75,8 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
                 </button>
               </div>
             </div>
-            <p className="text-gray-300 mt-2 font-light">
-              {contentSnippet}
-            </p>
-            <div className="flex justify-start mt-4 text-gray-400 space-x-8">
-              <div className="flex items-center space-x-2">
-                <LikeButton threadId={id} upvotes={upvotes} />
-              </div>
-              <div className="flex items-center space-x-2">
-                <button>
-                  {CommentIcon({
-                    fill: "#9CA3AF",
-                    width: 20,
-                    height: 20,
-                  })}
-                </button>
-                <span>{commentsCount}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button>
-                  <Share2Icon fill="#9CA3AF" width={20} height={20} />
-                </button>
-                <span>{repostCount}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button>
-                  {RepostIcon({
-                    fill: "#9CA3AF",
-                    width: 20,
-                    height: 20,
-                  })}
-                </button>
-              </div>
-            </div>
+            <p className="text-gray-300 mt-2 font-light">{contentSnippet}</p>
+            <Threadbutton id={id} commentsCount={commentsCount} upvotes={upvotes} repostCount={repostCount}/>
           </div>
         </div>
       </div>

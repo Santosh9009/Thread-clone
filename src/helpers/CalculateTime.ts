@@ -12,14 +12,14 @@ export const timeAgo = (timestamp: Date): string => {
   if (differenceInMinutes < 1) {
     return 'Just now';
   } else if (differenceInMinutes < 60) {
-    return `${differenceInMinutes} m`;
+    return `${differenceInMinutes}m`;
   } else if (differenceInHours < 24) {
-    return `${differenceInHours} h`;
+    return `${differenceInHours}h`;
   } else if (differenceInDays < 7) {
-    return `${differenceInDays} d`;
+    return `${differenceInDays}d`;
   } else if (differenceInWeeks < 52) {
-    return `${differenceInWeeks} w`;
+    return `${differenceInWeeks}w`;
   } else {
-    return `${differenceInYears} y`;
+    return `${differenceInYears}y`;
   }
 };
