@@ -1,5 +1,4 @@
 "use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -13,7 +12,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import DummyUserIcon from "../../../public/assests/profile-picture.png"
 import Image from "next/image"
 import { UpdateUser } from "@/lib/actions/user.actions"
-import { redirect } from "next/navigation"
+import { useRouter } from 'next/navigation'
+import { useSession } from "next-auth/react"
 
 const onboardSchema = z.object({
   name: z.string().min(2).max(20),
@@ -21,10 +21,12 @@ const onboardSchema = z.object({
   profilePic: z.instanceof(File).optional(),
 });
 
-export default function OnboardingForm({userId}:{userId:string}) {
+export default function OnboardingForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [profilePic, setProfilePic] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof onboardSchema>>({
     resolver: zodResolver(onboardSchema),
@@ -38,31 +40,32 @@ export default function OnboardingForm({userId}:{userId:string}) {
   const onSubmit = async (data: z.infer<typeof onboardSchema>) => {
     setIsLoading(true);
     try {
-     const newUser = await UpdateUser({
-      userId:userId, 
-      name:data.name, 
-      bio:data.bio,
-      isOnboarded:true
-     })
-
-     if(newUser){
-       toast({
-         title: "Profile Updated",
-         description: "Your profile has been updated successfully.",
-       });
-       redirect('/')
-     }else{
-      toast({
-        title: "Failed",
-        description: "Failed to update your profile. Please try again later.",
+      const response = await UpdateUser({
+        userId: session?.user._id,
+        name: data.name,
+        bio: data.bio,
+        isOnboarded: true
       });
-     }
+
+      if (response.success) {
+        toast({
+          title: "Profile Updated",
+          description: "Your profile has been updated successfully.",
+        });
+        router.push('/'); // Use client-side navigation
+      } else {
+        toast({
+          title: "Failed",
+          description: "Failed to update your profile. Please try again later.",
+        });
+      }
 
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to update your profile. Please try again later.",
       });
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

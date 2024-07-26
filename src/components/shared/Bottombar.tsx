@@ -1,7 +1,5 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Logo from "../../../public/assests/icons8-threads.svg";
 import { navLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -12,12 +10,13 @@ export default function Bottombar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState("/");
+
 
   useEffect(() => {
     // Update navLinks' `isActive` state based on the current pathname
-    navLinks.forEach(link => {
-      link.isActive = pathname.includes(link.route) || pathname === link.route;
-    });
+    const currentLink = navLinks.find(link =>(pathname.includes(link.route) && link.route.length > 1) ||pathname === link.route);
+    setActiveLink(currentLink?currentLink.route:"");
   }, [pathname]);
 
   const handleButtonClick = (link:{}) => {
@@ -35,7 +34,7 @@ export default function Bottombar() {
           <button
             onClick={() => handleButtonClick(link)}
             className={`${
-              link.isActive ? "bg-[#5051F9]" : "hover:bg-[#2b2b2b]"
+              activeLink===link.route? "bg-[#5051F9]" : "hover:bg-[#2b2b2b]"
             } p-3 rounded-md`}
             key={index}
             // disabled={!session?.user}

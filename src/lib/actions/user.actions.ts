@@ -45,9 +45,8 @@ export async function UpdateUser({
       throw new Error("User not found");
     }
 
-    const plainUser = updatedUser.toObject();
 
-    return plainUser;
+    return {success:true};
   } catch (error: any) {
     throw new Error("Failed to update user: " + error.message);
   }

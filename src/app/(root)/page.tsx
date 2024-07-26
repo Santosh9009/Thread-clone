@@ -6,7 +6,6 @@ import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchallThreads } from "@/lib/actions/thread.actions";
 import { PostType } from "@/types/Thread";
 import { Button } from "@/components/ui/button";
-import CreateThreadPlus from "@/components/cards/createthreadPlus";
 
 export default function Home() {
   const [threads, setThreads] = useState<PostType[]>([]);
@@ -32,7 +31,6 @@ export default function Home() {
     <div>
       <div className="md:h-[10vh] justify-center items-center font-medium md:block hidden"></div>
       <div className="hidden md:block">
-        <CreateThreadPlus />
       </div>
       <MainCardWrapper>
         <CreateThread />
@@ -50,7 +48,7 @@ export default function Home() {
           />
         ))}
         {isNext && (
-          <div className="absolute bottom-10 left-24">
+          <div className="">
             <Button
               className=""
               onClick={() =>

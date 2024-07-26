@@ -1,4 +1,5 @@
 // components/MetaThreadCard.tsx
+"use client"
 import Image from "next/image";
 import {
   CommentIcon,
@@ -11,6 +12,7 @@ import Link from "next/link";
 import LikeButton from "../uiCompoents/LikeButton";
 import { Sharepop } from "../uiCompoents/Sharepop";
 import Threadbutton from "../uiCompoents/Threadbutton";
+import { useRouter } from "next/navigation";
 
 interface ThreadCardProps {
   br?: boolean;
@@ -35,34 +37,27 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
   repostCount,
   timestamp,
 }) => {
-
-
-  // function handleclick(event: React.MouseEvent) {
-  //   event.stopPropagation();
-  //   event.preventDefault();
-  // }
+  const router = useRouter();
 
   return (
     <Link href={`/thread/${id}`} passHref>
       <div
-        className={`bg-[#181818] shadow-md overflow-hidden ${
-          br ? "border-b-[.05rem] border-[#323232" : ""
-        }] py-4 px-8`}
+        className={`bg-[#181818] overflow-hidden ${
+          br ? "border-b-[.05rem] border-[#323232]" : ""
+        } py-4 px-8`}
       >
         <div className="flex items-start">
           <Image
             src={DummyUserIcon}
-            alt={author}
+            alt={author || ''}
             className="w-10 rounded-full object-cover"
           />
           <div className="ml-4 flex-1">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2">
-                <Link href={`/profile/${authorId}`}>
-                  <h3 className="text-base font-semibold text-slate-200 hover:underline">
+                  <h3 onClick={()=>router.push(`/profile/${authorId}`)} className="text-base font-semibold text-slate-200 hover:underline">
                     {author && "@" + author}
                   </h3>
-                </Link>
                 <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
               </div>
               <div className="text-gray-400">

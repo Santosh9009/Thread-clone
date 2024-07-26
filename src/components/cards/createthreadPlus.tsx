@@ -13,7 +13,7 @@ export default function CreateThreadPlus() {
   const handleCloseModal = () => setIsModalOpen(false);
 
   return (
-    <div>
+    <div className="hidden md:block">
        <Button onClick={handleOpenModal} className="absolute right-8 bottom-8 bg-[#181818] hover:scale-110 transition-all duration-200 hover:bg-[#181818] border-[0.1rem] border-[#323333] py-8 px-6 rounded-xl">
         <PlusIcon height={30} width={30}/>
       </Button>

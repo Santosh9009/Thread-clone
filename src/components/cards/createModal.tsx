@@ -69,7 +69,7 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
             alt="Avatar"
             className="w-10 h-10 rounded-full mr-4"
           />
-          <h2 className="text-lg font-semibold text-white">{username}</h2>
+          <h2 className="text-lg font-semibold text-white hover:underline">@{username}</h2>
         </div>
         <div className="px-6">
           <textarea

@@ -54,7 +54,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
         onClick={handleHeartClick}
       >
         <Heart
-          className="transition-colors duration-150"
+          className="transition-colors"
           height={20}
           width={20}
           color={isLike ? "red" : "#9CA3AF"}

@@ -6,6 +6,7 @@ import { Inter } from "next/font/google";
 import Provider from "../Provider";
 import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import CreateThreadPlus from "@/components/cards/createthreadPlus";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
             <section className="main-container">
               <div className="max-w-xl mx-auto w-full">
                 {children}
+                <CreateThreadPlus/>
                 <Toaster />
                 </div>
             </section>

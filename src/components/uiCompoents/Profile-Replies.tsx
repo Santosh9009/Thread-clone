@@ -8,7 +8,7 @@ export default function ProfileReplies({
   comments: ThreadType[],
   user:string,
 }) {
-  console.log(comments);
+  
   return (
     <div>
       {comments &&
@@ -20,7 +20,7 @@ export default function ProfileReplies({
                 <ThreadCard
                   key={index}
                   id={thread.parentId._id.toString()}
-                  authorId={thread.author._id}
+                  authorId={thread.author._id.toJSON()}
                   author={thread.parentId.author.username}
                   contentSnippet={thread.parentId.content}
                   commentsCount={thread.parentId.comments.length}
@@ -41,7 +41,7 @@ export default function ProfileReplies({
               key={index}
               id={thread._id.toString()}
               author={user}
-              authorId={thread.author._id}
+              authorId={thread.author._id.toJSON()}
               contentSnippet={thread.content}
               commentsCount={thread.comments.length}
               upvotes={thread.likes}
