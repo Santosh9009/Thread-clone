@@ -32,7 +32,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
           contentSnippet={thread?.content}
           commentsCount={thread?.comments.length}
           upvotes={thread?.likes}
-          repostCount={thread?.reposts.length}
+          reposts={thread?.reposts}
           timestamp={thread?.createdAt}
         />
         <div className="p-5 font-medium text-lg border-b-[.05rem] border-[#323232]">Replies</div>
@@ -48,7 +48,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
               contentSnippet={comment?.content}
               commentsCount={comment.comments.length}
               upvotes={comment?.likes}
-              repostCount={comment?.reposts.length}
+              reposts={comment?.reposts}
               timestamp={comment?.createdAt}
             />
           ))}

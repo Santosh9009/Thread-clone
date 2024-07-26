@@ -20,8 +20,8 @@ interface ThreadCardProps {
   author: string;
   contentSnippet: string;
   commentsCount: number;
-  upvotes: any[]; // Assuming upvotes is an array of user ids
-  repostCount: number;
+  upvotes: []; // Assuming upvotes is an array of user ids
+  reposts: [];
   timestamp: Date;
   authorId: any;
 }
@@ -34,7 +34,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
   contentSnippet,
   commentsCount,
   upvotes,
-  repostCount,
+  reposts,
   timestamp,
 }) => {
   const router = useRouter();
@@ -71,7 +71,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               </div>
             </div>
             <p className="text-gray-300 mt-2 font-light">{contentSnippet}</p>
-            <Threadbutton id={id} commentsCount={commentsCount} upvotes={upvotes} repostCount={repostCount}/>
+            <Threadbutton id={id} commentsCount={commentsCount} upvotes={upvotes} reposts={reposts}/>
           </div>
         </div>
       </div>

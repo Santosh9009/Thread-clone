@@ -15,7 +15,7 @@ interface Props {
   bio: string; 
 }
 
-const MAX_BIO_LENGTH = 50; // Set the maximum length for the truncated bio
+const MAX_BIO_LENGTH = 50; 
 
 const ProfileCard = ({
   name,
@@ -79,7 +79,7 @@ const ProfileCard = ({
       </div>
 
       {authorId === userId ? (
-        <button className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-400">
+        <button className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
           Edit Profile
         </button>
       ) : (

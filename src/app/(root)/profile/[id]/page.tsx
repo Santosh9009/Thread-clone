@@ -54,7 +54,7 @@ async function Profile({ params }: { params: { id: string } }) {
                         contentSnippet={thread.content}
                         commentsCount={thread.comments.length}
                         upvotes={thread.likes}
-                        repostCount={thread.reposts.length}
+                        reposts={thread.reposts}
                         timestamp={thread.createdAt}
                       />
                     ))

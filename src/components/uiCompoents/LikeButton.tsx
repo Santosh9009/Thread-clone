@@ -8,14 +8,13 @@ import { Alert } from "../uiCompoents/Alert";
 
 interface LikeButtonProps {
   threadId: any;
-  upvotes: any[]; // Assuming upvotes is an array of user ids
+  upvotes: []; // Assuming upvotes is an array of user ids
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
   const session = useSession();
   const [isLike, setIsLike] = useState(false);
   const [likeCount, setLikeCount] = useState<number>(0);
-  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const check = upvotes.find((element) => element === session.data?.user._id);
@@ -23,11 +22,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
     setLikeCount(upvotes.length);
   }, [upvotes, session]);
 
-  const handleLike = useCallback(() => {
-    if (!session) {
-      setModalOpen(true);
-      return;
-    }
+    const handleLike = useCallback(() => {
 
     togglelike({ threadId, userId: session.data?.user._id })
       .then((result: any) => {
@@ -41,17 +36,14 @@ const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
       });
   }, [isLike]);
 
-  const handleHeartClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-    handleLike();
-  };
+  
 
   return (
     <>
       <button
         className="flex items-center space-x-2"
-        onClick={handleHeartClick}
+        onClick={handleLike}
+        disabled={!session.data?.user}
       >
         <Heart
           className="transition-colors"
@@ -62,7 +54,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {
         />
         <span className="">{likeCount}</span>
       </button>
-      {isModalOpen && <Alert onClose={() => setModalOpen(false)} />}
     </>
   );
 };
