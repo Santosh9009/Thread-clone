@@ -13,11 +13,11 @@ export default function Repost({ reposts }: { reposts: [] }) {
   const session = useSession();
   const [reposted , setReposted ] = useState(false);
 
-  useEffect(()=>{
-    const check = reposts.find((element) => element === session.data?.user._id);
-    setReposted(!!check);
-    setCount(reposts.length);
-  },[reposted,session.data])
+  // useEffect(()=>{
+  //   const check = reposts.find((element) => element === session.data?.user._id);
+  //   setReposted(!!check);
+  //   setCount(reposts.length);
+  // },[reposted])
 
   function handleRepost(){
     

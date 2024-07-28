@@ -6,12 +6,14 @@ import { UserComments, UserThreads } from "@/lib/actions/thread.actions";
 import ThreadCard from "@/components/cards/ThreadCard";
 import ProfileReplies from "@/components/uiCompoents/Profile-Replies";
 import ProfileCard from "@/components/cards/Profilecard";
+import { ObjectId } from "mongodb";
 
-async function Profile({ params }: { params: { id: string } }) {
+async function Profile({ params }: { params: { id: ObjectId } }) {
   const userId = params.id;
 
-  const user = await getUser(userId);
+  const { user }= await getUser(userId);
   const { userThreads } = await UserThreads(userId);
+  console.log(userThreads)
   const { comments } = await UserComments(userId);
 
   return (
@@ -20,11 +22,11 @@ async function Profile({ params }: { params: { id: string } }) {
       <MainCardWrapper>
         <ProfileCard
           authorId={userId}
-          name={user.name}
-          bio={user.bio}
-          username={user.username}
-          followers={user.followers.length}
-          following={user.following.length}
+          name={user?.name || ""}
+          bio={user?.bio || ""}
+          username={user?.username || ""}
+          followers={user?.followers || []}
+          following={user?.following || []}
         />
 
         <div className="flex mt-4 w-full">
@@ -50,7 +52,7 @@ async function Profile({ params }: { params: { id: string } }) {
                         key={index}
                         id={thread._id.toString()}
                         author={thread.author.username}
-                        authorId={thread.author._id.toJSON()} // Ensure this is a plain value
+                        authorId={thread.author._id} // Ensure this is a plain value
                         contentSnippet={thread.content}
                         commentsCount={thread.comments.length}
                         upvotes={thread.likes}
@@ -66,7 +68,7 @@ async function Profile({ params }: { params: { id: string } }) {
                 {/* User comments */}
                 {tab.name === "Replies" ? (
                   comments && comments.length > 0 ? (
-                    <ProfileReplies user={user.username} comments={comments} />
+                    <ProfileReplies user={user?.username || ""} comments={comments} />
                   ) : (
                     <div className="text-center py-3" >{tab.defaultValue}</div>
                   )

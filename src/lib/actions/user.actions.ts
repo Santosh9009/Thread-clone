@@ -1,8 +1,8 @@
 "use server";
 import UserModel from "@/lib/Model/User";
 import dbConnect from "../dbConnect";
-import { ObjectId } from "mongoose";
-import { FilterQuery } from "mongoose";
+import { ObjectId } from "mongodb";
+import { FilterQuery, model } from "mongoose";
 
 interface UpdateUserParams {
   userId: string;
@@ -45,14 +45,13 @@ export async function UpdateUser({
       throw new Error("User not found");
     }
 
-
-    return {success:true};
+    return { success: true };
   } catch (error: any) {
     throw new Error("Failed to update user: " + error.message);
   }
 }
 
-export async function getUser(id: string) {
+export async function getUser(id: ObjectId) {
   dbConnect();
 
   try {
@@ -62,7 +61,10 @@ export async function getUser(id: string) {
       throw new Error("no user found");
     }
 
-    return user;
+    // const user = await User.exec();
+    console.log(user)
+
+    return {user};
   } catch (error: any) {
     throw new Error("Uable to fetch user" + error.message);
   }
@@ -76,33 +78,31 @@ interface filterType {
 }
 
 export async function filterUser({
-  pageNumber=1,
-  pageSize=10,
+  pageNumber = 1,
+  pageSize = 10,
   userId,
   searchText,
 }: filterType) {
-
   dbConnect();
-  
 
   try {
     const skipAmount = (pageNumber - 1) * pageSize;
 
     const regex = new RegExp(searchText, "i");
 
-    const query:FilterQuery<typeof UserModel> = {id:{ $ne: userId }};
-    
-    if(searchText.trim()!==""){
+    const query: FilterQuery<typeof UserModel> = { id: { $ne: userId } };
+
+    if (searchText.trim() !== "") {
       query.$or = [
-        {name:{$regex:regex}},
-        {username:{$regex:regex}},
-      ]
+        { name: { $regex: regex } },
+        { username: { $regex: regex } },
+      ];
     }
-        
+
     const userQuery = UserModel.find(query)
-    .sort({createdAt:-1})
-    .skip(skipAmount)
-    .limit(pageSize)
+      .sort({ createdAt: -1 })
+      .skip(skipAmount)
+      .limit(pageSize);
 
     const users = await userQuery.exec();
 
@@ -110,11 +110,47 @@ export async function filterUser({
 
     const isNext = totalUsers > skipAmount + users.length;
 
-    const res = JSON.parse(JSON.stringify({users , isNext}))
-    console.log(res)
+    const res = JSON.parse(JSON.stringify({ users, isNext }));
+    console.log(res);
 
-    return {res};
+    return { res };
   } catch (error: any) {
     throw new Error("Error searching user" + error.message);
   }
 }
+
+const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
+  try {
+    const user = await UserModel.findById(userId);
+    const targetUser = await UserModel.findById(targetUserId);
+
+    if (!user || !targetUser) {
+      throw new Error("User not found");
+    }
+
+    const isFollowing = user.following.includes(targetUserId);
+
+    if (isFollowing) {
+      // Unfollow the user
+      user.following = user.following.filter((id) => id !== targetUserId);
+      targetUser.followers = targetUser.followers.filter((id) => id !== userId);
+    } else {
+      // Follow the user
+      user.following.push(targetUserId);
+      targetUser.followers.push(userId);
+    }
+
+    await user.save();
+    await targetUser.save();
+
+    return {
+      message: isFollowing
+        ? true
+        : false,
+    };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export default toggleFollowUser;

@@ -5,13 +5,15 @@ import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import Follow from "../uiCompoents/Follow";
+import { ObjectId } from "mongodb";
 
 interface Props {
   name: string;
   username: string;
-  followers: number;
-  following: number;
-  authorId: string;
+  followers: any[];
+  following: any[];
+  authorId: ObjectId;
   bio: string; 
 }
 
@@ -68,11 +70,11 @@ const ProfileCard = ({
         
         <div className="flex justify-start space-x-6 mb-5 w-full">
           <div className="flex items-center space-x-2">
-            <p className="text-lg font-semibold">{followers}</p>
+            <p className="text-lg font-semibold">{followers.length}</p>
             <p className="text-gray-400">Followers</p>
           </div>
           <div className="flex items-center space-x-2">
-            <p className="text-lg font-semibold">{following}</p>
+            <p className="text-lg font-semibold">{following.length}</p>
             <p className="text-gray-400">Following</p>
           </div>
         </div>
@@ -84,7 +86,7 @@ const ProfileCard = ({
         </button>
       ) : (
         <div className="flex justify-evenly w-full space-x-4 mt-3">
-          <Button className="w-1/2 dark rounded-xl">Follow</Button>
+          <Follow followers={followers} targetId={authorId}/>
           <Button className="w-1/2 bg-transparent border-[.05rem] border-[#323232] hover:bg-transparent rounded-xl hover:text-slate-400">Mention</Button>
         </div>
       )}

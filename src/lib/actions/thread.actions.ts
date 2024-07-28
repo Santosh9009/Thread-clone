@@ -3,7 +3,8 @@ import ThreadModel from "@/lib/Model/Thread";
 import dbConnect from "../dbConnect";
 import UserModel from "@/lib/Model/User";
 import { revalidatePath } from "next/cache";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
+import {ObjectId} from 'mongodb';
 
 // create thread
 interface createParams {
@@ -61,7 +62,7 @@ export async function fetchallThreads(
         populate: {
           path: "author",
           model: UserModel,
-          select: "_id name parentId avatarUrl",
+          select: "_id username parentId avatarUrl",
         },
       });
 
@@ -134,21 +135,21 @@ export async function getThread(threadId: ObjectId) {
 
   try {
     const thread = await ThreadModel.findById(threadId)
-      .populate("author", "_id name avatarUrl")
+      .populate("author", "_id username avatarUrl")
       .populate({
         path: "comments",
         populate: [
           {
             path: "author",
             model: UserModel,
-            select: "_id name avatarUrl",
+            select: "_id username avatarUrl",
           },
           {
             path: "comments",
             populate: {
               path: "author",
               model: UserModel,
-              select: "_id name avatarUrl",
+              select: "_id username avatarUrl",
             },
           },
         ],
@@ -166,7 +167,7 @@ export async function getThread(threadId: ObjectId) {
   }
 }
 
-export async function UserThreads(userId: string) {
+export async function UserThreads(userId: ObjectId) {
   dbConnect();
 
   try {
@@ -175,11 +176,13 @@ export async function UserThreads(userId: string) {
       author: userId,
     })
     .populate({
-      path:'author',
+      path:"author",
       model:UserModel,
       select:"username"
     })
-    .sort({ createdAt: "desc" });
+    .sort({ createdAt: "desc" }).exec()
+
+    // const userThreads = JSON.parse(JSON.stringify({Threads}))
 
     return { userThreads };
   } catch (error: any) {
@@ -187,11 +190,11 @@ export async function UserThreads(userId: string) {
   }
 }
 
-export async function UserComments(userId: string) {
+export async function UserComments(userId: ObjectId) {
   dbConnect();
 
   try {
-    const userComments = ThreadModel.find({
+    const comments = await ThreadModel.find({
       parentId: { $nin: [null] },
       author: userId,
     })
@@ -205,8 +208,7 @@ export async function UserComments(userId: string) {
       })
       .sort({ createdAt: "desc" });
 
-    const comments = await userComments.exec();
-    console.log(comments);
+    // const comments = JSON.parse(JSON.stringify({comment}))
 
     return { comments };
   } catch (error: any) {

@@ -39,6 +39,12 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
 }) => {
   const router = useRouter();
 
+  function handleclick(e:any){
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/profile/${authorId}`)
+  }
+
   return (
     <Link href={`/thread/${id}`} passHref>
       <div
@@ -55,7 +61,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
           <div className="ml-4 flex-1">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2">
-                  <h3 onClick={()=>router.push(`/profile/${authorId}`)} className="text-base font-semibold text-slate-200 hover:underline">
+                  <h3 onClick={handleclick} className="text-base font-semibold text-slate-200 hover:underline">
                     {author && "@" + author}
                   </h3>
                 <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
