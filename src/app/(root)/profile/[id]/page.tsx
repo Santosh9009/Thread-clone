@@ -11,9 +11,9 @@ import { ObjectId } from "mongodb";
 async function Profile({ params }: { params: { id: ObjectId } }) {
   const userId = params.id;
 
-  const { user }= await getUser(userId);
+  const { res }= await getUser(userId);
+  const user = res.user;
   const { userThreads } = await UserThreads(userId);
-  console.log(userThreads)
   const { comments } = await UserComments(userId);
 
   return (

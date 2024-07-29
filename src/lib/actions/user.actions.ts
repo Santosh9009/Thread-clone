@@ -61,10 +61,10 @@ export async function getUser(id: ObjectId) {
       throw new Error("no user found");
     }
 
-    // const user = await User.exec();
+    const res = JSON.parse(JSON.stringify({user}))
     console.log(user)
 
-    return {user};
+    return {res};
   } catch (error: any) {
     throw new Error("Uable to fetch user" + error.message);
   }
@@ -128,12 +128,12 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
       throw new Error("User not found");
     }
 
-    const isFollowing = user.following.includes(targetUserId);
+    const isFollowing = user.following.some((id) => id.equals(targetUserId));
 
     if (isFollowing) {
       // Unfollow the user
-      user.following = user.following.filter((id) => id !== targetUserId);
-      targetUser.followers = targetUser.followers.filter((id) => id !== userId);
+      user.following = user.following.filter((id) => !id.equals(targetUserId));
+      targetUser.followers = targetUser.followers.filter((id) => !id.equals(userId));
     } else {
       // Follow the user
       user.following.push(targetUserId);
