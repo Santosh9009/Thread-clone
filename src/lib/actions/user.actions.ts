@@ -4,6 +4,7 @@ import dbConnect from "../dbConnect";
 import { ObjectId } from "mongodb";
 import { FilterQuery, model } from "mongoose";
 
+
 interface UpdateUserParams {
   userId: string;
   name?: string;

@@ -1,28 +1,44 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
-interface RepostType extends Document {
-  user: mongoose.Types.ObjectId;
-  thread: mongoose.Types.ObjectId;
+export interface RepostType extends Document {
+  originalThread: mongoose.Types.ObjectId;
+  author: mongoose.Types.ObjectId;
+  content?: string;
   createdAt: Date;
+  likes: mongoose.Types.ObjectId[];
+  comments: mongoose.Types.ObjectId[];
 }
 
-const repostSchema: Schema<RepostType> = new Schema({
-  user: {
+const RepostSchema: Schema<RepostType> = new Schema({
+  originalThread: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "Thread",
     required: true,
   },
-  thread: {
+  author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Thread',
+    ref: "User",
     required: true,
+  },
+  content: {
+    type: String,
+    trim: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  }],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Thread",
+  }],
 });
 
-const Repost =mongoose.models.Repost as mongoose.Model<RepostType>|| mongoose.model<RepostType>('Repost', repostSchema);
+const RepostModel = mongoose.models.Repost as mongoose.Model<RepostType> ||
+  mongoose.model<RepostType>("Repost", RepostSchema);
 
-export default Repost;
+export default RepostModel;

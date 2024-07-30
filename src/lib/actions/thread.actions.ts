@@ -5,6 +5,7 @@ import UserModel from "@/lib/Model/User";
 import { revalidatePath } from "next/cache";
 import mongoose from "mongoose";
 import {ObjectId} from 'mongodb';
+import RepostModel from "../Model/Repost";
 
 // create thread
 interface createParams {
