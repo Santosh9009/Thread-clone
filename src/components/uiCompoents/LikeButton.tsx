@@ -8,7 +8,7 @@ import { Alert } from "../uiCompoents/Alert";
 
 interface LikeButtonProps {
   threadId: any;
-  upvotes: []; // Assuming upvotes is an array of user ids
+  upvotes: any[]; // Assuming upvotes is an array of user ids
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({ threadId, upvotes }) => {

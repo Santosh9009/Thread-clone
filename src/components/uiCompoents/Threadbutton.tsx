@@ -6,8 +6,8 @@ import Repost from "./Repost";
 
 interface ThreadbuttonProps {
   commentsCount: number;
-  upvotes: []; // Assuming upvotes is an array of user ids
-  reposts: [];
+  upvotes: any[]; // Assuming upvotes is an array of user ids
+  reposts: any[];
   id: any;
 }
 export default function Threadbutton({
@@ -39,7 +39,7 @@ export default function Threadbutton({
         </button>
         <span>{commentsCount}</span>
       </div>
-      <Repost reposts={reposts} />
+      <Repost reposts={reposts} threadId={id}/>
       <Sharepop id={id} />
     </div>
   );

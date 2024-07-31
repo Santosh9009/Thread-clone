@@ -52,7 +52,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                         key={index}
                         id={thread._id.toString()}
                         author={thread.author.username}
-                        authorId={thread.author._id} // Ensure this is a plain value
+                        authorId={thread.author._id} 
                         contentSnippet={thread.content}
                         commentsCount={thread.comments.length}
                         upvotes={thread.likes}

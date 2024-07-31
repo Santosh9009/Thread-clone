@@ -20,8 +20,8 @@ interface ThreadCardProps {
   author: string;
   contentSnippet: string;
   commentsCount: number;
-  upvotes: []; // Assuming upvotes is an array of user ids
-  reposts: [];
+  upvotes: any[]; // Assuming upvotes is an array of user ids
+  reposts: any[];
   timestamp: Date;
   authorId: any;
 }

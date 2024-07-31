@@ -65,7 +65,11 @@ export async function fetchallThreads(
           model: UserModel,
           select: "_id username parentId avatarUrl",
         },
-      });
+      }).populate({
+        path:"reposts",
+        model:RepostModel,
+        select:'author content'
+      })
 
     const posts = await postsfetch.exec();
 
@@ -240,10 +244,30 @@ export async function togglelike({ threadId, userId }: liketype) {
     }
 
     await thread.save();
-    console.log(thread);
 
     return true;
   } catch (error) {
     throw new Error("Unable toogle like" + error);
+  }
+}
+
+// repost a thread or
+export async function repostThread(originalThread:ObjectId,author:ObjectId,content?:string){
+  dbConnect()
+  try{
+    
+    const newrepost = await RepostModel.create({
+      originalThread,
+      author,
+      content,
+    })
+
+    await ThreadModel.findOneAndUpdate({_id:originalThread},{
+      $push:{reposts:newrepost._id}
+    })
+
+    return {success:true}
+  }catch(error:any){
+    throw new Error("Error reposting"+error)
   }
 }

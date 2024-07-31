@@ -19,6 +19,7 @@ export default function Home() {
         const { allposts } = await fetchallThreads(pageNumber, pageSize);
         setThreads((prevthread) => [...prevthread, ...allposts.posts]);
         setIsNext(allposts.isNext);
+        // console.log(allposts.posts)
       } catch (error) {
         console.error("Failed to fetch threads:", error);
       }
@@ -43,7 +44,7 @@ export default function Home() {
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotes={thread.likes}
-            repostCount={thread.reposts.length}
+            reposts={thread.reposts}
             timestamp={thread.createdAt}
           />
         ))}
