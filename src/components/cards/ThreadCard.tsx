@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 interface ThreadCardProps {
   br?: boolean;
-  id: any;
+  id: any;  
   author: string;
   contentSnippet: string;
   commentsCount: number;
@@ -77,7 +77,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               </div>
             </div>
             <p className="text-gray-300 mt-2 font-light">{contentSnippet}</p>
-            <Threadbutton id={id} commentsCount={commentsCount} upvotes={upvotes} reposts={reposts}/>
+            <Threadbutton author={author} authorId={authorId} contentSnippet={contentSnippet} id={id} commentsCount={commentsCount} upvotes={upvotes} reposts={reposts} />
           </div>
         </div>
       </div>

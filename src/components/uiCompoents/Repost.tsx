@@ -11,10 +11,17 @@ import { useSession } from "next-auth/react";
 import { repostThread } from "@/lib/actions/thread.actions";
 import { ObjectId } from "mongodb";
 import { toast } from "../ui/use-toast";
+import QuoteCard from "./Quote";
 export default function Repost({
+  author,
+  authorId,
+  contentSnippet,
   reposts,
   threadId,
 }: {
+  author: string;
+  authorId: any;
+  contentSnippet: string;
   reposts: any[];
   threadId: ObjectId;
 }) {
@@ -49,6 +56,25 @@ export default function Repost({
     setPopoverOpen(false);
   }
 
+
+  // function handleQuoteRepost() {
+  //   repostThread(threadId, session.data?.user._id, quoteContent)
+  //     .then((res) => {
+  //       if (res.success === true) {
+  //         setCount((prev) => prev + 1);
+  //         setReposted(true);
+  //         toast({
+  //           title: "Success",
+  //           description: "Quoted and reposted thread",
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error quoting and reposting:", error);
+  //     });
+  //   setPopoverOpen(false);
+  // }
+
   return (
     <div>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -64,15 +90,10 @@ export default function Repost({
             <span>{reposts.length}</span>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="flex flex-col dark bg-[#181818] w-36 p-3">
-          <div className="flex items-center justify-around hover:bg-[#262626] rounded p-2 ">
-            <button className="bg-transparent text-white font-semibold">
-              Quote
-            </button>
-            <Quote width={16} height={16} />
-          </div>
+        <PopoverContent className="flex flex-col dark bg-[#181818] w-36 p-2">
+          <QuoteCard  author={author} authorId={authorId} contentSnippet={contentSnippet}/>
           {reposted ? (
-            <div className="flex items-center justify-around hover:bg-[#262626] rounded p-2 ">
+            <div className="flex items-center justify-center hover:bg-[#262626] rounded p-2 ">
               <button className="bg-transparent text-red-500 font-semibold">
                 Remove
               </button>

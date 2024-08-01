@@ -18,7 +18,7 @@ export default function ProfileReplies({
               {thread.parentId && (
                 <ThreadCard
                   key={index}
-                  id={thread.parentId._id.toString()}
+                  id={thread.parentId._id.toJSON()}
                   authorId={thread.author._id.toJSON()}
                   author={thread.parentId.author.username}
                   contentSnippet={thread.parentId.content}

@@ -10,7 +10,7 @@ const Follow=({
   targetId,
 }: {
   followers: any[];
-  targetId: ObjectId;
+  targetId: any;
 })=> {
   const [isfollowed, setIsfollowed] = useState(false);
   const { data } = useSession();

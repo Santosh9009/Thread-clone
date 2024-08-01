@@ -13,7 +13,7 @@ interface Props {
   username: string;
   followers: any[];
   following: any[];
-  authorId: ObjectId;
+  authorId: string;
   bio: string; 
 }
 

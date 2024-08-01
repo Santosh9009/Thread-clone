@@ -27,7 +27,7 @@ export async function createThread({
       content,
     });
 
-    revalidatePath(path);
+    revalidatePath("/");
     revalidatePath("/profile");
 
     return { newThread };
@@ -39,11 +39,12 @@ export async function createThread({
 // fetch all threads
 export async function fetchallThreads(
   pageNumber: number,
-  pageSize: number
 ): Promise<any> {
   try {
     await dbConnect();
     console.log("DB connected");
+
+    const pageSize:number = 5;
 
     const skipAmount = (pageNumber - 1) * pageSize;
     console.log(`Skipping ${skipAmount} documents`);

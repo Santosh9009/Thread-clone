@@ -1,40 +1,61 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CreateThread from "@/components/cards/CreateThread";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchallThreads } from "@/lib/actions/thread.actions";
 import { PostType } from "@/types/Thread";
-import { Button } from "@/components/ui/button";
+import { Loader, Loader2 } from "lucide-react";
 
 export default function Home() {
   const [threads, setThreads] = useState<PostType[]>([]);
   const [isNext, setIsNext] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchThreads() {
+      setLoading(true)
       try {
-        const pageSize = 5;
-        const { allposts } = await fetchallThreads(pageNumber, pageSize);
-        setThreads((prevthread) => [...prevthread, ...allposts.posts]);
+        const { allposts } = await fetchallThreads(pageNumber);
+        setThreads((prevThreads) => [...prevThreads, ...allposts.posts]);
         setIsNext(allposts.isNext);
-        // console.log(allposts.posts)
       } catch (error) {
         console.error("Failed to fetch threads:", error);
+      }finally {
+        setLoading(false);
       }
     }
-
+    
     fetchThreads();
   }, [pageNumber]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && isNext) {
+        setPageNumber((prevPageNumber) => prevPageNumber + 1);
+      }
+    });
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
+      }
+    };
+  }, [isNext]);
 
   return (
     <div>
       <div className="md:h-[10vh] justify-center items-center font-medium md:block hidden"></div>
-      <div className="hidden md:block">
-      </div>
+      <div className="hidden md:block"></div>
       <MainCardWrapper>
         <CreateThread />
+        {threads.length<1 && <Loader className="w-full mx-auto animate-spin mt-24"/>}
         {threads.map((thread, index) => (
           <ThreadCard
             key={index}
@@ -48,18 +69,8 @@ export default function Home() {
             timestamp={thread.createdAt}
           />
         ))}
-        {isNext && (
-          <div className="">
-            <Button
-              className=""
-              onClick={() =>
-                setPageNumber((prevPageNumber) => prevPageNumber + 1)
-              }
-            >
-              Load More
-            </Button>
-          </div>
-        )}
+        <div ref={loadMoreRef} className="load-more-trigger" />
+        {loading && threads.length > 0 && <Loader2 className="w-full mx-auto animate-spin mt-4"/>}
       </MainCardWrapper>
     </div>
   );

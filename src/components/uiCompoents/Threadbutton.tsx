@@ -5,12 +5,18 @@ import { CommentIcon, RepostIcon } from "../../../public/assests/Images";
 import Repost from "./Repost";
 
 interface ThreadbuttonProps {
+  author: string;
+  authorId: any;
+  contentSnippet: string;
   commentsCount: number;
   upvotes: any[]; // Assuming upvotes is an array of user ids
   reposts: any[];
   id: any;
 }
 export default function Threadbutton({
+  author,
+  authorId,
+  contentSnippet,
   commentsCount,
   upvotes,
   reposts,
@@ -39,7 +45,7 @@ export default function Threadbutton({
         </button>
         <span>{commentsCount}</span>
       </div>
-      <Repost reposts={reposts} threadId={id}/>
+      <Repost author={author} authorId={authorId} contentSnippet={contentSnippet}  reposts={reposts} threadId={id}/>
       <Sharepop id={id} />
     </div>
   );

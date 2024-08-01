@@ -21,7 +21,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
       <div className="md:h-[10vh]"></div>
       <MainCardWrapper>
         <ProfileCard
-          authorId={userId}
+          authorId={userId.toString()}
           name={user?.name || ""}
           bio={user?.bio || ""}
           username={user?.username || ""}
@@ -50,9 +50,9 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                     userThreads.map((thread: any, index: number) => (
                       <ThreadCard
                         key={index}
-                        id={thread._id.toString()}
+                        id={thread._id.toJSON()}
                         author={thread.author.username}
-                        authorId={thread.author._id} 
+                        authorId={thread.author._id.toJSON()} 
                         contentSnippet={thread.content}
                         commentsCount={thread.comments.length}
                         upvotes={thread.likes}
