@@ -63,7 +63,6 @@ export async function getUser(id: ObjectId) {
     }
 
     const res = JSON.parse(JSON.stringify({user}))
-    console.log(user)
 
     return {res};
   } catch (error: any) {
@@ -111,10 +110,7 @@ export async function filterUser({
 
     const isNext = totalUsers > skipAmount + users.length;
 
-    const res = JSON.parse(JSON.stringify({ users, isNext }));
-    console.log(res);
-
-    return { res };
+    return { res: JSON.parse(JSON.stringify( {users} )),isNext};
   } catch (error: any) {
     throw new Error("Error searching user" + error.message);
   }

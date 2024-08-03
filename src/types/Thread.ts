@@ -20,14 +20,18 @@ export interface User {
 
 export interface PostType {
   _id: ObjectId;
-  parentId: ObjectId | null;
+  parentId?: PostType | null;
   content: string;
-  author: User;
-  likes: ObjectId[];
-  reposts: ObjectId[];
-  comments: ObjectId[];
+  author: {
+    _id: ObjectId;
+    username: string;
+  };
   createdAt: Date;
-  __v: number;
+  likes: any[];
+  comments: any[];
+  reposts: any[];
+  isRepost: boolean;
+  originalThread?: any
 }
 
 

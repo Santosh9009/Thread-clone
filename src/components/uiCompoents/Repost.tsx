@@ -5,7 +5,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RepostIcon } from "../../../public/assests/Images";
-import { Quote } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { repostThread } from "@/lib/actions/thread.actions";
@@ -32,14 +31,14 @@ export default function Repost({
 
   useEffect(() => {
     const check = reposts.find(
-      (element) => element.author === session.data?.user._id && element.content===undefined
+      (element) => element.author === session.data?.user._id
     );
     setReposted(!!check);
     setCount(reposts.length);
   }, []);
 
   function handleRepost() {
-    repostThread(threadId, session.data?.user._id, undefined)
+    repostThread(threadId, session.data?.user._id,undefined)
       .then((res) => {
         if (res.success === true) {
           setCount((prev) => prev + 1);
@@ -87,7 +86,7 @@ export default function Repost({
                 height: 20,
               })}
             </button>
-            <span>{reposts.length}</span>
+            <span>{count}</span>
           </div>
         </PopoverTrigger>
         <PopoverContent className="flex flex-col dark bg-[#181818] w-36 p-2">

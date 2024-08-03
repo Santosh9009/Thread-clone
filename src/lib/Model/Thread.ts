@@ -1,6 +1,6 @@
-import mongoose, { Schema , Document} from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface ThreadType extends Document{
+export interface ThreadType extends Document {
   parentId?: mongoose.Types.ObjectId;
   content: string;
   author: mongoose.Types.ObjectId;
@@ -8,6 +8,8 @@ export interface ThreadType extends Document{
   likes: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
   reposts: mongoose.Types.ObjectId[];
+  isRepost: boolean;
+  originalThread?: mongoose.Types.ObjectId;
 }
 
 const ThreadSchema: Schema<ThreadType> = new Schema({
@@ -18,7 +20,6 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
   },
   content: {
     type: String,
-    required: true,
     trim: true,
   },
   author: {
@@ -33,7 +34,7 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-  }], 
+  }],
   reposts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Thread",
@@ -42,9 +43,29 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Thread",
   }],
+  isRepost: {
+    type: Boolean,
+    default: false,
+  },
+  originalThread: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Thread",
+    default: null,
+  },
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
+// Populate references automatically
+ThreadSchema.virtual('authorDetails', {
+  ref: 'User',
+  localField: 'author',
+  foreignField: '_id',
+  justOne: true,
+});
 
-const ThreadModel = (mongoose.models.Thread as mongoose.Model<ThreadType>) || (mongoose.model<ThreadType>("Thread", ThreadSchema));
+const ThreadModel = mongoose.models.Thread as mongoose.Model<ThreadType> || mongoose.model<ThreadType>("Thread", ThreadSchema);
+
 
 export default ThreadModel;

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Quote } from "lucide-react";
 
-export default function QuoteCard({
+export default function AddQuote({
   author,
   authorId,
   contentSnippet,

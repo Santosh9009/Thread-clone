@@ -58,6 +58,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                         upvotes={thread.likes}
                         reposts={thread.reposts}
                         timestamp={thread.createdAt}
+                        isRepost={thread.isRepost}
                       />
                     ))
                   ) : (

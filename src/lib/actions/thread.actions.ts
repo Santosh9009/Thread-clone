@@ -4,7 +4,7 @@ import dbConnect from "../dbConnect";
 import UserModel from "@/lib/Model/User";
 import { revalidatePath } from "next/cache";
 import mongoose from "mongoose";
-import {ObjectId} from 'mongodb';
+import { ObjectId } from "mongodb";
 import RepostModel from "../Model/Repost";
 
 // create thread
@@ -37,28 +37,78 @@ export async function createThread({
 }
 
 // fetch all threads
-export async function fetchallThreads(
-  pageNumber: number,
-): Promise<any> {
+// export async function fetchallThreads(
+//   pageNumber: number,
+// ): Promise<any> {
+//   try {
+//     await dbConnect();
+//     console.log("DB connected");
+
+//     const pageSize:number = 5;
+
+//     const skipAmount = (pageNumber - 1) * pageSize;
+//     console.log(`Skipping ${skipAmount} documents`);
+
+//     const postsfetch = ThreadModel.find({
+//       parentId: { $in: [null, undefined] },
+//     })
+//       .sort({ createdAt: "desc" })
+//       .skip(skipAmount)
+//       .limit(pageSize)
+//       .populate({
+//         path: "author",
+//         model: UserModel,
+//       })
+//       .populate({
+//         path: "comments",
+//         populate: {
+//           path: "author",
+//           model: UserModel,
+//           select: "_id username parentId avatarUrl",
+//         },
+//       }).populate({
+//         path:"reposts",
+//         model:RepostModel,
+//         select:'author content'
+//       })
+
+//     const posts = await postsfetch.exec();
+
+//     const totalPosts = await ThreadModel.countDocuments({
+//       parentId: { $in: [null, undefined] },
+//     });
+
+//     const isNext = totalPosts > skipAmount + posts.length;
+
+//     if (!postsfetch) {
+//       throw new Error("No posts found!");
+//     }
+
+//     const allposts = JSON.parse(JSON.stringify({ posts, isNext }));
+
+//     return { allposts };
+//   } catch (error: any) {
+//     console.error("Unable to fetch threads:", error.message);
+//     throw new Error("Unable to fetch threads: " + error.message);
+//   }
+// }
+
+export async function fetchAllThreads(pageNumber: number): Promise<any> {
   try {
     await dbConnect();
     console.log("DB connected");
 
-    const pageSize:number = 5;
-
+    const pageSize: number = 5;
     const skipAmount = (pageNumber - 1) * pageSize;
     console.log(`Skipping ${skipAmount} documents`);
 
-    const postsfetch = ThreadModel.find({
+    const posts = await ThreadModel.find({
       parentId: { $in: [null, undefined] },
     })
       .sort({ createdAt: "desc" })
       .skip(skipAmount)
       .limit(pageSize)
-      .populate({
-        path: "author",
-        model: UserModel,
-      })
+      .populate({ path: "author", model: UserModel })
       .populate({
         path: "comments",
         populate: {
@@ -66,27 +116,24 @@ export async function fetchallThreads(
           model: UserModel,
           select: "_id username parentId avatarUrl",
         },
-      }).populate({
-        path:"reposts",
-        model:RepostModel,
-        select:'author content'
       })
-
-    const posts = await postsfetch.exec();
+      .populate({ path: "reposts", model: ThreadModel, select: "author" })
+      .populate({
+        path: "originalThread",
+        model: ThreadModel,
+        populate: [
+          { path: "reposts", model: ThreadModel, select: "author" },
+          { path: "author", model: UserModel, select: "username" },
+        ],
+      })
+      .exec();
 
     const totalPosts = await ThreadModel.countDocuments({
       parentId: { $in: [null, undefined] },
     });
-
     const isNext = totalPosts > skipAmount + posts.length;
 
-    if (!postsfetch) {
-      throw new Error("No posts found!");
-    }
-
-    const allposts = JSON.parse(JSON.stringify({ posts, isNext }));
-
-    return { allposts };
+    return { posts: JSON.parse(JSON.stringify(posts)), isNext };
   } catch (error: any) {
     console.error("Unable to fetch threads:", error.message);
     throw new Error("Unable to fetch threads: " + error.message);
@@ -143,6 +190,14 @@ export async function getThread(threadId: ObjectId) {
     const thread = await ThreadModel.findById(threadId)
       .populate("author", "_id username avatarUrl")
       .populate({
+        path: "originalThread",
+        model: ThreadModel,
+        populate: [
+          { path: "reposts", model: ThreadModel, select: "author" },
+          { path: "author", model: UserModel, select: "username" },
+        ],
+      })
+      .populate({
         path: "comments",
         populate: [
           {
@@ -180,13 +235,15 @@ export async function UserThreads(userId: ObjectId) {
     const userThreads = await ThreadModel.find({
       parentId: { $in: [null, undefined] },
       author: userId,
+      isRepost: false,
     })
-    .populate({
-      path:"author",
-      model:UserModel,
-      select:"username"
-    })
-    .sort({ createdAt: "desc" }).exec()
+      .populate({
+        path: "author",
+        model: UserModel,
+        select: "username",
+      })
+      .sort({ createdAt: "desc" })
+      .exec();
 
     // const userThreads = JSON.parse(JSON.stringify({Threads}))
 
@@ -207,10 +264,10 @@ export async function UserComments(userId: ObjectId) {
       .populate({
         path: "parentId",
         model: ThreadModel,
-        populate:{
-          path:'author',
-          model:UserModel,
-        }
+        populate: {
+          path: "author",
+          model: UserModel,
+        },
       })
       .sort({ createdAt: "desc" });
 
@@ -253,22 +310,32 @@ export async function togglelike({ threadId, userId }: liketype) {
 }
 
 // repost a thread or
-export async function repostThread(originalThread:ObjectId,author:ObjectId,content?:string){
-  dbConnect()
-  try{
-    
-    const newrepost = await RepostModel.create({
-      originalThread,
-      author,
+export async function repostThread(
+  originalThread: ObjectId,
+  author: ObjectId,
+  content?: string
+) {
+  dbConnect();
+  try {
+    const repost = await ThreadModel.create({
+      parentId: null,
       content,
-    })
+      author,
+      isRepost: true,
+      originalThread,
+    });
 
-    await ThreadModel.findOneAndUpdate({_id:originalThread},{
-      $push:{reposts:newrepost._id}
-    })
+    await ThreadModel.findOneAndUpdate(
+      { _id: originalThread },
+      {
+        $push: { reposts: repost._id },
+      }
+    );
 
-    return {success:true}
-  }catch(error:any){
-    throw new Error("Error reposting"+error)
+    console.log(repost);
+
+    return { success: true };
+  } catch (error: any) {
+    throw new Error("Error reposting" + error);
   }
 }
