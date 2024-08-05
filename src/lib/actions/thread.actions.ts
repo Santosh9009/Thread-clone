@@ -3,7 +3,7 @@ import ThreadModel from "@/lib/Model/Thread";
 import dbConnect from "../dbConnect";
 import UserModel from "@/lib/Model/User";
 import { revalidatePath } from "next/cache";
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
 import { ObjectId } from "mongodb";
 import RepostModel from "../Model/Repost";
 
@@ -98,7 +98,7 @@ export async function fetchAllThreads(pageNumber: number): Promise<any> {
     await dbConnect();
     console.log("DB connected");
 
-    const pageSize: number = 5;
+    const pageSize: number = 10;
     const skipAmount = (pageNumber - 1) * pageSize;
     console.log(`Skipping ${skipAmount} documents`);
 
@@ -117,13 +117,20 @@ export async function fetchAllThreads(pageNumber: number): Promise<any> {
           select: "_id username parentId avatarUrl",
         },
       })
-      .populate({ path: "reposts", model: ThreadModel, select: "author" })
+      .populate({ path: "reposts", model: ThreadModel, select: "author " })
       .populate({
         path: "originalThread",
         model: ThreadModel,
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
           { path: "author", model: UserModel, select: "username" },
+          {
+            path: "originalThread",
+            model: ThreadModel,
+            populate: [
+              { path: "author", model: UserModel, select: "username" },
+            ],
+          },
         ],
       })
       .exec();
@@ -132,6 +139,10 @@ export async function fetchAllThreads(pageNumber: number): Promise<any> {
       parentId: { $in: [null, undefined] },
     });
     const isNext = totalPosts > skipAmount + posts.length;
+
+    // console.log(`Fetched ${posts.length} posts`);
+    // console.log(`Total posts: ${totalPosts}`);
+    // console.log(`Is there a next page? ${isNext}`);
 
     return { posts: JSON.parse(JSON.stringify(posts)), isNext };
   } catch (error: any) {
@@ -195,6 +206,31 @@ export async function getThread(threadId: ObjectId) {
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
           { path: "author", model: UserModel, select: "username" },
+          {
+            path: "originalThread",
+            model: ThreadModel,
+            populate: [
+              { path: "author", model: UserModel, select: "username" },
+            ],
+          },
+          {
+            path: "comments",
+            populate: [
+              {
+                path: "author",
+                model: UserModel,
+                select: "_id username avatarUrl",
+              },
+              {
+                path: "comments",
+                populate: {
+                  path: "author",
+                  model: UserModel,
+                  select: "_id username avatarUrl",
+                },
+              },
+            ],
+          },
         ],
       })
       .populate({
@@ -220,7 +256,6 @@ export async function getThread(threadId: ObjectId) {
       throw new Error("Thread not found");
     }
     const post = JSON.parse(JSON.stringify({ thread }));
-    console.log(post.thread);
 
     return { post };
   } catch (error: any) {
@@ -235,7 +270,7 @@ export async function UserThreads(userId: ObjectId) {
     const userThreads = await ThreadModel.find({
       parentId: { $in: [null, undefined] },
       author: userId,
-      isRepost: false,
+      isRepost: { $in: [null, undefined] },
     })
       .populate({
         path: "author",
@@ -312,14 +347,12 @@ export async function togglelike({ threadId, userId }: liketype) {
 // repost a thread or
 export async function repostThread(
   originalThread: ObjectId,
-  author: ObjectId,
-  content?: string
+  author: ObjectId
 ) {
   dbConnect();
   try {
     const repost = await ThreadModel.create({
       parentId: null,
-      content,
       author,
       isRepost: true,
       originalThread,
@@ -332,10 +365,71 @@ export async function repostThread(
       }
     );
 
-    console.log(repost);
+    revalidatePath("/");
 
     return { success: true };
   } catch (error: any) {
     throw new Error("Error reposting" + error);
   }
 }
+
+// remove repost
+export async function removeRepostThread(
+  originalThread: ObjectId,
+  author: ObjectId
+) {
+  dbConnect(); // Connect to your database
+
+  try {
+    // Find the repost thread
+    const repost = await ThreadModel.findOne({
+      originalThread,
+      author,
+      isRepost: true,
+    });
+
+    if (!repost) {
+      throw new Error("Repost not found");
+    }
+
+    // Remove the repost reference from the original thread's reposts array
+    await ThreadModel.findOneAndUpdate(
+      { _id: originalThread },
+      {
+        $pull: { reposts: repost._id },
+      }
+    );
+
+    // Delete the repost thread itself
+    const deletedRepost = await ThreadModel.findByIdAndDelete(repost._id);
+
+    revalidatePath("/");
+
+    return { success: true };
+  } catch (error: any) {
+    throw new Error("Error removing repost: " + error);
+  }
+}
+
+
+// get thread for quote
+export async function getThreadbyId(threadId:any){
+  dbConnect();
+  try{
+    const post = await ThreadModel.findOne({_id:threadId})
+    .populate({
+      path: "author",
+      model: UserModel,
+      select: "username",
+    })
+
+    const thread = JSON.parse(JSON.stringify({post}))
+
+    return {thread};
+
+  }catch(error:any){
+    throw new Error("Unable to fetch thread");
+  }
+}
+
+

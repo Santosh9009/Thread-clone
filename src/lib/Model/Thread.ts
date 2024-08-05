@@ -9,6 +9,7 @@ export interface ThreadType extends Document {
   comments: mongoose.Types.ObjectId[];
   reposts: mongoose.Types.ObjectId[];
   isRepost: boolean;
+  isQuote: boolean;
   originalThread?: mongoose.Types.ObjectId;
 }
 
@@ -47,6 +48,10 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
     type: Boolean,
     default: false,
   },
+  isQuote: {
+    type: Boolean,
+    default: false,
+  },
   originalThread: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Thread",
@@ -66,6 +71,5 @@ ThreadSchema.virtual('authorDetails', {
 });
 
 const ThreadModel = mongoose.models.Thread as mongoose.Model<ThreadType> || mongoose.model<ThreadType>("Thread", ThreadSchema);
-
 
 export default ThreadModel;

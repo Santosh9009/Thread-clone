@@ -27,6 +27,7 @@ interface ThreadCardProps {
   isRepost: boolean;
   repostauthor?: any;
   repostTime?: any;
+  isQuote?:boolean,
 }
 
 const ThreadCard: React.FC<ThreadCardProps> = ({
@@ -42,6 +43,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
   isRepost,
   repostauthor,
   repostTime,
+  isQuote,
 }) => {
   const router = useRouter();
 
@@ -62,6 +64,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
       {isRepost && repostauthor && (
         <div className="flex gap-2 items-center justify-start text-slate-400 px-5 py-2">
           {RepostIcon({
+            fill: "#9CA3AF",
             width: 16,
             height: 16,
           })}
@@ -106,13 +109,12 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               </div>
               <p className="text-gray-300 mt-2 font-light">{contentSnippet}</p>
               <Threadbutton
-                author={author}
-                authorId={authorId}
-                contentSnippet={contentSnippet}
                 id={id}
                 commentsCount={commentsCount}
                 upvotes={upvotes}
                 reposts={reposts}
+                isRepost={isRepost}
+                isQuote={isQuote}
               />
             </div>
           </div>

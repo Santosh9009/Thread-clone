@@ -3,13 +3,11 @@ import { useEffect, useState, useRef } from "react";
 import CreateThread from "@/components/cards/CreateThread";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import ThreadCard from "@/components/cards/ThreadCard";
-import RepostCard from "@/components/cards/RepostCard";
-// import QuoteCard from "@/components/cards/QuoteCard";
 import { fetchAllThreads } from "@/lib/actions/thread.actions";
 import { PostType } from "@/types/Thread";
-import { Loader, Loader2 } from "lucide-react";
+import { Loader, Loader2, Pencil } from "lucide-react";
 import QuoteCard from "@/components/cards/QuoteRepostCard";
-
+import RepostCard from "@/components/cards/RepostCard";
 
 export default function Home() {
   const [threads, setThreads] = useState<PostType[]>([]);
@@ -38,7 +36,11 @@ export default function Home() {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && isNext) {
-        setPageNumber((prevPageNumber) => prevPageNumber + 1);
+        console.log("Load more trigger is in view, loading next page...");
+        setPageNumber((prevPageNumber) => {
+          console.log("Setting new page number:", prevPageNumber + 1);
+          return prevPageNumber + 1;
+        });
       }
     });
 
@@ -61,7 +63,7 @@ export default function Home() {
         <CreateThread />
         {threads.length < 1 && <Loader className="w-full mx-auto animate-spin mt-24" />}
         {threads.map((thread, index) => {
-          if (thread.isRepost && thread.content) {
+          if (thread.isQuote && thread.originalThread) {
             // It's a quote
             return (
               <QuoteCard
@@ -75,26 +77,28 @@ export default function Home() {
                 reposts={thread.reposts}
                 timestamp={thread.createdAt}
                 originalThread={thread.originalThread}
+                isRepost={thread.isRepost}
+                isQuote={thread.isQuote}
               />
             );
           } 
-          
-          else if (thread.originalThread || thread.isRepost) {
+          else if (thread.isRepost && thread.originalThread) {
             // It's a repost
             return (
-              <ThreadCard
-              key={index}
-              id={thread.originalThread?._id}
-              authorId={thread.originalThread?.author._id}
-              author={thread.originalThread.author.username}
-              contentSnippet={thread.originalThread?.content}
-              commentsCount={thread.comments.length}
-              upvotes={thread.originalThread?.likes}
-              reposts={thread.originalThread?.reposts}
-              timestamp={thread.originalThread?.createdAt}
-              repostauthor={thread.author}
-              isRepost={thread.isRepost}
-              repostTime={thread.createdAt}
+              <RepostCard 
+                key={index}
+                id={thread._id}
+                authorId={thread.originalThread?.author._id}
+                author={thread.originalThread.author.username}
+                contentSnippet={thread.originalThread?.content}
+                commentsCount={thread.originalThread.comments.length}
+                upvotes={thread.originalThread?.likes}
+                reposts={thread.originalThread?.reposts}
+                timestamp={thread.originalThread?.createdAt}
+                repostauthor={thread.author}
+                isRepost={thread.isRepost}
+                repostTime={thread.createdAt}
+                originalThread={thread.originalThread}
               />
             );
           } else {
@@ -111,6 +115,7 @@ export default function Home() {
                 reposts={thread.reposts}
                 timestamp={thread.createdAt}
                 isRepost={thread.isRepost}
+                isQuote={thread.isQuote}
               />
             );
           }

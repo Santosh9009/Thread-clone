@@ -13,7 +13,7 @@ import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { useSession } from "next-auth/react";
 import { addCommnet } from "@/lib/actions/thread.actions";
 import { usePathname } from "next/navigation";
-import { ObjectId } from "mongoose";
+import { ObjectId } from "mongodb";
 
 const commentSchema = z.object({
   comment: z.string().min(1, "Comment is required"),

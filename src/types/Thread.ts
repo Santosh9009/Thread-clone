@@ -31,7 +31,8 @@ export interface PostType {
   comments: any[];
   reposts: any[];
   isRepost: boolean;
-  originalThread?: any
+  originalThread?: any,
+  isQuote:boolean,
 }
 
 

@@ -25,6 +25,8 @@ interface ThreadCardProps {
   timestamp: Date;
   authorId: any;
   originalThread: any;
+  isRepost:boolean,
+  isQuote:boolean,
 }
 
 const QuoteCard: React.FC<ThreadCardProps> = ({
@@ -38,6 +40,8 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
   reposts,
   timestamp,
   originalThread,
+  isRepost,
+  isQuote
 }) => {
   const router = useRouter();
 
@@ -121,13 +125,13 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
 
 
             <Threadbutton
-              author={author}
-              authorId={authorId}
-              contentSnippet={contentSnippet}
               id={id}
               commentsCount={commentsCount}
               upvotes={upvotes}
               reposts={reposts}
+              isRepost={isRepost}
+              content={contentSnippet}
+              isQuote = {isQuote}
             />
           </div>
         </div>

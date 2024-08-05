@@ -3,40 +3,46 @@ import LikeButton from "../uiCompoents/LikeButton";
 import { Sharepop } from "../uiCompoents/Sharepop";
 import { CommentIcon, RepostIcon } from "../../../public/assests/Images";
 import Repost from "./Repost";
+import { useRouter } from "next/navigation";
 
 interface ThreadbuttonProps {
-  author: string;
-  authorId: any;
-  contentSnippet: string;
   commentsCount: number;
-  upvotes: any[]; // Assuming upvotes is an array of user ids
+  upvotes: any[]; 
   reposts: any[];
   id: any;
+  originalThreadId?:any;
+  isRepost:boolean,
+  content?:string,
+  isQuote?:boolean,
 }
 export default function Threadbutton({
-  author,
-  authorId,
-  contentSnippet,
   commentsCount,
   upvotes,
   reposts,
   id,
+  originalThreadId,
+  isRepost,
+  content,
+  isQuote,
 }: ThreadbuttonProps) {
-  function sharehandler(event: React.MouseEvent) {
+
+  const router = useRouter();
+  function handler(event: React.MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
   }
+  // const shareId = isRepost ? 
 
   return (
     <div
-      onClick={sharehandler}
+      onClick={handler}
       className="flex justify-start mt-4 text-gray-400 space-x-8"
     >
       <div className="">
-        <LikeButton threadId={id} upvotes={upvotes} />
+        <LikeButton threadId={isRepost ? originalThreadId:id } upvotes={upvotes} />
       </div>
       <div className="flex items-center space-x-2">
-        <button>
+        <button onClick={()=>router.push(`thread/${id}`)}>
           {CommentIcon({
             fill: "#9CA3AF",
             width: 20,
@@ -45,7 +51,7 @@ export default function Threadbutton({
         </button>
         <span>{commentsCount}</span>
       </div>
-      <Repost author={author} authorId={authorId} contentSnippet={contentSnippet}  reposts={reposts} threadId={id}/>
+      <Repost  reposts={reposts} threadId={id} isRepost={isRepost} isQuote={isQuote} originalThreadId={originalThreadId}/>
       <Sharepop id={id} />
     </div>
   );
