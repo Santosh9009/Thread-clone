@@ -130,8 +130,8 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
               upvotes={upvotes}
               reposts={reposts}
               isRepost={isRepost}
-              content={contentSnippet}
               isQuote = {isQuote}
+              originalThreadId={originalThread._id}
             />
           </div>
         </div>

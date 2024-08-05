@@ -433,3 +433,34 @@ export async function getThreadbyId(threadId:any){
 }
 
 
+// Quote thread
+
+export async function QuoteThread(
+  originalThread: ObjectId,
+  author: ObjectId,
+  content:string,
+) {
+  dbConnect();
+  try {
+    const quote = await ThreadModel.create({
+      parentId: null,
+      author,
+      isQuote: true,
+      originalThread,
+      content
+    });
+
+    await ThreadModel.findOneAndUpdate(
+      { _id: originalThread },
+      {
+        $push: { Quotes: quote._id },
+      }
+    );
+
+    revalidatePath("/");
+
+    return { success: true };
+  } catch (error: any) {
+    throw new Error("Error quoting" + error);
+  }
+}

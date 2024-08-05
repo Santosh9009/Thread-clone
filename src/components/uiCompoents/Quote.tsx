@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getThreadbyId } from "@/lib/actions/thread.actions";
+import { getThreadbyId, QuoteThread } from "@/lib/actions/thread.actions";
 import { PostType } from "@/types/Thread";
 import { Quote } from "lucide-react";
 import Image from "next/image";
@@ -16,11 +16,13 @@ import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { timeAgo } from "@/helpers/CalculateTime";
 import { useSession } from "next-auth/react";
 import { Textarea } from "../ui/textarea";
+import { toast } from "../ui/use-toast";
 
 export default function AddQuote({ id }: { id: any }) {
   const [thread, setThread] = useState<PostType | null>(null);
   const session = useSession();
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     getThreadbyId(id)
@@ -32,15 +34,30 @@ export default function AddQuote({ id }: { id: any }) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
-  // useState(()=>{
-
-  // },[])
+  function handleQuotePost() {
+    QuoteThread(id, session.data?.user._id, content)
+      .then((result) => {
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: "Quote Posted",
+          });
+          setIsOpen(false);  // Close the dialog
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: "Failure",
+          description: "Unable to post quote",
+        });
+      });
+  }
 
   return (
     <div>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger className="w-full">
           <div className="flex items-center justify-around hover:bg-[#262626] rounded p-2">
             <div className="bg-transparent text-white font-semibold">Quote</div>
@@ -63,9 +80,10 @@ export default function AddQuote({ id }: { id: any }) {
               placeholder="What's on your mind?"
               rows={3}
               minLength={2}
-              // onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => setContent(e.target.value)}
             />
           </div>
+          {/* Original thread */}
           {thread && (
             <div className="bg-[#181818] rounded-lg overflow-hidden border-[.05rem] border-[#323232] py-4 px-4 m-2">
               <div className="flex items-start">
@@ -93,6 +111,18 @@ export default function AddQuote({ id }: { id: any }) {
               </div>
             </div>
           )}
+
+          <div className="flex justify-end p-4">
+            <button
+              onClick={handleQuotePost}
+              className={`${
+                content ? "text-white" : "text-slate-600"
+              } px-4 py-1 rounded-lg border-[.05rem] border-[#323232]`}
+              disabled={!content}
+            >
+              Post
+            </button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

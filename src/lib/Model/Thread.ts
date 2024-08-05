@@ -7,6 +7,7 @@ export interface ThreadType extends Document {
   createdAt: Date;
   likes: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
+  Quotes: mongoose.Types.ObjectId[];
   reposts: mongoose.Types.ObjectId[];
   isRepost: boolean;
   isQuote: boolean;
@@ -41,6 +42,10 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
     ref: "Thread",
   }],
   comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Thread",
+  }],
+  Quotes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Thread",
   }],
