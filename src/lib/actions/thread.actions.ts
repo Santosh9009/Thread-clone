@@ -345,10 +345,7 @@ export async function togglelike({ threadId, userId }: liketype) {
 }
 
 // repost a thread or
-export async function repostThread(
-  originalThread: ObjectId,
-  author: ObjectId
-) {
+export async function repostThread(originalThread: ObjectId, author: ObjectId) {
   dbConnect();
   try {
     const repost = await ThreadModel.create({
@@ -411,34 +408,30 @@ export async function removeRepostThread(
   }
 }
 
-
 // get thread for quote
-export async function getThreadbyId(threadId:any){
+export async function getThreadbyId(threadId: any) {
   dbConnect();
-  try{
-    const post = await ThreadModel.findOne({_id:threadId})
-    .populate({
+  try {
+    const post = await ThreadModel.findOne({ _id: threadId }).populate({
       path: "author",
       model: UserModel,
       select: "username",
-    })
+    });
 
-    const thread = JSON.parse(JSON.stringify({post}))
+    const thread = JSON.parse(JSON.stringify({ post }));
 
-    return {thread};
-
-  }catch(error:any){
+    return { thread };
+  } catch (error: any) {
     throw new Error("Unable to fetch thread");
   }
 }
-
 
 // Quote thread
 
 export async function QuoteThread(
   originalThread: ObjectId,
   author: ObjectId,
-  content:string,
+  content: string
 ) {
   dbConnect();
   try {
@@ -447,7 +440,7 @@ export async function QuoteThread(
       author,
       isQuote: true,
       originalThread,
-      content
+      content,
     });
 
     await ThreadModel.findOneAndUpdate(
@@ -462,5 +455,34 @@ export async function QuoteThread(
     return { success: true };
   } catch (error: any) {
     throw new Error("Error quoting" + error);
+  }
+}
+
+export async function getUserReposts(userId: ObjectId) {
+  dbConnect();
+  try {
+    const reposts = await ThreadModel.find({
+      author: userId,
+      isRepost: true,
+    })
+      .populate("author", "_id username avatarUrl")
+      .populate({
+        path: "originalThread",
+        model: ThreadModel,
+        populate: [
+          { path: "author", model: UserModel, select: "_id username" },
+          { path: "comments", model: ThreadModel },
+          {
+            path: "originalThread",
+            model: ThreadModel,
+            populate: { path: "author", model: UserModel, select: "username" },
+          },
+        ],
+      })
+      .exec();
+
+    return { allReposts: JSON.parse(JSON.stringify({ reposts })) };
+  } catch (error: any) {
+    throw new Error("Unable to get user reposts");
   }
 }

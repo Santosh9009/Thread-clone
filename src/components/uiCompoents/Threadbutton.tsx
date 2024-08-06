@@ -4,6 +4,7 @@ import { Sharepop } from "../uiCompoents/Sharepop";
 import { CommentIcon, RepostIcon } from "../../../public/assests/Images";
 import Repost from "./Repost";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ThreadbuttonProps {
   commentsCount: number;
@@ -39,14 +40,12 @@ export default function Threadbutton({
       <div className="">
         <LikeButton threadId={isRepost ? originalThreadId:id } upvotes={upvotes} />
       </div>
-      <div className="flex items-center space-x-2">
-        <button onClick={()=>router.push(`thread/${id}`)}>
+      <div onClick={()=>router.push(`/thread/${id}`)} className="flex items-center space-x-2">
           {CommentIcon({
             fill: "#9CA3AF",
             width: 20,
             height: 20,
           })}
-        </button>
         <span>{commentsCount}</span>
       </div>
       <Repost  reposts={reposts} threadId={id} isRepost={isRepost} isQuote={isQuote} originalThreadId={originalThreadId}/>
