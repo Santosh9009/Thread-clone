@@ -151,3 +151,18 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
 };
 
 export default toggleFollowUser;
+
+
+export async function getFollowers(userId:ObjectId){
+  dbConnect();
+
+  try{
+    const UserFollowers = await UserModel.findById(userId)
+    .populate({path:"followers",model:UserModel})
+
+    return UserFollowers;
+
+  }catch(error:any){
+    throw new Error("Unable to get followers");
+  }
+}
