@@ -263,36 +263,47 @@ export async function getThread(threadId: ObjectId) {
   }
 }
 
-export async function UserThreads(userId: ObjectId) {
+export async function UserThreads(userId: ObjectId, pageNumber: number) {
   dbConnect();
 
   try {
-    const userThreads = await ThreadModel.find({
+    const pageSize = 2;
+    const skipAmount = (pageNumber - 1) * pageSize;
+
+    const Threads = await ThreadModel.find({
       parentId: { $in: [null, undefined] },
       author: userId,
-      isRepost: { $in: [null, undefined] },
+      isRepost: { $in: [false, null, undefined] },
     })
       .populate({
         path: "author",
         model: UserModel,
-        select: "username",
+        select: "username _id",
       })
+      .populate({
+        path: "originalThread",
+        model: ThreadModel,
+        populate: { path: "author", model: UserModel, select: "username _id" },
+      })
+      .limit(pageSize)
+      .skip(skipAmount)
       .sort({ createdAt: "desc" })
       .exec();
 
-    // const userThreads = JSON.parse(JSON.stringify({Threads}))
-
-    return { userThreads };
+    return { userThreads: JSON.parse(JSON.stringify(Threads)) };
   } catch (error: any) {
     throw new Error("Error fetching user threads");
   }
 }
 
-export async function UserComments(userId: ObjectId) {
+export async function UserComments(userId: ObjectId, pageNumber: number) {
   dbConnect();
 
   try {
-    const comments = await ThreadModel.find({
+    const pageSize = 2;
+    const skipAmount = (pageNumber - 1) * pageSize;
+
+    const comment = await ThreadModel.find({
       parentId: { $nin: [null] },
       author: userId,
     })
@@ -304,11 +315,12 @@ export async function UserComments(userId: ObjectId) {
           model: UserModel,
         },
       })
-      .sort({ createdAt: "desc" });
+      .sort({ createdAt: "desc" })
+      .limit(pageSize)
+      .skip(skipAmount)
+      .exec();
 
-    // const comments = JSON.parse(JSON.stringify({comment}))
-
-    return { comments };
+    return { comments: JSON.parse(JSON.stringify(comment)) };
   } catch (error: any) {
     throw new Error("Error fetching user comments");
   }
@@ -458,9 +470,12 @@ export async function QuoteThread(
   }
 }
 
-export async function getUserReposts(userId: ObjectId) {
+export async function getUserReposts(userId: ObjectId, pageNumber: number) {
   dbConnect();
   try {
+    const pageSize = 4;
+    const skipAmount = (pageNumber - 1) * pageSize;
+
     const reposts = await ThreadModel.find({
       author: userId,
       isRepost: true,
@@ -470,8 +485,8 @@ export async function getUserReposts(userId: ObjectId) {
         path: "originalThread",
         model: ThreadModel,
         populate: [
+          { path: "reposts", model: ThreadModel, select: "author" },
           { path: "author", model: UserModel, select: "_id username" },
-          { path: "comments", model: ThreadModel },
           {
             path: "originalThread",
             model: ThreadModel,
@@ -479,9 +494,11 @@ export async function getUserReposts(userId: ObjectId) {
           },
         ],
       })
+      .limit(pageSize)
+      .skip(skipAmount)
       .exec();
 
-    return { allReposts: JSON.parse(JSON.stringify({ reposts })) };
+    return { Reposts: JSON.parse(JSON.stringify( reposts )) };
   } catch (error: any) {
     throw new Error("Unable to get user reposts");
   }

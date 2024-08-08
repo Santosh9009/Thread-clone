@@ -4,7 +4,6 @@ import dbConnect from "../dbConnect";
 import { ObjectId } from "mongodb";
 import { FilterQuery, model } from "mongoose";
 
-
 interface UpdateUserParams {
   userId: string;
   name?: string;
@@ -56,15 +55,13 @@ export async function getUser(id: ObjectId) {
   dbConnect();
 
   try {
-    const user = await UserModel.findById(id);
+    const User = await UserModel.findById(id);
 
-    if (!user) {
+    if (!User) {
       throw new Error("no user found");
     }
 
-    const res = JSON.parse(JSON.stringify({user}))
-
-    return {res};
+    return { user: JSON.parse(JSON.stringify(User)) };
   } catch (error: any) {
     throw new Error("Uable to fetch user" + error.message);
   }
@@ -73,19 +70,19 @@ export async function getUser(id: ObjectId) {
 interface filterType {
   userId: ObjectId;
   pageNumber?: number;
-  pageSize?: number;
   searchText: string;
 }
 
 export async function filterUser({
   pageNumber = 1,
-  pageSize = 10,
   userId,
   searchText,
 }: filterType) {
   dbConnect();
 
   try {
+    const pageSize = 10;
+
     const skipAmount = (pageNumber - 1) * pageSize;
 
     const regex = new RegExp(searchText, "i");
@@ -110,7 +107,7 @@ export async function filterUser({
 
     const isNext = totalUsers > skipAmount + users.length;
 
-    return { res: JSON.parse(JSON.stringify( {users} )),isNext};
+    return { res: JSON.parse(JSON.stringify({ users })), isNext };
   } catch (error: any) {
     throw new Error("Error searching user" + error.message);
   }
@@ -130,7 +127,9 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
     if (isFollowing) {
       // Unfollow the user
       user.following = user.following.filter((id) => !id.equals(targetUserId));
-      targetUser.followers = targetUser.followers.filter((id) => !id.equals(userId));
+      targetUser.followers = targetUser.followers.filter(
+        (id) => !id.equals(userId)
+      );
     } else {
       // Follow the user
       user.following.push(targetUserId);
@@ -141,9 +140,7 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
     await targetUser.save();
 
     return {
-      message: isFollowing
-        ? true
-        : false,
+      message: isFollowing ? true : false,
     };
   } catch (error: any) {
     return { error: error.message };
@@ -152,17 +149,17 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
 
 export default toggleFollowUser;
 
-
-export async function getFollowers(userId:ObjectId){
+export async function getFollowers(userId: ObjectId) {
   dbConnect();
 
-  try{
-    const UserFollowers = await UserModel.findById(userId)
-    .populate({path:"followers",model:UserModel})
+  try {
+    const UserFollowers = await UserModel.findById(userId).populate({
+      path: "followers",
+      model: UserModel,
+    });
 
     return UserFollowers;
-
-  }catch(error:any){
+  } catch (error: any) {
     throw new Error("Unable to get followers");
   }
 }

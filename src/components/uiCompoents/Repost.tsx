@@ -22,7 +22,7 @@ export default function Repost({
   reposts: any[];
   threadId: ObjectId;
   originalThreadId?:any;
-  isRepost:boolean,
+  isRepost?:boolean,
   isQuote?:boolean,
 }) {
   const [count, setCount] = useState<number>(0);

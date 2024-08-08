@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { fetchAllThreads } from "@/lib/actions/thread.actions";
 import ThreadCard from "../cards/ThreadCard";
 import RepostCard from "../cards/RepostCard";
-import QuoteCard from "../cards/QuoteRepostCard";
+import QuoteCard from "../cards/QuoteCard";
 
 
 export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
@@ -97,7 +97,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
       })}
 
         <div ref={ref}>
-          {isNext && <Loader2 className="w-full mx-auto animate-spin"/>}
+          {isNext && <Loader2 className="w-full mx-auto animate-spin my-5"/>}
         </div>
     </>
   );

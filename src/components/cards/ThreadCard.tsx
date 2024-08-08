@@ -24,7 +24,7 @@ interface ThreadCardProps {
   reposts: any[];
   timestamp: Date;
   authorId: any;
-  isRepost: boolean;
+  isRepost?: boolean;
   repostauthor?: any;
   repostTime?: any;
   isQuote?:boolean,

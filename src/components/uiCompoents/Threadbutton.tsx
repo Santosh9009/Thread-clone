@@ -12,7 +12,7 @@ interface ThreadbuttonProps {
   reposts: any[];
   id: any;
   originalThreadId?:any;
-  isRepost:boolean,
+  isRepost?:boolean,
   isQuote?:boolean,
 }
 export default function Threadbutton({

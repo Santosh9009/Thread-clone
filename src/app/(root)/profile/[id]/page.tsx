@@ -7,21 +7,19 @@ import {
   UserComments,
   UserThreads,
 } from "@/lib/actions/thread.actions";
-import ThreadCard from "@/components/cards/ThreadCard";
 import ProfileReplies from "@/components/uiCompoents/Profile-Replies";
 import ProfileCard from "@/components/cards/Profilecard";
 import { ObjectId } from "mongodb";
-import RepostCard from "@/components/cards/RepostCard";
+import LoadUserThreads from "@/components/Loadmore/LoadUserThread";
+import LoadReposts from "@/components/Loadmore/LoadRepost";
 
 async function Profile({ params }: { params: { id: ObjectId } }) {
   const userId = params.id;
 
-  const { res } = await getUser(userId);
-  const user = res.user;
-  const { userThreads } = await UserThreads(userId);
-  const { comments } = await UserComments(userId);
-  const { allReposts } = await getUserReposts(userId);
-  const reposts = allReposts.reposts;
+  const { user } = await getUser(userId);
+  const { userThreads } = await UserThreads(userId, 1);
+  const { comments } = await UserComments(userId, 1);
+  const { Reposts } = await getUserReposts(userId, 1);
 
   return (
     <div>
@@ -54,20 +52,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                 {/* User threads */}
                 {tab.name === "Threads" ? (
                   userThreads && userThreads.length > 0 ? (
-                    userThreads.map((thread: any, index: number) => (
-                      <ThreadCard
-                        key={index}
-                        id={thread._id.toString()}
-                        author={thread.author.username}
-                        authorId={thread.author._id.toString()}
-                        contentSnippet={thread.content}
-                        commentsCount={thread.comments.length}
-                        upvotes={thread.likes}
-                        reposts={thread.reposts}
-                        timestamp={thread.createdAt}
-                        isRepost={thread.isRepost}
-                      />
-                    ))
+                    <LoadUserThreads threads={userThreads} userId={userId} />
                   ) : (
                     <div className="text-center py-3">{tab.defaultValue}</div>
                   )
@@ -79,6 +64,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                     <ProfileReplies
                       user={user?.username || ""}
                       comments={comments}
+                      userId={userId}
                     />
                   ) : (
                     <div className="text-center py-3">{tab.defaultValue}</div>
@@ -87,24 +73,8 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
 
                 {/* User reposts */}
                 {tab.name === "Reposts" ? (
-                  reposts && reposts.length > 0 ? (
-                    reposts.map((thread: any, index: number) => (
-                      <RepostCard
-                        key={index}
-                        id={thread._id.toString()}
-                        authorId={thread.originalThread?.author._id.toString()}
-                        author={thread.originalThread.author.username}
-                        contentSnippet={thread.originalThread?.content}
-                        commentsCount={thread.originalThread.comments.length}
-                        upvotes={thread.originalThread?.likes}
-                        reposts={thread.originalThread?.reposts}
-                        timestamp={thread.originalThread?.createdAt}
-                        repostauthor={thread.author.username}
-                        isRepost={thread.isRepost}
-                        repostTime={thread.createdAt}
-                        originalThread={thread.originalThread}
-                      />
-                    ))
+                  Reposts && Reposts.length > 0 ? (
+                    <LoadReposts reposts={Reposts} userId={userId} />
                   ) : (
                     <div className="text-center py-3">{tab.defaultValue}</div>
                   )

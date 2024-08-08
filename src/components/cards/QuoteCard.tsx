@@ -2,15 +2,12 @@
 "use client";
 import Image from "next/image";
 import {
-  CommentIcon,
-  RepostIcon,
   ThreeDotIcon,
 } from "../../../public/assests/Images";
 import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { timeAgo } from "@/helpers/CalculateTime";
 import Link from "next/link";
-import LikeButton from "../uiCompoents/LikeButton";
-import { Sharepop } from "../uiCompoents/Sharepop";
+
 import Threadbutton from "../uiCompoents/Threadbutton";
 import { useRouter } from "next/navigation";
 

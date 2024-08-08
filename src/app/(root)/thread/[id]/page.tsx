@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
-import QuoteCard from "@/components/cards/QuoteRepostCard";
+import QuoteCard from "@/components/cards/QuoteCard";
 import RepostCard from "@/components/cards/RepostCard";
 import ThreadCard from "@/components/cards/ThreadCard";
 import PostComment from "@/components/forms/CommnetForm";
