@@ -98,7 +98,7 @@ export async function fetchAllThreads(pageNumber: number): Promise<any> {
     await dbConnect();
     console.log("DB connected");
 
-    const pageSize: number = 10;
+    const pageSize: number = 4;
     const skipAmount = (pageNumber - 1) * pageSize;
     console.log(`Skipping ${skipAmount} documents`);
 
