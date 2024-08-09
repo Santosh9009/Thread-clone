@@ -1,12 +1,12 @@
 "use client";
 import { useInView } from "react-intersection-observer";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ObjectId } from "mongodb";
 import { getFollowings } from "@/lib/actions/user.actions";
 import UserCard from "../cards/UserCard";
 
-export default function LoadFollowings({ userId }: { userId: ObjectId }) {
+export default function LoadFollowings({ userId }: { userId: string }) {
   const { ref, inView } = useInView();
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
@@ -45,7 +45,7 @@ export default function LoadFollowings({ userId }: { userId: ObjectId }) {
               key={index}
               name={user.name}
               username={user.username}
-              followers={user.followers.length}
+              followers={user.followers}
               userId={user._id}
             />
           ))
@@ -53,7 +53,7 @@ export default function LoadFollowings({ userId }: { userId: ObjectId }) {
 
       <div ref={ref}>
         {loading && hasMore && (
-          <Loader2 className="w-full mx-auto animate-spin my-5" />
+          <Loader className="w-full mx-auto animate-spin my-5" />
         )}
       </div>
     </div>

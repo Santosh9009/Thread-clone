@@ -48,6 +48,12 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
     router.push(`/profile/${authorId}`);
   }
 
+  function handleclick2(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/profile/${originalThread.author._id}`);
+  }
+
   function originalThreadclick(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -102,7 +108,7 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-2">
                       <h3
-                        onClick={handleclick}
+                        onClick={handleclick2}
                         className="text-base font-semibold text-slate-200 hover:underline"
                       >
                         {originalThread.author.username && "@" + originalThread.author.username}

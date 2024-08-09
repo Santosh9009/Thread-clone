@@ -8,6 +8,7 @@ import { useState } from "react";
 import Follow from "../uiCompoents/Follow";
 import { ObjectId } from "mongodb";
 import { People } from "../uiCompoents/People";
+import { useRouter } from "next/navigation";
 
 interface Props {
   name: string;
@@ -30,6 +31,7 @@ const ProfileCard = ({
 }: Props) => {
   const { data } = useSession();
   const userId = data?.user._id;
+  const router = useRouter();
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -72,24 +74,25 @@ const ProfileCard = ({
         <div className="flex justify-start space-x-6 mb-5 w-full">
           <div className="flex items-center space-x-2">
             <p className="text-base font-semibold">{followers.length}</p>
-            <People userId={userId} btn={'Followers'}/>
+            <People userId={authorId} btn={'Followers'}/>
           </div>
           <div className="flex items-center space-x-2">
             <p className="text-base font-semibold">{following.length}</p>
-            <People userId={userId} btn={"Following"}/>
+            <People userId={authorId} btn={"Following"}/>
           </div>
         </div>
       </div>
 
-     
 
       {authorId === userId ? (
-        <button className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
+        <button onClick={()=>router.push(`/profile/edit/${userId}`)} className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
           Edit Profile
         </button>
       ) : (
         <div className="flex justify-evenly w-full space-x-4 mt-3">
+          <div className="w-1/2">
           <Follow followers={followers} targetId={authorId}/>
+          </div>
           <Button className="w-1/2 bg-transparent border-[.05rem] border-[#323232] hover:bg-transparent rounded-xl hover:text-slate-400">Mention</Button>
         </div>
       )}

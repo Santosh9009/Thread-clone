@@ -18,7 +18,7 @@ import { ObjectId } from "mongodb";
 import { getFollowers } from "@/lib/actions/user.actions";
 import LoadFollowings from "../Loadmore/LoadFollowings";
 
-export function People({ userId, btn }: { userId: ObjectId, btn:string }) {
+export function People({ userId, btn }: { userId: string, btn:string }) {
 
   return (
     <Dialog>

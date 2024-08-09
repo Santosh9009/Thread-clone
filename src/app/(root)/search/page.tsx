@@ -76,7 +76,7 @@ export default function Search() {
                     key={index}
                     name={user.name}
                     username={user.username}
-                    followers={user.followers.length}
+                    followers={user.followers}
                     userId={user._id}
                   />
                 ))

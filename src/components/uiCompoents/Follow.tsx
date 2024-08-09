@@ -11,7 +11,7 @@ const Follow=({
 }: {
   followers: any[];
   targetId: any;
-})=> {
+}) => {
   const [isfollowed, setIsfollowed] = useState(false);
   const { data } = useSession();
   const userId = data?.user._id;
@@ -32,8 +32,8 @@ const Follow=({
   }
 
   return (
-    <div className="w-1/2">
-        <Button onClick={handlefollow} className="w-full dark rounded-xl p-5">
+    <div className="w-full">
+        <Button disabled={targetId===userId} onClick={handlefollow} className="w-full dark rounded-xl p-5">
           {isfollowed?"Following":"Follow"}
         </Button>
     </div>

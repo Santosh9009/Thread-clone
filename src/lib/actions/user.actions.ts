@@ -87,7 +87,7 @@ export async function filterUser({
 
     const regex = new RegExp(searchText, "i");
 
-    const query: FilterQuery<typeof UserModel> = { id: { $ne: userId } };
+    const query: FilterQuery<typeof UserModel> = { _id: { $ne: userId } };
 
     if (searchText.trim() !== "") {
       query.$or = [
@@ -151,7 +151,7 @@ export default toggleFollowUser;
 
 
 // get user followers
-export async function getFollowers(userId: ObjectId, pageNumber: number) {
+export async function getFollowers(userId: string, pageNumber: number) {
   dbConnect();
 
   try {
@@ -165,6 +165,9 @@ export async function getFollowers(userId: ObjectId, pageNumber: number) {
         options:{
           skip:skipAmount,
           limit:pageSize
+        },
+        match:{
+          _id:{$ne:userId}
         }
       })
       .exec();
@@ -184,7 +187,7 @@ export async function getFollowers(userId: ObjectId, pageNumber: number) {
 
 
 // get user following
-export async function getFollowings(userId: ObjectId, pageNumber: number) {
+export async function getFollowings(userId: string, pageNumber: number) {
   dbConnect();
 
   try {
@@ -198,6 +201,9 @@ export async function getFollowings(userId: ObjectId, pageNumber: number) {
         options:{
           skip:skipAmount,
           limit:pageSize
+        },
+        match:{
+          _id:{$ne:userId}
         }
       })
       .exec();

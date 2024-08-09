@@ -2,11 +2,12 @@ import Image from "next/image";
 import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import Follow from "../uiCompoents/Follow";
 
 interface props {
   username: string;
   name: string;
-  followers: number;
+  followers: any[];
   userId: string | unknown;
 }
 
@@ -28,12 +29,13 @@ export default function UserCard({ username, name, followers, userId }: props) {
               <h2 className="text-base font-semibold text-white">{username}</h2>
               <p className="text-gray-400 text-sm">{!name ? "Na" : name}</p>
               <p className="text-white text-sm">
-                <span className="mr-2">{followers}</span>followers
+                <span className="mr-2">{followers.length}</span>followers
               </p>
             </div>
-            <Link href={`/profile/${userId}`} passHref>
-              <Button className="dark">View</Button>
-            </Link>
+
+            <div className="text-xm">
+              <Follow targetId={userId} followers={followers} />
+            </div>
           </div>
         </div>
       </div>
