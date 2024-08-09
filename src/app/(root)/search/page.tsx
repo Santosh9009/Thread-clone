@@ -52,10 +52,10 @@ export default function Search() {
     }
   }, [inView, isNext, loading]);
 
-  // Handler for search input changes
+
   function onchangeHandler(searchString: string) {
     setText(searchString);
-    setPage(1); // Reset page to 1 on new search
+    setPage(1); 
   }
 
   return (

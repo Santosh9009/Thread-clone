@@ -44,7 +44,12 @@ export const navLinks = [
 ];
 
 export const tabs = [
-  { name: "Threads", defaultValue: `No Threads found`, value: "" },
-  { name: "Replies", defaultValue: `No Replies found`, value: "" },
-  { name: "Reposts", defaultValue: `No Reposts found`, value: "" },
+  { name: "Threads", defaultValue: `No Threads found` },
+  { name: "Replies", defaultValue: `No Replies found` },
+  { name: "Reposts", defaultValue: `No Reposts found` },
+];
+
+export const Peopletabs = [
+  { name: "Following", defaultValue: `No Following found` },
+  { name: "Followers", defaultValue: `No Followers found` },
 ];

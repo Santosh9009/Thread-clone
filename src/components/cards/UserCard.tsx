@@ -25,9 +25,9 @@ export default function UserCard({ username, name, followers, userId }: props) {
         <div className="w-full border-b-[.05rem] border-[#323232] pb-2">
           <div className="pl-4 w-full flex justify-between items-center">
             <div className="flex flex-col ">
-              <h2 className="text-lg font-semibold text-white">{username}</h2>
-              <p className="text-gray-400">{!name ? "Na" : name}</p>
-              <p className="text-white">
+              <h2 className="text-base font-semibold text-white">{username}</h2>
+              <p className="text-gray-400 text-sm">{!name ? "Na" : name}</p>
+              <p className="text-white text-sm">
                 <span className="mr-2">{followers}</span>followers
               </p>
             </div>

@@ -3,8 +3,6 @@ import { useInView } from "react-intersection-observer";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getUserReposts, UserThreads } from "@/lib/actions/thread.actions";
-import ThreadCard from "../cards/ThreadCard";
-import QuoteCard from "../cards/QuoteCard";
 import { ObjectId } from "mongodb";
 import RepostCard from "../cards/RepostCard";
 
@@ -22,7 +20,7 @@ export default function LoadReposts({
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    const fetchThreads = async () => {
+    const getReposts = async () => {
       setLoading(true);
       try {
         const res = await getUserReposts(userId, page);
@@ -40,7 +38,7 @@ export default function LoadReposts({
     };
 
     if (inView && !loading) {
-      fetchThreads();
+      getReposts();
     }
   }, [inView, loading]);
 

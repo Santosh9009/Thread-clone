@@ -149,16 +149,67 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
 
 export default toggleFollowUser;
 
-export async function getFollowers(userId: ObjectId) {
+
+// get user followers
+export async function getFollowers(userId: ObjectId, pageNumber: number) {
   dbConnect();
 
   try {
-    const UserFollowers = await UserModel.findById(userId).populate({
-      path: "followers",
-      model: UserModel,
-    });
+    const pageSize = 2;
+    const skipAmount = (pageNumber - 1) * pageSize;
 
-    return UserFollowers;
+    const user = await UserModel.findById(userId)
+      .populate({
+        path: "followers",
+        model: UserModel,
+        options:{
+          skip:skipAmount,
+          limit:pageSize
+        }
+      })
+      .exec();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const followers = user.followers;
+
+
+    return { Followers: JSON.parse(JSON.stringify(followers)) };
+  } catch (error: any) {
+    throw new Error("Unable to get followers");
+  }
+}
+
+
+// get user following
+export async function getFollowings(userId: ObjectId, pageNumber: number) {
+  dbConnect();
+
+  try {
+    const pageSize = 1;
+    const skipAmount = (pageNumber - 1) * pageSize;
+
+    const user = await UserModel.findById(userId)
+      .populate({
+        path: "following",
+        model: UserModel,
+        options:{
+          skip:skipAmount,
+          limit:pageSize
+        }
+      })
+      .exec();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const followings = user.following;
+
+
+    return { Followings: JSON.parse(JSON.stringify(followings)) };
   } catch (error: any) {
     throw new Error("Unable to get followers");
   }

@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Follow from "../uiCompoents/Follow";
 import { ObjectId } from "mongodb";
+import { People } from "../uiCompoents/People";
 
 interface Props {
   name: string;
@@ -70,15 +71,17 @@ const ProfileCard = ({
         
         <div className="flex justify-start space-x-6 mb-5 w-full">
           <div className="flex items-center space-x-2">
-            <p className="text-lg font-semibold">{followers.length}</p>
-            <p className="text-gray-400">Followers</p>
+            <p className="text-base font-semibold">{followers.length}</p>
+            <People userId={userId} btn={'Followers'}/>
           </div>
           <div className="flex items-center space-x-2">
-            <p className="text-lg font-semibold">{following.length}</p>
-            <p className="text-gray-400">Following</p>
+            <p className="text-base font-semibold">{following.length}</p>
+            <People userId={userId} btn={"Following"}/>
           </div>
         </div>
       </div>
+
+     
 
       {authorId === userId ? (
         <button className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
