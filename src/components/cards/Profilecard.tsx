@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Follow from "../uiCompoents/Follow";
-import { ObjectId } from "mongodb";
 import { People } from "../uiCompoents/People";
 import { useRouter } from "next/navigation";
 
@@ -73,11 +72,11 @@ const ProfileCard = ({
         
         <div className="flex justify-start space-x-6 mb-5 w-full">
           <div className="flex items-center space-x-2">
-            <p className="text-base font-semibold">{followers.length}</p>
+            <p className="text-base font-medium">{followers.length}</p>
             <People userId={authorId} btn={'Followers'}/>
           </div>
           <div className="flex items-center space-x-2">
-            <p className="text-base font-semibold">{following.length}</p>
+            <p className="text-base font-medium">{following.length}</p>
             <People userId={authorId} btn={"Following"}/>
           </div>
         </div>
@@ -85,7 +84,7 @@ const ProfileCard = ({
 
 
       {authorId === userId ? (
-        <button onClick={()=>router.push(`/profile/edit/${userId}`)} className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
+        <button onClick={()=>router.push(`/profile/edit`)} className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
           Edit Profile
         </button>
       ) : (
