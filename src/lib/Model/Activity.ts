@@ -1,22 +1,40 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-// Define the interface for the Activity document
-interface ActivityType extends Document {
-  userId: mongoose.Schema.Types.ObjectId;
-  type: string;
-  details: Record<string, unknown>;
-  createdAt?: Date;
+export interface Activity extends Document {
+  actor: mongoose.Types.ObjectId; // The user who performed the action
+  recipient: mongoose.Types.ObjectId; // The user who is the target of the action
+  type: string; // "like", "comment", "repost", "follow"
+  thread?: mongoose.Types.ObjectId; // Optional, relevant for actions like "like", "comment", "repost"
+  createdAt: Date;
 }
 
-// Define the Activity schema
-const ActivitySchema: Schema<ActivityType> = new Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  type: { type: String, required: true }, // e.g., 'create_thread', 'post_comment', 'like_post'
-  details: { type: mongoose.Schema.Types.Mixed, required: true }, // JSON object for additional details
-  createdAt: { type: Date, default: Date.now }
+const ActivitySchema: Schema<Activity> = new Schema({
+  actor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  recipient: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["like", "comment", "repost", "follow"],
+    required: true,
+  },
+  thread: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Thread",
+    default: null,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// Define the Activity model
-const Activity = mongoose.models.Activity as Model<ActivityType> || mongoose.model<ActivityType>('Activity', ActivitySchema);
+const ActivityModel = mongoose.models.Activity as mongoose.Model<Activity> || mongoose.model<Activity>("Activity", ActivitySchema);
 
-export default Activity;
+export default ActivityModel;
