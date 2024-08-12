@@ -85,8 +85,7 @@ const UserSchema: Schema<User> = new Schema({
   toObject: { virtuals: true },
 });
 
-// You can define virtuals here if needed, e.g., `fullName` based on `name`
 
-const UserModel = (mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>("User", UserSchema));
+const UserModel = (mongoose.models?.User as mongoose.Model<User>) || (mongoose.model<User>("User", UserSchema));
 
 export default UserModel;

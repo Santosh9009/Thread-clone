@@ -32,10 +32,10 @@ export default function LoadFollowings({ userId }: { userId: string }) {
       }
     };
 
-    if (inView && !loading) {
+    if (inView && !loading && hasMore) {
       fetchFollowers();
     }
-  }, [inView, loading]);
+  }, [inView, hasMore]);
 
   return (
     <div className="scroll">

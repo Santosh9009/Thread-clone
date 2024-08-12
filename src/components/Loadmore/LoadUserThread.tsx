@@ -38,10 +38,10 @@ export default function LoadUserThreads({
       }
     };
 
-    if (inView && !loading) {
+    if (inView && !loading && hasMore) {
       fetchThreads();
     }
-  }, [inView, loading]);
+  }, [inView, hasMore]);
 
   return (
     <>

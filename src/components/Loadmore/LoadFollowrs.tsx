@@ -2,7 +2,6 @@
 import { useInView } from "react-intersection-observer";
 import { Loader } from "lucide-react";
 import { useEffect,useState } from "react";
-import { ObjectId } from "mongodb";
 import { getFollowers } from "@/lib/actions/user.actions";
 import UserCard from "../cards/UserCard";
 
@@ -36,10 +35,10 @@ export default function LoadFollowers({
     };
 
 
-    if (inView && !loading) {
+    if (inView && !loading && hasMore) {
       fetchFollowers();
     }
-  }, [inView, loading]);
+  }, [inView, hasMore]);
 
   return (
     <>

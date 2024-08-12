@@ -75,6 +75,6 @@ ThreadSchema.virtual('authorDetails', {
   justOne: true,
 });
 
-const ThreadModel = mongoose.models.Thread as mongoose.Model<ThreadType> || mongoose.model<ThreadType>("Thread", ThreadSchema);
+const ThreadModel = mongoose.models?.Thread as mongoose.Model<ThreadType> || mongoose.model<ThreadType>("Thread", ThreadSchema);
 
 export default ThreadModel;

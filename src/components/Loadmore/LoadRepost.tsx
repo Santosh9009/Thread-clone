@@ -2,7 +2,7 @@
 import { useInView } from "react-intersection-observer";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getUserReposts, UserThreads } from "@/lib/actions/thread.actions";
+import { getUserReposts } from "@/lib/actions/thread.actions";
 import { ObjectId } from "mongodb";
 import RepostCard from "../cards/RepostCard";
 
@@ -37,10 +37,10 @@ export default function LoadReposts({
       }
     };
 
-    if (inView && !loading) {
+    if (inView && !loading && hasMore) {
       getReposts();
     }
-  }, [inView, loading]);
+  }, [inView, hasMore]);
 
   return (
     <>
