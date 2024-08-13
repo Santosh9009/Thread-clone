@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import mongoose, { model } from "mongoose";
 import { ObjectId } from "mongodb";
 import RepostModel from "../Model/Repost";
+import { logActivity } from "./activity.actions";
 
 // create thread
 interface createParams {
@@ -186,6 +187,12 @@ export async function addCommnet({
     originalThread.comments.push(savedComment._id);
 
     await originalThread.save();
+    await logActivity({
+      actorId: author,
+      type: "comment",
+      recipientId: originalThread.author._id,
+      threadId: threadId,
+    });
 
     revalidatePath(path);
   } catch (error: any) {
@@ -344,6 +351,13 @@ export async function togglelike({ threadId, userId }: liketype) {
 
     if (UserIndex == -1) {
       thread.likes.push(userObjectId);
+      // log Activity
+      await logActivity({
+        actorId: userId,
+        type: "like",
+        recipientId: thread.author._id,
+        threadId: threadId,
+      });
     } else {
       thread.likes.splice(UserIndex, 1);
     }
@@ -367,12 +381,24 @@ export async function repostThread(originalThread: ObjectId, author: ObjectId) {
       originalThread,
     });
 
-    await ThreadModel.findOneAndUpdate(
+    const oldthread = await ThreadModel.findOneAndUpdate(
       { _id: originalThread },
       {
         $push: { reposts: repost._id },
       }
     );
+
+    if (originalThread) {
+      await logActivity({
+        actorId: author,
+        type: "repost",
+        recipientId: oldthread?.author._id,
+        originalThreadId: originalThread,
+        threadId: repost._id,
+      });
+    }
+
+    console.log(originalThread);
 
     revalidatePath("/");
 
@@ -455,12 +481,22 @@ export async function QuoteThread(
       content,
     });
 
-    await ThreadModel.findOneAndUpdate(
+    const oldthread = await ThreadModel.findOneAndUpdate(
       { _id: originalThread },
       {
         $push: { Quotes: quote._id },
       }
     );
+
+    if (originalThread) {
+      await logActivity({
+        actorId: author,
+        type: "quote",
+        recipientId:oldthread?.author._id,
+        originalThreadId: originalThread,
+        threadId: quote._id,
+      });
+    }
 
     revalidatePath("/");
 
@@ -498,7 +534,7 @@ export async function getUserReposts(userId: ObjectId, pageNumber: number) {
       .skip(skipAmount)
       .exec();
 
-    return { Reposts: JSON.parse(JSON.stringify( reposts )) };
+    return { Reposts: JSON.parse(JSON.stringify(reposts)) };
   } catch (error: any) {
     throw new Error("Unable to get user reposts");
   }

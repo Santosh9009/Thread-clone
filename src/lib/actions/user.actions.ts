@@ -3,7 +3,7 @@ import UserModel from "@/lib/Model/User";
 import dbConnect from "../dbConnect";
 import { ObjectId } from "mongodb";
 import { FilterQuery, model } from "mongoose";
-import logActivity from "./activity.actions";
+import {logActivity} from "./activity.actions";
 import { revalidatePath } from "next/cache";
 
 interface UpdateUserParams {
@@ -142,7 +142,7 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
     await targetUser.save();
 
     if(!isFollowing){
-      await logActivity(userId, targetUserId, "follow");
+      await logActivity({actorId:userId,type:'follow',recipientId:targetUserId});
     }
 
     const pathToRevalidate = `/profile/${userId}`;

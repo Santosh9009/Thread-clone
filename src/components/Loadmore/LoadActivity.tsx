@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { Loader } from "lucide-react";
 import { getUserActivities } from "@/lib/actions/activity.actions";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import LikeActivityCard from "../cards/Activity/LikeActivityCard";
 import CommentActivityCard from "../cards/Activity/CommentActivityCard";
@@ -10,7 +10,13 @@ import FollowActivityCard from "../cards/Activity/FollowActivityCard";
 import QuoteActivityCard from "../cards/Activity/QuoteActivityCard";
 import { ObjectId } from "mongodb";
 
-export default function LoadActivity({ userId, activity }: { userId: ObjectId, activity: any[] }) {
+export default function LoadActivity({
+  userId,
+  activity,
+}: {
+  userId: ObjectId;
+  activity: any[];
+}) {
   const { ref, inView } = useInView();
   const [data, setData] = useState<any[]>(activity);
   const [page, setPage] = useState(2);
@@ -42,21 +48,35 @@ export default function LoadActivity({ userId, activity }: { userId: ObjectId, a
 
   return (
     <>
-      {/* <h1>Your Activity</h1> */}
       {data.length > 0 ? (
         <ul>
-          {data.map((activity) => (
-            <li key={activity._id}>
-              {activity.type === "like" && <LikeActivityCard activity={activity} />}
-              {activity.type === "comment" && <CommentActivityCard activity={activity} />}
-              {activity.type === "repost" && <RepostActivityCard activity={activity} />}
-              {activity.type === "follow" && <FollowActivityCard activity={activity} />}
-              {activity.type === "quote" && <QuoteActivityCard activity={activity} />}
-            </li>
-          ))}
+          {data.map(
+            (activity) =>
+              activity.actor._id !== activity.recipient._id && (
+                <li key={activity._id}>
+                  {activity.type === "like" && (
+                    <LikeActivityCard activity={activity} />
+                  )}
+                  {activity.type === "comment" && (
+                    <CommentActivityCard activity={activity} />
+                  )}
+                  {activity.type === "repost" && (
+                    <RepostActivityCard activity={activity} />
+                  )}
+                  {activity.type === "follow" && (
+                    <FollowActivityCard activity={activity} />
+                  )}
+                  {activity.type === "quote" && (
+                    <QuoteActivityCard activity={activity} />
+                  )}
+                </li>
+              )
+          )}
         </ul>
       ) : (
-        <div className="text-center">No Activity</div>
+        <div className="flex justify-center items-start h-screen py-20 font-medium">
+          No Activity
+        </div>
       )}
 
       <div ref={ref}>

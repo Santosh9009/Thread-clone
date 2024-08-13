@@ -20,7 +20,9 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
     return <div>Thread not found</div>;
   }
 
-  const originalComments = thread?.originalThread?.comments || thread?.comments;
+  const comments = thread.isRepost
+    ? thread.originalThread?.comments || []
+    : thread.comments || [];
 
   return (
     <div>
@@ -77,25 +79,24 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
         <div className="p-5 font-medium text-lg border-b-[.05rem] border-[#323232]">
           Replies
         </div>
-        <PostComment ThreadId={thread.isRepost?thread.originalThread._id:params.id} />
+        <PostComment
+          ThreadId={thread.isRepost ? thread.originalThread._id : params.id}
+        />
         <div>
-          {originalComments &&
-            originalComments.map(
-              (comment: any, index: number) => (
-                <ThreadCard
-                  key={index}
-                  id={comment?._id}
-                  author={comment?.author.username}
-                  authorId={comment.author._id}
-                  contentSnippet={comment?.content}
-                  commentsCount={comment.comments.length}
-                  upvotes={comment?.likes}
-                  reposts={comment?.reposts}
-                  timestamp={comment?.createdAt}
-                  isRepost={thread?.isRepost}
-                />
-              )
-            )}
+        {comments.map((comment: any, index: number) => (
+            <ThreadCard
+              key={index}
+              id={comment?._id}
+              author={comment?.author.username}
+              authorId={comment.author._id}
+              contentSnippet={comment?.content}
+              commentsCount={comment.comments.length}
+              upvotes={comment?.likes}
+              reposts={comment?.reposts}
+              timestamp={comment?.createdAt}
+              isRepost={thread?.isRepost}
+            />
+          ))}
         </div>
       </MainCardWrapper>
     </div>

@@ -4,6 +4,7 @@ export interface ActivityType extends Document {
   actor: mongoose.Types.ObjectId;
   recipient: mongoose.Types.ObjectId;
   type: string;
+  originalthread?: mongoose.Types.ObjectId;
   thread?: mongoose.Types.ObjectId;
   createdAt: Date;
 }
@@ -26,6 +27,11 @@ const ActivitySchema: Schema<ActivityType> = new Schema(
       required: true,
     },
     thread: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Thread",
+      default: null,
+    },
+    originalthread: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Thread",
       default: null,
