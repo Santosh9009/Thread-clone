@@ -38,7 +38,7 @@ export async function logActivity({
       thread: threadId,
     });
 
-    revalidatePath('/activity')
+    revalidatePath("/activity");
   } catch (error) {
     console.error("Error logging activity:", error);
   }
@@ -53,7 +53,10 @@ export async function getUserActivities(
     const PageSize = 10;
     const skipAmount = (pageNumber - 1) * PageSize;
 
-    const query = await ActivityModel.find({ recipient: userId })
+    const query = await ActivityModel.find({
+      recipient: userId,
+      actor: { $ne: userId },
+    })
       .sort({ createdAt: -1 })
       .populate({
         path: "actor",

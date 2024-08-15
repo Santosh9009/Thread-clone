@@ -17,10 +17,6 @@ export default function Menu() {
         <MenubarMenu>
           <MenubarTrigger className=""><MenuIcon/></MenubarTrigger>
           <MenubarContent className="dark">
-            <MenubarItem>Appearance</MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem>Settings</MenubarItem>
-            <MenubarSeparator />
             <MenubarItem onClick={()=>signOut()}>Logout</MenubarItem>
           </MenubarContent>
         </MenubarMenu>

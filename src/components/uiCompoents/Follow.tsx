@@ -1,11 +1,11 @@
-
 import toggleFollowUser from "@/lib/actions/user.actions";
 import { ObjectId } from "mongodb";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
+import { error } from "console";
 
-const Follow=({
+const Follow = ({
   followers,
   targetId,
 }: {
@@ -21,22 +21,28 @@ const Follow=({
     setIsfollowed(!!result);
   }, [userId]);
 
-
   const handlefollow = async () => {
-    try{
-      const followersarray = await toggleFollowUser(userId,targetId);
-      setIsfollowed(!isfollowed);
-    }catch(error:any){
-      console.log(error.message)
-    }
-  }
+    toggleFollowUser(userId, targetId)
+      .then((res) => {
+        if (res.isFollowing) {
+          setIsfollowed(!isfollowed);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="w-full">
-        <Button disabled={targetId===userId} onClick={handlefollow} className="w-full dark rounded-xl p-5">
-          {isfollowed?"Following":"Follow"}
-        </Button>
+      <Button
+        disabled={targetId === userId}
+        onClick={handlefollow}
+        className="w-full dark rounded-xl p-5"
+      >
+        {isfollowed ? "Following" : "Follow"}
+      </Button>
     </div>
   );
-}
+};
 export default Follow;

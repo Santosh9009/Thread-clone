@@ -33,7 +33,7 @@ export default function LikeActivityCard({ activity }: { activity: any }) {
 
           {/* Liked Thread Link */}
           {activity.thread && (
-            <Link href={`/thread/${activity.thread._id}`}>
+            <Link href={`/thread/${activity.thread}`}>
               <div className="py-2 text-blue-400">
                 <p className="text-sm line-clamp-2 hover:underline">
                   {activity.thread.content || "View Thread"}

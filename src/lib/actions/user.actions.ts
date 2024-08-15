@@ -148,9 +148,7 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
     const pathToRevalidate = `/profile/${userId}`;
     revalidatePath(pathToRevalidate);
 
-    return {
-      message: isFollowing ? true : false,
-    };
+    return { isFollowing }
   } catch (error: any) {
     return { error: error.message };
   }

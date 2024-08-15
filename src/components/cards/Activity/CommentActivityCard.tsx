@@ -33,7 +33,7 @@ export default function CommentActivityCard({ activity }: { activity: any }) {
 
           {/* View Thread Link */}
           {activity.thread && (
-            <Link href={`/thread/${activity.thread._id}`}>
+            <Link href={`/thread/${activity.thread}`}>
               <div className="py-2 text-blue-400">
                 <p className="text-sm line-clamp-2 hover:underline">
                   View Thread

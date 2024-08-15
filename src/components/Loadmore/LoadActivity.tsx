@@ -50,28 +50,25 @@ export default function LoadActivity({
     <>
       {data.length > 0 ? (
         <ul>
-          {data.map(
-            (activity) =>
-              activity.actor._id !== activity.recipient._id && (
-                <li key={activity._id}>
-                  {activity.type === "like" && (
-                    <LikeActivityCard activity={activity} />
-                  )}
-                  {activity.type === "comment" && (
-                    <CommentActivityCard activity={activity} />
-                  )}
-                  {activity.type === "repost" && (
-                    <RepostActivityCard activity={activity} />
-                  )}
-                  {activity.type === "follow" && (
-                    <FollowActivityCard activity={activity} />
-                  )}
-                  {activity.type === "quote" && (
-                    <QuoteActivityCard activity={activity} />
-                  )}
-                </li>
-              )
-          )}
+          {data.map((activity) => (
+            <li key={activity._id}>
+              {activity.type === "like" && (
+                <LikeActivityCard activity={activity} />
+              )}
+              {activity.type === "comment" && (
+                <CommentActivityCard activity={activity} />
+              )}
+              {activity.type === "repost" && (
+                <RepostActivityCard activity={activity} />
+              )}
+              {activity.type === "follow" && (
+                <FollowActivityCard activity={activity} />
+              )}
+              {activity.type === "quote" && (
+                <QuoteActivityCard activity={activity} />
+              )}
+            </li>
+          ))}
         </ul>
       ) : (
         <div className="flex justify-center items-start h-screen py-20 font-medium">

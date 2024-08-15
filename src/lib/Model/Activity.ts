@@ -15,21 +15,25 @@ const ActivitySchema: Schema<ActivityType> = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
     recipient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
     type: {
       type: String,
       enum: ["like", "comment", "repost", "follow", "quote"],
       required: true,
+      index: true,
     },
     thread: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Thread",
       default: null,
+      index: true,
     },
     originalthread: {
       type: mongoose.Schema.Types.ObjectId,
@@ -39,6 +43,7 @@ const ActivitySchema: Schema<ActivityType> = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+      index: true,
     },
   },
   {
