@@ -1,13 +1,12 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import QuoteCard from "@/components/cards/QuoteCard";
 import RepostCard from "@/components/cards/RepostCard";
 import ThreadCard from "@/components/cards/ThreadCard";
 import PostComment from "@/components/forms/CommnetForm";
-import { getThread, togglelike } from "@/lib/actions/thread.actions";
-import { ThreadType } from "@/lib/Model/Thread";
-import { CommentThread, CommentType, ThreadsType } from "@/types/Thread";
+import { getThread } from "@/lib/actions/thread.actions";
+import { ArrowLeft } from "lucide-react";
 import { ObjectId } from "mongodb";
+import Link from "next/link";
 
 async function Thread({ params }: { params: { id: ObjectId } }) {
   if (!params.id) return null;
@@ -26,14 +25,18 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
 
   return (
     <div>
-      <div className="md:h-[10vh] md:flex items-center justify-center hidden">
-        Thread
+      <div className="md:h-[10vh] md:flex items-center justify-between hidden px-3">
+        <Link href={'/'} className="hover:bg-[#2b2b2b] rounded-full p-1">
+          <ArrowLeft width={25} height={25} />
+        </Link>
+        <p>Thread</p>
+        <div></div>
       </div>
       <MainCardWrapper>
         {thread.isQuote && thread.originalThread ? (
           <QuoteCard
             // @ts-ignore
-            id={params._id}
+            id={thread._id}
             authorId={thread.author._id}
             author={thread.author.username}
             contentSnippet={thread.content}
@@ -63,7 +66,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
           />
         ) : (
           <ThreadCard
-            id={params.id}
+            id={thread._id}
             // @ts-ignore
             author={thread?.author.username}
             authorId={thread.author._id}
@@ -83,7 +86,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
           ThreadId={thread.isRepost ? thread.originalThread._id : params.id}
         />
         <div>
-        {comments.map((comment: any, index: number) => (
+          {comments.map((comment: any, index: number) => (
             <ThreadCard
               key={index}
               id={comment?._id}

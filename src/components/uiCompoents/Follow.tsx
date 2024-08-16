@@ -36,7 +36,7 @@ const Follow = ({
   return (
     <div className="w-full">
       <Button
-        disabled={targetId === userId}
+        disabled={targetId === userId }
         onClick={handlefollow}
         className="w-full dark rounded-xl p-5"
       >

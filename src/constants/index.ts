@@ -50,6 +50,6 @@ export const tabs = [
 ];
 
 export const Peopletabs = [
-  { name: "Following", defaultValue: `No Following found` },
   { name: "Followers", defaultValue: `No Followers found` },
+  { name: "Following", defaultValue: `No Following found` },
 ];

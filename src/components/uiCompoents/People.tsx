@@ -2,24 +2,17 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Peopletabs } from "@/constants";
 import LoadFollowers from "../Loadmore/LoadFollowrs";
-import { ObjectId } from "mongodb";
-import { getFollowers } from "@/lib/actions/user.actions";
 import LoadFollowings from "../Loadmore/LoadFollowings";
 
-export function People({ userId, btn }: { userId: string, btn:string }) {
+export function People({ userId, btn }: { userId: string; btn: string }) {
 
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -27,7 +20,7 @@ export function People({ userId, btn }: { userId: string, btn:string }) {
       </DialogTrigger>
       <DialogTitle></DialogTitle>
       <DialogContent className="sm:max-w-[475px] dark bg-[#181818] md:h-[90%] h-[80%] p-0">
-        <Tabs defaultValue="account" className="w-full">
+        <Tabs defaultValue={btn} className="w-full">
           <TabsList className="flex justify-evenly w-full bg-transparent">
             {Peopletabs.map((tab, index) => (
               <TabsTrigger
@@ -39,11 +32,11 @@ export function People({ userId, btn }: { userId: string, btn:string }) {
               </TabsTrigger>
             ))}
           </TabsList>
-          <TabsContent value="Following">
-           <LoadFollowings userId={userId}/>
-          </TabsContent>
           <TabsContent value="Followers">
             <LoadFollowers userId={userId} />
+          </TabsContent>
+          <TabsContent value="Following">
+            <LoadFollowings userId={userId} />
           </TabsContent>
         </Tabs>
       </DialogContent>

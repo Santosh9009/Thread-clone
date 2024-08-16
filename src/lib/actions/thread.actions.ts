@@ -370,7 +370,7 @@ export async function togglelike({ threadId, userId }: liketype) {
   }
 }
 
-// repost a thread or
+// repost a thread 
 export async function repostThread(originalThread: ObjectId, author: ObjectId) {
   dbConnect();
   try {
@@ -537,5 +537,16 @@ export async function getUserReposts(userId: ObjectId, pageNumber: number) {
     return { Reposts: JSON.parse(JSON.stringify(reposts)) };
   } catch (error: any) {
     throw new Error("Unable to get user reposts");
+  }
+}
+
+
+export async function deleteThread(threadId:any){
+  dbConnect();
+  try{
+    const thread = await ThreadModel.findOneAndDelete()
+
+  }catch(error:any){
+    throw new Error("Error deleting thread"+error)
   }
 }

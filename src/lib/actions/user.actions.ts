@@ -162,7 +162,7 @@ export async function getFollowers(userId: string, pageNumber: number) {
   dbConnect();
 
   try {
-    const pageSize = 2;
+    const pageSize = 5;
     const skipAmount = (pageNumber - 1) * pageSize;
 
     const user = await UserModel.findById(userId)
@@ -198,7 +198,7 @@ export async function getFollowings(userId: string, pageNumber: number) {
   dbConnect();
 
   try {
-    const pageSize = 1;
+    const pageSize = 5;
     const skipAmount = (pageNumber - 1) * pageSize;
 
     const user = await UserModel.findById(userId)

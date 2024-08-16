@@ -126,7 +126,6 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
               </div>
             </div>
 
-
             <Threadbutton
               id={id}
               commentsCount={commentsCount}

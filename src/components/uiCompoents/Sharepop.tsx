@@ -15,20 +15,22 @@ export function Sharepop({ id }: { id: any }) {
     navigator.clipboard.writeText(linkToCopy).then(() => {
       toast({
         description: "Link copied",
-        duration:700,
+        duration: 700,
       });
       setIsOpen(false); // Close the popover after the toast
     });
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Share2Icon fill="#9CA3AF" width={20} height={20} />
-      </PopoverTrigger>
-      <PopoverContent className="w-30 p-3">
-        <button onClick={handleCopyLink}>Copy link</button>
-      </PopoverContent>
-    </Popover>
+    <div className="">
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Share2Icon fill="#9CA3AF" width={20} height={20} />
+        </PopoverTrigger>
+        <PopoverContent className="w-30 p-3">
+          <button onClick={handleCopyLink}>Copy link</button>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }

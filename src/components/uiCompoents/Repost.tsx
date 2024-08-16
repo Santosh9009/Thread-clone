@@ -96,10 +96,10 @@ export default function Repost({
             <span>{count}</span>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="flex flex-col dark bg-[#181818] w-36 p-2">
+        <PopoverContent className="flex flex-col dark bg-[#181818] w-36 p-2 border-[#323232]">
           <QuoteCard id={(isRepost)?originalThreadId:threadId}/>
           {reposted ? (
-            <div className="flex items-center justify-center hover:bg-[#262626] rounded p-2 ">
+            <div className="flex items-center justify-center hover:bg-[#262626] rounded p-2">
               <button
                 onClick={handleRemoveRepost}
                 className="bg-transparent text-red-500 font-semibold"

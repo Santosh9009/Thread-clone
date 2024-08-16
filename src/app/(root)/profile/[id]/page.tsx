@@ -54,7 +54,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                   userThreads && userThreads.length > 0 ? (
                     <LoadUserThreads threads={userThreads} userId={userId} />
                   ) : (
-                    <div className="text-center py-3">{tab.defaultValue}</div>
+                    <div className="text-center py-3 text-slate-700">{tab.defaultValue}</div>
                   )
                 ) : null}
 
@@ -67,7 +67,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                       userId={userId}
                     />
                   ) : (
-                    <div className="text-center py-3">{tab.defaultValue}</div>
+                    <div className="text-center py-3 text-slate-700">{tab.defaultValue}</div>
                   )
                 ) : null}
 
@@ -76,7 +76,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                   Reposts && Reposts.length > 0 ? (
                     <LoadReposts reposts={Reposts} userId={userId} />
                   ) : (
-                    <div className="text-center py-3">{tab.defaultValue}</div>
+                    <div className="text-center py-3 text-slate-700">{tab.defaultValue}</div>
                   )
                 ) : null}
               </TabsContent>
