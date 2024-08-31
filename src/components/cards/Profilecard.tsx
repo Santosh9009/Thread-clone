@@ -44,13 +44,13 @@ const ProfileCard = ({
     <div className="flex flex-col items-center p-8 text-white w-full">
       <div className="w-full flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold mb-1">{name || "NA"}</h1>
+          <h1 className="text- md:text-2xl font-bold mb-1">{name || "NA"}</h1>
           <button className="text-gray-400 mb-2 hover:underline">
             @{username || "na"}
           </button>
         </div>
 
-        <Image
+       <Image
           src={DummyUserIcon}
           alt={`${name}'s avatar` || ""}
           className="w-24 h-24 mb-4"
