@@ -12,6 +12,8 @@ export interface ThreadType extends Document {
   isRepost: boolean;
   isQuote: boolean;
   originalThread?: mongoose.Types.ObjectId;
+  photos?: { url: string; publicId: string }[];  // Array of photo objects
+  videos?: { url: string; publicId: string }[]; 
 }
 
 const ThreadSchema: Schema<ThreadType> = new Schema({
@@ -62,6 +64,18 @@ const ThreadSchema: Schema<ThreadType> = new Schema({
     ref: "Thread",
     default: null,
   },
+  photos: [
+    {
+      url: { type: String, required: true },
+      publicId: { type: String, required: true },
+    },
+  ],
+  videos: [
+    {
+      url: { type: String, required: true },
+      publicId: { type: String, required: true },
+    },
+  ],
 }, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true },

@@ -131,7 +131,7 @@ export default function EditUserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 max-w-lg mx-auto py-10"
+        className="space-y-6 max-w-lg mx-auto px-10 md:px-0 py-10"
       >
         <div className="flex flex-col items-center space-y-4">
           <Avatar

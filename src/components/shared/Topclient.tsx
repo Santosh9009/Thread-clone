@@ -13,12 +13,6 @@ export default function TopbarClient({ session }:{session:any}) {
   const pathname = usePathname();
   const [isModalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    // Update navLinks' `isActive` state based on the current pathname
-    navLinks.forEach((link) => {
-      link.isActive = pathname.includes(link.route) || pathname === link.route;
-    });
-  }, [pathname]);
 
   return (
     <div>
@@ -32,24 +26,19 @@ export default function TopbarClient({ session }:{session:any}) {
               </Link>
             </div>
             <div className="flex space-x-10">
-              {navLinks.map((link, index) => (
-                <button
-                  onClick={() =>
-                    !link.isDisabled &&
-                    link.label !== "Home" &&
-                    setModalOpen(true)
-                  }
-                  className={`${
-                    link.isActive ? "bg-[#5051F9]" : "hover:bg-[#2b2b2b]"
-                  } p-3 rounded-md ${
-                    link.isDisabled ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  key={index}
-                  disabled={!session && link.label === "Home"}
-                >
-                  <div className="w-5">{link.img()}</div>
-                </button>
-              ))}
+              
+            {navLinks.map((link, index) => (
+          <div key={index}> {/* Add key to parent div to avoid warning */}
+            {/* Render each navigation link */}
+              <button
+                onClick={() =>  setModalOpen(true)}
+                className={` p-3 rounded-md`}
+                disabled={!session && link.label === "Home"}
+              >
+                <div className="w-5">{link.img()}</div>
+              </button>
+          </div>
+        ))}
             </div>
             <Link href="/login">
               <Button className="bg-white text-black hover:bg-slate-300 text-sm">

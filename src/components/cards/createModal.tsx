@@ -3,6 +3,7 @@ import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import Image from "next/image";
 import { toast } from "../ui/use-toast";
 import { createThread } from "@/lib/actions/thread.actions";
+import { useSession } from "next-auth/react";
 
 interface CreateThreadCardProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
   authorId,
 }) => {
   const [content, setContent] = useState("");
+  const session = useSession();
 
   const handleCreateThread = async () => {
     if (content.trim()) {
@@ -56,11 +58,11 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 modal-background"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 modal-background h-screen"
       onClick={handleClickOutside}
     >
       <div
-        className="bg-[#181818] rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232]"
+        className="bg-[#181818] h-full md:h-auto rounded-lg shadow-lg w-full md:max-w-lg border-[0.01rem] border-[#323232]"
         onClick={(e) => e.stopPropagation()} // Prevent clicks inside modal from closing it
       >
         <div className="p-6 flex items-center">
