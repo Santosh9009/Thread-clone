@@ -74,6 +74,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
               isRepost={thread.isRepost}
               repostTime={thread.createdAt}
               originalThread={thread.originalThread}
+              photos={thread.originalThread.photos}
             />
           );
         } else {
@@ -91,6 +92,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
               timestamp={thread.createdAt}
               isRepost={thread.isRepost}
               isQuote={thread.isQuote}
+              photos={thread.photos}
             />
           );
         }

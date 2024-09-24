@@ -9,11 +9,14 @@ import {
 import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { timeAgo } from "@/helpers/CalculateTime";
 import Link from "next/link";
-import LikeButton from "../uiCompoents/LikeButton";
-import { Sharepop } from "../uiCompoents/Sharepop";
 import Threadbutton from "../uiCompoents/Threadbutton";
 import { useRouter } from "next/navigation";
+import { CldImage } from "next-cloudinary";
 
+interface photo {
+  url: string;
+  publicId: string;
+}
 interface ThreadCardProps {
   br?: boolean;
   id: any;
@@ -27,7 +30,8 @@ interface ThreadCardProps {
   isRepost?: boolean;
   repostauthor?: any;
   repostTime?: any;
-  isQuote?:boolean,
+  isQuote?: boolean;
+  photos?: photo[];
 }
 
 const ThreadCard: React.FC<ThreadCardProps> = ({
@@ -44,8 +48,10 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
   repostauthor,
   repostTime,
   isQuote,
+  photos,
 }) => {
   const router = useRouter();
+  const MAX_PHOTOS_DISPLAY = 4; 
 
   function handleclick(e: any) {
     e.preventDefault();
@@ -108,6 +114,30 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
                 </div>
               </div>
               <p className="text-gray-300 mt-2 font-light">{contentSnippet}</p>
+
+              {/* Map through the photos array and display images */}
+              {photos && photos.length > 0 && (
+                <div className="mt-2">
+                  <div className="grid grid-cols-3 gap-2">
+                    {photos.slice(0, MAX_PHOTOS_DISPLAY).map((photo, index) => (
+                      <CldImage
+                        key={photo.publicId}
+                        src={photo.url}
+                        alt={`Photo ${index + 1}`}
+                        className="w-full h-auto rounded-md object-cover"
+                        width={300} // Set your desired width
+                        height={200} // Set your desired height
+                      />
+                    ))}
+                  </div>
+                  {photos.length > MAX_PHOTOS_DISPLAY && (
+                    <button className="mt-2 text-blue-500 hover:underline">
+                      View more ({photos.length - MAX_PHOTOS_DISPLAY})
+                    </button>
+                  )}
+                </div>
+              )}
+
               <Threadbutton
                 id={id}
                 commentsCount={commentsCount}

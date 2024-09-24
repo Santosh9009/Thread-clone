@@ -2,6 +2,7 @@ import CreateThread from "@/components/cards/CreateThread";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import { fetchAllThreads } from "@/lib/actions/thread.actions";
 import Loadhome from "@/components/Loadmore/Loadhome";
+import { UploadComponent } from "@/components/uiCompoents/uploadComponent";
 
 async function Home() {
 

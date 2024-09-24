@@ -77,6 +77,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
             timestamp={thread?.createdAt}
             isRepost={thread?.isRepost}
             isQuote={thread?.isQuote}
+            photos={thread?.photos}
           />
         )}
         <div className="p-5 font-medium text-lg border-b-[.05rem] border-[#323232]">

@@ -14,6 +14,7 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { UploadComponent } from "../uiCompoents/uploadComponent";
 
 interface CreateThreadCardProps {
   isOpen: boolean;
@@ -31,15 +32,18 @@ export const CreateThreadDialog: React.FC<CreateThreadCardProps> = ({
   const [content, setContent] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // Add ref for textarea
   const session = useSession();
+  const [images, setImages] = useState<{ url: string; publicId: string }[]>([]);
+
 
   const handleCreateThread = async () => {
     if (content.trim()) {
       const Newthread = await createThread({
         author: authorId,
         content: content,
-        path: "/",
+        photos:images
       });
       setContent("");
+      setImages([]); 
       onClose();
       if (Newthread) {
         toast({
@@ -70,7 +74,16 @@ export const CreateThreadDialog: React.FC<CreateThreadCardProps> = ({
       textareaRef.current.style.height = "auto"; // Reset on mount
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Adjust to content
     }
-  }, [content]); // Adjust textarea height whenever content changes
+  }, [content]); 
+  
+  const handleUploadSuccess = (uploadedFile: { secure_url: string; public_id: string }) => {
+    const newImage = {
+      url: uploadedFile.secure_url,
+      publicId: uploadedFile.public_id,
+    };
+    setImages([newImage]); // Only allow one image
+    console.log('Uploaded image:', newImage);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -101,6 +114,8 @@ export const CreateThreadDialog: React.FC<CreateThreadCardProps> = ({
               rows={3}
               minLength={2}
             />
+          <UploadComponent onUploadSuccess={handleUploadSuccess}/>
+
           </DialogDescription>
           <DialogFooter>
             <Button onClick={handleCreateThread} disabled={!content.trim()}>
@@ -112,4 +127,3 @@ export const CreateThreadDialog: React.FC<CreateThreadCardProps> = ({
     </Dialog>
   );
 };
-

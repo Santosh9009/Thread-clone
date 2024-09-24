@@ -11,30 +11,39 @@ import { logActivity } from "./activity.actions";
 interface createParams {
   content: string;
   author: string;
-  path: string;
+  photos?: { url: string | null; publicId: string | null}[]; 
+  videos?: { url: string | null; publicId: string | null }[]; 
 }
 
 export async function createThread({
   content,
   author,
-  path,
+  photos = [],   
+  videos = [],   
 }: createParams): Promise<any> {
   try {
+    // Connect to the database
     await dbConnect();
 
-    const newThread = await ThreadModel.create({
+      await ThreadModel.create({
       author,
       content,
+      photos,  
+      videos,  
     });
 
+    // Revalidate the necessary paths (home and profile pages)
     revalidatePath("/");
     revalidatePath("/profile");
 
-    return { newThread };
+    // Return the created thread
+    return { success:true };
   } catch (error) {
-    throw new Error("Error creating thread" + error);
+    // Handle any errors that occur during thread creation
+    throw new Error("Error creating thread: " + error);
   }
 }
+
 
 // fetch all threads
 // export async function fetchallThreads(
@@ -465,22 +474,70 @@ export async function getThreadbyId(threadId: any) {
 
 // Quote thread
 
+// export async function QuoteThread(
+//   originalThread: ObjectId,
+//   author: ObjectId,
+//   content: string
+// ) {
+//   dbConnect();
+//   try {
+//     const quote = await ThreadModel.create({
+//       parentId: null,
+//       author,
+//       isQuote: true,
+//       originalThread,
+//       content,
+//     });
+
+//     const oldthread = await ThreadModel.findOneAndUpdate(
+//       { _id: originalThread },
+//       {
+//         $push: { Quotes: quote._id },
+//       }
+//     );
+
+//     if (originalThread) {
+//       await logActivity({
+//         actorId: author,
+//         type: "quote",
+//         recipientId:oldthread?.author._id,
+//         originalThreadId: originalThread,
+//         threadId: quote._id,
+//       });
+//     }
+
+//     revalidatePath("/");
+
+//     return { success: true };
+//   } catch (error: any) {
+//     throw new Error("Error quoting" + error);
+//   }
+// }
+
 export async function QuoteThread(
   originalThread: ObjectId,
   author: ObjectId,
-  content: string
+  content: string,
+  photos?: { url: string; publicId: string }[] // Change here to allow an array of photos
 ) {
   dbConnect();
   try {
-    const quote = await ThreadModel.create({
+    const quoteData: any = {
       parentId: null,
       author,
       isQuote: true,
       originalThread,
       content,
-    });
+    };
 
-    const oldthread = await ThreadModel.findOneAndUpdate(
+    // If photos are provided, add them to the quote data
+    if (photos) {
+      quoteData.photos = photos;
+    }
+
+    const quote = await ThreadModel.create(quoteData);
+
+    const oldThread = await ThreadModel.findOneAndUpdate(
       { _id: originalThread },
       {
         $push: { Quotes: quote._id },
@@ -491,7 +548,7 @@ export async function QuoteThread(
       await logActivity({
         actorId: author,
         type: "quote",
-        recipientId:oldthread?.author._id,
+        recipientId: oldThread?.author._id,
         originalThreadId: originalThread,
         threadId: quote._id,
       });
@@ -501,9 +558,10 @@ export async function QuoteThread(
 
     return { success: true };
   } catch (error: any) {
-    throw new Error("Error quoting" + error);
+    throw new Error("Error quoting: " + error.message);
   }
 }
+
 
 export async function getUserReposts(userId: ObjectId, pageNumber: number) {
   dbConnect();

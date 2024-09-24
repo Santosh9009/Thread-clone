@@ -30,8 +30,6 @@ export default function Threadbutton({
     event.preventDefault();
   }
 
-  console.log(id)
-
   return (
     <div
       onClick={handler}
