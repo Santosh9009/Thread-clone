@@ -57,26 +57,26 @@ const RepostCard: React.FC<ThreadCardProps> = ({
   const MAX_PHOTOS_DISPLAY = 3; 
 
   function handleclick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${authorId}`);
   }
 
   function handleUsernameClick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${repostauthor._id}`);
   }
 
   function originalThreadclick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/thread/${quote._id}`);
   }
 
   function quoteusernameclick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${quote.author._id}`);
   }
 
@@ -95,8 +95,8 @@ const RepostCard: React.FC<ThreadCardProps> = ({
           <span>reposted {timeAgo(repostTime)}</span>
         </div>
       )}
-      <Link href={`/thread/${id}`} passHref>
-        <div
+      {/* <Link href={`/thread/${id}`}> */}
+        <div onClick={()=>router.push(`/thread/${id}`)}
           className={`bg-[#181818] overflow-hidden ${
             br ? "border-b-[.05rem] border-[#323232]" : ""
           } py-4 px-8`}
@@ -200,7 +200,7 @@ const RepostCard: React.FC<ThreadCardProps> = ({
             </div>
           </div>
         </div>
-      </Link>
+      {/* </Link> */}
     </div>
   );
 };

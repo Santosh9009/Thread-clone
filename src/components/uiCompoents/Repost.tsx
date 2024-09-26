@@ -11,6 +11,9 @@ import { repostThread, removeRepostThread } from "@/lib/actions/thread.actions";
 import { ObjectId } from "mongodb";
 import { toast } from "../ui/use-toast";
 import QuoteCard from "./Quote";
+import AddQuote from "./Quote3";
+import { Alert } from "./Alert";
+import { Quote } from "lucide-react";
 
 export default function Repost({
   reposts,
@@ -29,6 +32,9 @@ export default function Repost({
   const session = useSession();
   const [reposted, setReposted] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
 
  const mainthread = isRepost ? originalThreadId : threadId
 
@@ -81,6 +87,21 @@ export default function Repost({
     setPopoverOpen(false);
   }
 
+  const handleOpen = () => {
+    if (session?.data?.user) {
+      // If user session exists, open the modal
+      setIsModalOpen(true);
+    } else {
+      // Otherwise, open the alert
+      setIsAlertOpen(true);
+    }
+  };
+
+
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseAlert = () => setIsAlertOpen(false);
+
+
   return (
     <div>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -97,7 +118,13 @@ export default function Repost({
           </div>
         </PopoverTrigger>
         <PopoverContent className="flex flex-col dark bg-[#181818] w-36 p-2 border-[#323232]">
-          <QuoteCard id={(isRepost)?originalThreadId:threadId}/>
+        {/* <QuoteCard id={(isRepost)?originalThreadId:threadId}/> */}
+
+        <div onClick={handleOpen} className="flex items-center justify-around hover:bg-[#262626] rounded p-2">
+            <div className="bg-transparent text-white font-semibold">Quote</div>
+            <Quote width={16} height={16} />
+          </div>
+        
           {reposted ? (
             <div className="flex items-center justify-center hover:bg-[#262626] rounded p-2">
               <button
@@ -125,6 +152,8 @@ export default function Repost({
           )}
         </PopoverContent>
       </Popover>
+      {isModalOpen && <AddQuote id={(isRepost)?originalThreadId:threadId} isOpen={isModalOpen} onClose={handleCloseModal}/>}
+      {isAlertOpen && <Alert onClose={handleCloseAlert} />}
     </div>
   );
 }

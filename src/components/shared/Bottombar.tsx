@@ -6,17 +6,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Alert } from "../uiCompoents/Alert";
 import { Plus } from "lucide-react";
-import { CreateThreadDialog } from "../cards/createDialog";
+import { CreateThreadCard } from "../cards/createModal";
 
-export default function Bottombar() {
+const Bottombar: React.FC = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isCreateThreadOpen, setCreateThreadOpen] = useState(false); // State for thread modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("/");
 
   useEffect(() => {
-    // Update navLinks' `isActive` state based on the current pathname
     const currentLink = navLinks.find(
       (link) =>
         (pathname.includes(link.route) && link.route.length > 1) ||
@@ -25,44 +24,42 @@ export default function Bottombar() {
     setActiveLink(currentLink ? currentLink.route : "");
   }, [pathname]);
 
-  const handleButtonClick = (link: any) => {
+  const handleButtonClick = (e: any) => {
+    // Show alert if user is not logged in when trying to access certain links
     if (!session?.user) {
-      setModalOpen(true);
+      e.preventDefault();
+      setIsAlertOpen(true);
     }
   };
 
-  const handleCreateThreadClick = () => {
-    if (!session?.user) {
-      setModalOpen(true);
+  const handleOpen = () => {
+    if (session?.user) {
+      setIsModalOpen(true);
     } else {
-      setCreateThreadOpen(true); // Open thread modal
+      setIsAlertOpen(true);
     }
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-    setCreateThreadOpen(false); // Close both modals
-  };
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseAlert = () => setIsAlertOpen(false);
 
   return (
+    <>
     <div className="fixed bottom-0 w-screen md:hidden backdrop-blur-md">
       <div className="w-full h-[.05rem] bg-gray-600"></div>
       <div className="flex justify-center items-center space-x-8 my-3">
         {navLinks.map((link, index) => (
           <div key={index} className="flex items-center">
-            {/* Render each navigation link */}
             <Link
-              href={
-                link.route === "/profile"
-                  ? link.route + "/" + session?.user._id
-                  : link.route
-              }
+              href={link.route === "/profile" ? `${link.route}/${session?.user?._id}` : link.route}
               passHref
             >
               <button
-                onClick={() => handleButtonClick(link)}
+                onClick={(e) => handleButtonClick(e)}
                 className={`${
-                  activeLink === link.route ? "bg-[#5051F9]" : "hover:bg-[#2b2b2b]"
+                  activeLink === link.route
+                    ? "bg-[#5051F9]"
+                    : "hover:bg-[#2b2b2b]"
                 } p-2 rounded-md flex items-center justify-center`}
               >
                 <div className="w-5">{link.img()}</div>
@@ -70,28 +67,26 @@ export default function Bottombar() {
             </Link>
           </div>
         ))}
-        {/* Render the Plus icon button separately */}
-        {<button
-          onClick={handleCreateThreadClick}
+        <button
+          onClick={()=>handleOpen()}
           className="p-2 rounded-md flex items-center justify-center"
         >
           <Plus className="w-7 text-white" />
-        </button>}
+        </button>
       </div>
-
-      {/* Render the Alert modal */}
-      {isModalOpen && <Alert onClose={handleCloseModal} />}
-
-      {/* Render the CreateThreadDialog dialog */}
-      {isCreateThreadOpen && (
-        <CreateThreadDialog
-          isOpen={isCreateThreadOpen}
+    </div>
+    {isModalOpen && (
+        <CreateThreadCard
+          isOpen={isModalOpen}
           onClose={handleCloseModal}
-          username={session?.user.username || ""} // Provide fallback for type safety
-          authorId={session?.user._id || ""} // Provide fallback for type safety
+          username={session?.user?.username}
+          authorId={session?.user?._id}
         />
       )}
-    </div>
-  );
-}
+    {isAlertOpen && <Alert onClose={handleCloseAlert} />}
 
+    </>
+  );
+};
+
+export default Bottombar;

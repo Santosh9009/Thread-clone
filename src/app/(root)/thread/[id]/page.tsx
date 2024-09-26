@@ -1,3 +1,4 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import QuoteCard from "@/components/cards/QuoteCard";
 import RepostCard from "@/components/cards/RepostCard";
@@ -6,6 +7,7 @@ import PostComment from "@/components/forms/CommnetForm";
 import { getThread } from "@/lib/actions/thread.actions";
 import { ArrowLeft } from "lucide-react";
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 async function Thread({ params }: { params: { id: ObjectId } }) {
@@ -14,6 +16,8 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
   // @ts-ignore
   const { post }: any = await getThread(params.id);
   const thread = post.thread;
+  const session = await getServerSession(authOptions);
+
 
   if (!post.thread) {
     return <div>Thread not found</div>;
@@ -25,11 +29,11 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
 
   return (
     <div>
-      <div className="md:h-[10vh] md:flex items-center justify-between hidden px-3">
+       <div className="md:h-[10vh] md:flex items-center justify-between hidden px-3">
         <Link href={'/'} className="hover:bg-[#2b2b2b] rounded-full p-1">
           <ArrowLeft width={25} height={25} />
         </Link>
-        <p>Thread</p>
+        {session?.user &&<p>Thread</p>}
         <div></div>
       </div>
       <MainCardWrapper>
@@ -63,6 +67,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
             repostTime={thread.createdAt}
             originalThread={thread.originalThread}
             isQuote={thread.isQuote}
+            photos={thread.originalThread.photos}
           />
         ) : (
           <ThreadCard

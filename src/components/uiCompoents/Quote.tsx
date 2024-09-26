@@ -27,7 +27,6 @@ export default function AddQuote({ id }: { id: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const [images, setImages] = useState<{ url: string; publicId: string }[]>([]);
 
-
   useEffect(() => {
     getThreadbyId(id)
       .then((result) => {
@@ -41,7 +40,7 @@ export default function AddQuote({ id }: { id: any }) {
   }, [id]);
 
   function handleQuotePost() {
-    QuoteThread(id, session.data?.user._id, content,images)
+    QuoteThread(id, session.data?.user._id, content, images)
       .then((result) => {
         if (result.success) {
           toast({
@@ -49,8 +48,8 @@ export default function AddQuote({ id }: { id: any }) {
             description: "Quote Posted",
           });
           setIsOpen(false);
-          setImages([]);  
-          setContent(""); 
+          setImages([]);
+          setContent("");
         }
       })
       .catch((error) => {
@@ -61,13 +60,16 @@ export default function AddQuote({ id }: { id: any }) {
       });
   }
 
-  const handleUploadSuccess = (uploadedFile: { secure_url: string; public_id: string }) => {
+  const handleUploadSuccess = (uploadedFile: {
+    secure_url: string;
+    public_id: string;
+  }) => {
     const newImage = {
       url: uploadedFile.secure_url,
       publicId: uploadedFile.public_id,
     };
     setImages([newImage]); // Only allow one image
-    console.log('Uploaded image:', newImage);
+    console.log("Uploaded image:", newImage);
   };
 
   return (
@@ -79,7 +81,7 @@ export default function AddQuote({ id }: { id: any }) {
             <Quote width={16} height={16} />
           </div>
         </DialogTrigger>
-        <DialogContent className="bg-[#181818] dark overflow-y-scroll">
+        <DialogContent className="bg-[#181818] dark min-h-screen overflow-y-scroll">
           <DialogTitle />
           <div className="flex flex-col">
             <div className="flex items-center gap-3">
@@ -90,7 +92,7 @@ export default function AddQuote({ id }: { id: any }) {
               />
               <div>@{session.data?.user.username}</div>
             </div>
-            <DialogDescription>
+            {/* <DialogDescription> */}
             <textarea
               className="w-full py-4 px-2 bg-[#181818] rounded-lg text-white focus:outline-none resize-none"
               placeholder="What's on your mind?"
@@ -98,7 +100,7 @@ export default function AddQuote({ id }: { id: any }) {
               minLength={2}
               onChange={(e) => setContent(e.target.value)}
             />
-            </DialogDescription>
+            {/* </DialogDescription> */}
           </div>
           {/* Original thread */}
           {thread && (
@@ -139,8 +141,8 @@ export default function AddQuote({ id }: { id: any }) {
               Post
             </button>
           </div>
-          <UploadComponent onUploadSuccess={handleUploadSuccess}/>
-          
+
+            <UploadComponent onUploadSuccess={handleUploadSuccess} />
         </DialogContent>
       </Dialog>
     </div>

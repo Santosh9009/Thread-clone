@@ -54,14 +54,14 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
   const MAX_PHOTOS_DISPLAY = 4; 
 
   function handleclick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${authorId}`);
   }
 
   function handleUsernameClick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${repostauthor._id}`);
   }
 
@@ -80,8 +80,8 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
           <span>reposted {timeAgo(repostTime)}</span>
         </div>
       )}
-      <Link href={`/thread/${id}`} passHref>
-        <div
+      {/* <Link href={`/thread/${id}`}> */}
+        <div onClick={()=>router.push(`/thread/${id}`)}
           className={`bg-[#181818] overflow-hidden ${
             br ? "border-b-[.05rem] border-[#323232]" : ""
           } py-4 px-8`}
@@ -118,13 +118,13 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               {/* Map through the photos array and display images */}
               {photos && photos.length > 0 && (
                 <div className="mt-2">
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="flex ">
                     {photos.slice(0, MAX_PHOTOS_DISPLAY).map((photo, index) => (
                       <CldImage
                         key={photo.publicId}
                         src={photo.url}
                         alt={`Photo ${index + 1}`}
-                        className="w-full h-auto rounded-md object-cover"
+                        className="w-[30%] h-auto rounded-md object-cover"
                         width={300} // Set your desired width
                         height={200} // Set your desired height
                       />
@@ -149,7 +149,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
             </div>
           </div>
         </div>
-      </Link>
+      {/* </Link> */}
     </div>
   );
 };

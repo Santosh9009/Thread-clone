@@ -4,7 +4,8 @@ import Image from "next/image";
 import { toast } from "../ui/use-toast";
 import { createThread } from "@/lib/actions/thread.actions";
 import { useSession } from "next-auth/react";
-import { UploadComponent } from "../uiCompoents/uploadComponent"
+import { UploadComponent } from "../uiCompoents/uploadComponent";
+import { X } from "lucide-react";
 
 interface CreateThreadCardProps {
   isOpen: boolean;
@@ -88,18 +89,27 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
       onClick={handleClickOutside}
     >
       <div
-        className="bg-[#181818] max-h-screen overflow-y-auto rounded-lg shadow-lg w-full md:max-w-lg border-[0.01rem] border-[#323232] flex flex-col"
+        className="bg-[#181818] max-h-screen overflow-y-auto rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232] flex flex-col h-screen md:h-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-6 flex items-center flex-shrink-0">
-          <Image
-            src={DummyUserIcon}
-            alt="Avatar"
-            className="w-10 h-10 rounded-full mr-4"
-          />
-          <h2 className="text-lg font-semibold text-white hover:underline">
-            @{username}
-          </h2>
+        <div className="p-6 flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center">
+            <Image
+              src={DummyUserIcon}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full mr-4"
+            />
+            <h2 className="text-lg font-semibold text-white hover:underline">
+              @{username}
+            </h2>
+          </div>
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white"
+          >
+            <X/>
+          </button>
         </div>
 
         <div className="px-6 flex-grow overflow-y-auto">

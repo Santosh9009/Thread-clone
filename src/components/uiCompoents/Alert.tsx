@@ -9,7 +9,7 @@ interface LoginModalProps {
 export const Alert: React.FC<LoginModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center md:p-0 p-5">
-      <div className="bg-[#0e0e0e] p-5 md:p-8 rounded-md shadow-lg max-w-lg w-full border-[.05rem] border-[#323232]">
+      <div className="bg-[#0e0e0e] p-5 md:p-8 rounded-md shadow-lg max-w-lg w-full border-[.05rem] border-[#323232] max-h-screen">
         <h2 className="text-xl md:text-2xl font-semibold text-white mb-6">
           Please Log In
         </h2>

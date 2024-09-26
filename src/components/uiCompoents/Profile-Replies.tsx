@@ -62,6 +62,7 @@ export default function ProfileReplies({
                   reposts={thread.parentId.reposts}
                   timestamp={thread.parentId.createdAt}
                   br={false}
+                  photos={thread.parentId.photos}
                 />
               )}
               <div
@@ -80,6 +81,7 @@ export default function ProfileReplies({
               upvotes={thread.likes}
               reposts={thread.reposts}
               timestamp={thread.createdAt}
+              photos={thread.photos}
             />
           </div>
         ))}

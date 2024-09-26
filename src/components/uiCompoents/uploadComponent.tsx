@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Upload } from "lucide-react";
@@ -10,13 +10,13 @@ interface CloudinaryUploadResult {
 }
 
 interface UploadComponentProps {
-  onUploadSuccess: (uploadedFile: CloudinaryUploadResult) => void; // Change to accept a single file
+  onUploadSuccess: (uploadedFile: CloudinaryUploadResult) => void;
 }
 
 export const UploadComponent: React.FC<UploadComponentProps> = ({
   onUploadSuccess,
 }) => {
-  const [resource, setResource] = useState<CloudinaryUploadResult | null>(null); // Change to store a single file
+  const [resource, setResource] = useState<CloudinaryUploadResult | null>(null);
 
   const handleUploadSuccess = (uploadedFiles: CloudinaryUploadResult[]) => {
     if (uploadedFiles.length > 1) {
@@ -26,15 +26,14 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
       return;
     }
 
-    // Set the uploaded resource if there's one file
     if (uploadedFiles.length === 1) {
       setResource(uploadedFiles[0]);
-      onUploadSuccess(uploadedFiles[0]); // Pass the single uploaded file
+      onUploadSuccess(uploadedFiles[0]);
     }
   };
 
   const handleRemoveImage = () => {
-    setResource(null); // Clear the selected resource
+    setResource(null);
   };
 
   return (
@@ -42,13 +41,22 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
       <CldUploadWidget
         signatureEndpoint="/api/sign-cloudinary-params"
         onSuccess={(result) => {
-          const uploadedFiles: CloudinaryUploadResult[] = Array.isArray(result?.info)
-            ? result.info.filter((file): file is CloudinaryUploadResult =>
-                !!file && typeof file === "object" && "secure_url" in file && "public_id" in file
+          const uploadedFiles: CloudinaryUploadResult[] = Array.isArray(
+            result?.info
+          )
+            ? result.info.filter(
+                (file): file is CloudinaryUploadResult =>
+                  !!file &&
+                  typeof file === "object" &&
+                  "secure_url" in file &&
+                  "public_id" in file
               )
-            : result?.info && typeof result.info === "object" && "secure_url" in result.info && "public_id" in result.info
-              ? [result.info as CloudinaryUploadResult] 
-              : []; 
+            : result?.info &&
+              typeof result.info === "object" &&
+              "secure_url" in result.info &&
+              "public_id" in result.info
+            ? [result.info as CloudinaryUploadResult]
+            : [];
 
           handleUploadSuccess(uploadedFiles);
         }}
@@ -56,8 +64,8 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
           widget.close();
         }}
         options={{
-          multiple: false, // Restrict to a single upload
-          maxFiles: 1, // Allow only one file
+          multiple: false,
+          maxFiles: 1,
         }}
       >
         {({ open }) => {
@@ -68,16 +76,19 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
               toast({
                 description: "You can only upload one photo.",
               });
-              return; 
+              return;
             }
 
-            open(); 
+            open();
           };
 
           return (
             <button
               className="flex justify-center items-center gap-1 hover:bg-[#090909] p-2 rounded-md"
-              onClick={handleOnClick}
+              onClick={(e) => {
+                e.stopPropagation(); 
+                handleOnClick(e);
+              }}
             >
               Upload <Upload className="w-4 h-4" />
             </button>
@@ -94,7 +105,9 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
             alt="Uploaded File"
           />
           <button
-            onClick={handleRemoveImage}
+            onClick={(e) => {
+              handleRemoveImage()
+            }}
             className="ml-2 text-red-500"
           >
             Remove

@@ -74,6 +74,7 @@ export default function LoadUserThreads({
             timestamp={thread.createdAt}
             isRepost={thread.isRepost}
             isQuote={thread.isQuote}
+            photos={thread.photos}
           />
         )
       )}

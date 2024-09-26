@@ -84,6 +84,7 @@ export default function PostComment({ThreadId}:{ThreadId:ObjectId}) {
                       {...field}
                       className="bg-transparent resize-none focus:outline-none pt-2 w-full"
                       rows={2}
+                      disabled={!session.data?.user}
                     />
                   </FormControl>
                   <FormMessage />

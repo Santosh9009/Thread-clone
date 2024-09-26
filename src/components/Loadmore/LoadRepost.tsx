@@ -59,6 +59,7 @@ export default function LoadReposts({
           isRepost={thread.isRepost}
           repostTime={thread.createdAt}
           originalThread={thread.originalThread}
+          photos={thread.originalThread.photos}
         />
       ))}
 

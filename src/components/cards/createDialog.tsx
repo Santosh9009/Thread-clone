@@ -87,7 +87,7 @@ export const CreateThreadDialog: React.FC<CreateThreadCardProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="dark h-screen flex flex-col justify-start overflow-y-scroll">
+      <DialogContent className="dark min-h-screen flex flex-col justify-start overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>
             <div className="flex items-center">

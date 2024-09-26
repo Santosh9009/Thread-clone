@@ -43,26 +43,27 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
   const router = useRouter();
 
   function handleclick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${authorId}`);
   }
 
   function handleclick2(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/profile/${originalThread.author._id}`);
   }
 
   function originalThreadclick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     router.push(`/thread/${originalThread.id}`);
   }
 
   return (
-    <Link href={`/thread/${id}`} passHref>
-      <div
+    // <Link href={`/thread/${id}`}>
+    <div onClick={()=>router.push(`/thread/${id}`)}
+
         className={`bg-[#181818] overflow-hidden ${
           br ? "border-b-[.05rem] border-[#323232]" : ""
         } py-4 px-8`}
@@ -138,7 +139,7 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
           </div>
         </div>
       </div>
-    </Link>
+    // </Link>
   );
 };
 
