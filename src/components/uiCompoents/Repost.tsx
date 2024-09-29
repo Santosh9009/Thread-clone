@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { repostThread, removeRepostThread } from "@/lib/actions/thread.actions";
 import { ObjectId } from "mongodb";
 import { toast } from "../ui/use-toast";
-import QuoteCard from "./Quote";
+import QuoteCard from "./Quote3";
 import AddQuote from "./Quote3";
 import { Alert } from "./Alert";
 import { Quote } from "lucide-react";
