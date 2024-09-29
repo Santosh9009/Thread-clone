@@ -89,7 +89,7 @@ export const ProfilePicUploadComponent: React.FC<ProfilePicUploadComponentProps>
               }
             }}
           >
-            Upload <Upload className="w-4 h-4" />
+            upload <Upload className="w-4 h-4" />
           </button>
         )}
       </CldUploadWidget>

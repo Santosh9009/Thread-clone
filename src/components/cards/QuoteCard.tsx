@@ -47,8 +47,8 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
   const MAX_PHOTOS_DISPLAY = 4;
 
   function handleclick(e: any) {
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     router.push(`/profile/${authorId}`);
   }
 
@@ -81,12 +81,12 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
         <div className="ml-4 flex-1">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <h3
+              <button
                 onClick={handleclick}
                 className="text-base font-semibold text-slate-200 hover:underline"
               >
                 {author && "@" + author}
-              </h3>
+              </button>
               <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
             </div>
             <div className="text-gray-400">
@@ -137,13 +137,13 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
               <div className="ml-4 flex-1">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center space-x-2">
-                    <h3
+                    <button
                       onClick={handleclick2}
                       className="text-base font-semibold text-slate-200 hover:underline"
                     >
                       {originalThread.author.username &&
                         "@" + originalThread.author.username}
-                    </h3>
+                    </button>
                     <p className="text-gray-400 text-sm">
                       {timeAgo(originalThread.createdAt)}
                     </p>

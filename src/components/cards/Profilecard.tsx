@@ -9,6 +9,7 @@ import Follow from "../uiCompoents/Follow";
 import { People } from "../uiCompoents/People";
 import { useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 interface Props {
   name: string;
@@ -16,11 +17,11 @@ interface Props {
   followers: any[];
   following: any[];
   authorId: string;
-  bio: string; 
-  avatarUrl:string,
+  bio: string;
+  avatarUrl: string;
 }
 
-const MAX_BIO_LENGTH = 50; 
+const MAX_BIO_LENGTH = 50;
 
 const ProfileCard = ({
   name,
@@ -29,7 +30,7 @@ const ProfileCard = ({
   following,
   authorId,
   bio,
-  avatarUrl
+  avatarUrl,
 }: Props) => {
   const { data } = useSession();
   const userId = data?.user._id;
@@ -41,7 +42,8 @@ const ProfileCard = ({
     setIsExpanded(!isExpanded);
   };
 
-  const truncatedBio = bio.length > MAX_BIO_LENGTH ? bio.slice(0, MAX_BIO_LENGTH) + "..." : bio;
+  const truncatedBio =
+    bio.length > MAX_BIO_LENGTH ? bio.slice(0, MAX_BIO_LENGTH) + "..." : bio;
 
   return (
     <div className="flex flex-col items-center p-8 text-white w-full">
@@ -53,51 +55,56 @@ const ProfileCard = ({
           </button>
         </div>
 
-       <CldImage
-          src={avatarUrl}
-          width={20}
-          height={20}
-          alt={`${name}'s avatar` || ""}
-          className="w-24 h-24 mb-4"
-        />
+        <Avatar className="h-24 w-24 rounded-full">
+          <AvatarImage
+            src={avatarUrl ? avatarUrl : DummyUserIcon.src}
+            alt="Profile Picture"
+            className="rounded-full"
+          />
+          <AvatarFallback>
+            <Image alt="User" src={DummyUserIcon} className="rounded-full" />
+          </AvatarFallback>
+        </Avatar>
       </div>
 
       <div className="flex flex-col mb-5 w-full">
-        <p className="text-gray-400 mb-4">
-          {isExpanded ? bio : truncatedBio}
-        </p>
+        <p className="text-gray-400 mb-4">{isExpanded ? bio : truncatedBio}</p>
         {bio.length > MAX_BIO_LENGTH && (
-          <button 
+          <button
             className="text-blue-500 hover:underline"
             onClick={handleToggleBio}
           >
             {isExpanded ? "See Less" : "See More"}
           </button>
         )}
-        
+
         <div className="flex justify-start space-x-6 mb-5 w-full">
           <div className="flex items-center space-x-2">
             <p className="text-base font-medium">{followers.length}</p>
-            <People userId={authorId} btn={'Followers'}/>
+            <People userId={authorId} btn={"Followers"} />
           </div>
           <div className="flex items-center space-x-2">
             <p className="text-base font-medium">{following.length}</p>
-            <People userId={authorId} btn={"Following"}/>
+            <People userId={authorId} btn={"Following"} />
           </div>
         </div>
       </div>
 
-
       {authorId === userId ? (
-        <button onClick={()=>router.push(`/profile/edit`)} className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300">
+        <button
+          onClick={() => router.push(`/profile/edit`)}
+          className="w-full bg-transparent border-[0.05rem] border-[#3d3d3d] py-2 rounded-xl font-semibold hover:text-slate-300"
+        >
           Edit Profile
         </button>
       ) : (
         <div className="flex justify-evenly w-full space-x-4 mt-3">
           <div className="w-1/2">
-          <Follow followers={followers} targetId={authorId}/>
+            <Follow followers={followers} targetId={authorId} />
           </div>
-          <Button className="w-1/2 bg-transparent border-[.05rem] border-[#323232] hover:bg-transparent rounded-xl hover:text-slate-400">Mention</Button>
+          <Button className="w-1/2 bg-transparent border-[.05rem] border-[#323232] hover:bg-transparent rounded-xl hover:text-slate-400">
+            Mention
+          </Button>
         </div>
       )}
     </div>
