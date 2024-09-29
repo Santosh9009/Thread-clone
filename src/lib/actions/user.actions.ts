@@ -12,6 +12,8 @@ interface UpdateUserParams {
   username?: string;
   bio?: string;
   isOnboarded: boolean;
+  avatarUrl: string, 
+  avatarPublicId: string,
 }
 
 export async function UpdateUser({
@@ -20,6 +22,8 @@ export async function UpdateUser({
   username,
   bio,
   isOnboarded,
+  avatarUrl,
+  avatarPublicId,
 }: UpdateUserParams): Promise<any> {
   try {
     await dbConnect();
@@ -29,29 +33,31 @@ export async function UpdateUser({
     if (name) updateData.name = name;
     if (username) updateData.username = username;
     if (bio) updateData.bio = bio;
+    if (avatarUrl) updateData.avatarUrl = avatarUrl; 
+    if (avatarPublicId) updateData.avatarPublicId = avatarPublicId; 
+    if (isOnboarded !== undefined) updateData.isOnboarded = isOnboarded;
 
     // Ensure at least one field is provided to update
-    if (!name && !username && !bio && isOnboarded === undefined) {
+    if (!name && !username && !bio && !avatarUrl && !avatarPublicId && isOnboarded === undefined) {
       throw new Error("No fields provided to update");
     }
-
-    updateData.isOnboarded = isOnboarded;
 
     const updatedUser = await UserModel.findOneAndUpdate(
       { _id: userId },
       { $set: updateData },
-      { upsert: false }
+      { upsert: false, new: true } // Ensure new updated document is returned
     );
 
     if (!updatedUser) {
       throw new Error("User not found");
     }
 
-    return { success: true };
+    return { success: true, user: updatedUser };
   } catch (error: any) {
     throw new Error("Failed to update user: " + error.message);
   }
 }
+
 
 export async function getUser(id: ObjectId) {
   dbConnect();

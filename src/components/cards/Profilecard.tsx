@@ -8,6 +8,7 @@ import { useState } from "react";
 import Follow from "../uiCompoents/Follow";
 import { People } from "../uiCompoents/People";
 import { useRouter } from "next/navigation";
+import { CldImage } from "next-cloudinary";
 
 interface Props {
   name: string;
@@ -16,6 +17,7 @@ interface Props {
   following: any[];
   authorId: string;
   bio: string; 
+  avatarUrl:string,
 }
 
 const MAX_BIO_LENGTH = 50; 
@@ -27,6 +29,7 @@ const ProfileCard = ({
   following,
   authorId,
   bio,
+  avatarUrl
 }: Props) => {
   const { data } = useSession();
   const userId = data?.user._id;
@@ -50,8 +53,10 @@ const ProfileCard = ({
           </button>
         </div>
 
-       <Image
-          src={DummyUserIcon}
+       <CldImage
+          src={avatarUrl}
+          width={20}
+          height={20}
           alt={`${name}'s avatar` || ""}
           className="w-24 h-24 mb-4"
         />

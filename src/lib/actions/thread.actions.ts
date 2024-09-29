@@ -325,10 +325,18 @@ export async function UserComments(userId: ObjectId, pageNumber: number) {
       .populate({
         path: "parentId",
         model: ThreadModel,
-        populate: {
-          path: "author",
-          model: UserModel,
-        },
+        populate: [
+          { path: "reposts", model: ThreadModel, select: "author" },
+          { path: "author", model: UserModel, select: "username" },
+          {
+            path: "originalThread",
+            model: ThreadModel,
+            populate: [
+              { path: "author", model: UserModel, select: "username" },
+            ],
+          },
+        ],
+        
       })
       .sort({ createdAt: "desc" })
       .limit(pageSize)
@@ -587,6 +595,7 @@ export async function getUserReposts(userId: ObjectId, pageNumber: number) {
           },
         ],
       })
+      .sort({ createdAt: "desc" })
       .limit(pageSize)
       .skip(skipAmount)
       .exec();

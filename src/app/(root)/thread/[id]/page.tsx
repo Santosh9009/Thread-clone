@@ -18,6 +18,10 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
   const thread = post.thread;
   const session = await getServerSession(authOptions);
 
+  if(!session?.user){
+    return null;
+  }
+
 
   if (!post.thread) {
     return <div>Thread not found</div>;
@@ -51,6 +55,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
             originalThread={thread.originalThread}
             isRepost={thread.isRepost}
             isQuote={thread.isQuote}
+            photos={thread.photos}
           />
         ) : thread.isRepost && thread.originalThread ? (
           <RepostCard

@@ -9,7 +9,8 @@ import { PostType } from "@/types/Thread";
 import { timeAgo } from "@/helpers/CalculateTime";
 import { useSession } from "next-auth/react";
 import { UploadComponent } from "./uploadComponent";
-import {  X } from "lucide-react";
+import { X } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 
 interface AddQuoteProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
   const [content, setContent] = useState("");
   const [images, setImages] = useState<{ url: string; publicId: string }[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const MAX_PHOTOS_DISPLAY = 4;
 
   useEffect(() => {
     if (isOpen) {
@@ -39,7 +41,12 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
 
   const handleQuotePost = async () => {
     try {
-      const result = await QuoteThread(id, session.data?.user._id, content, images);
+      const result = await QuoteThread(
+        id,
+        session.data?.user._id,
+        content,
+        images
+      );
       if (result.success) {
         toast({
           title: "Success",
@@ -60,7 +67,10 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
     }
   };
 
-  const handleUploadSuccess = (uploadedFile: { secure_url: string; public_id: string }) => {
+  const handleUploadSuccess = (uploadedFile: {
+    secure_url: string;
+    public_id: string;
+  }) => {
     const newImage = {
       url: uploadedFile.secure_url,
       publicId: uploadedFile.public_id,
@@ -84,7 +94,9 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
     >
       <div
         className="bg-[#181818] h-full md:h-auto max-h-screen rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232] flex flex-col overflow-hidden"
-        onClick={(e) => {e.stopPropagation();}}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <div className="p-6 flex items-center flex-shrink-0 justify-between">
           <div className="flex items-center">
@@ -98,7 +110,7 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
             </h2>
           </div>
           <button onClick={onClose} className="text-white">
-            <X/>
+            <X />
           </button>
         </div>
 
@@ -118,6 +130,7 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
               }
             }}
           />
+          <UploadComponent onUploadSuccess={handleUploadSuccess} />
           {thread && (
             <div className="bg-[#181818] rounded-lg overflow-hidden border-[.05rem] border-[#323232] py-4 px-4 m-2">
               <div className="flex items-start">
@@ -140,11 +153,35 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
                   <p className="text-gray-300 mt-2 font-light">
                     {thread.content}
                   </p>
+                  {thread.photos && thread.photos.length > 0 && (
+                    <div className="mt-2">
+                      <div className="grid grid-cols-3 gap-2">
+                        {thread.photos
+                          .slice(0, MAX_PHOTOS_DISPLAY)
+                          .map((photo, index) => (
+                            <CldImage
+                              key={photo.publicId}
+                              src={photo.url}
+                              alt={`Photo ${index + 1}`}
+                              className="w-full h-auto rounded-md object-cover"
+                              width={300}
+                              height={200}
+                            />
+                          ))}
+                      </div>
+                      {thread.photos.length > MAX_PHOTOS_DISPLAY && (
+                        <button className="mt-2 text-blue-500 hover:underline">
+                          View more ({thread.photos.length - MAX_PHOTOS_DISPLAY}
+                          )
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           )}
-          <UploadComponent onUploadSuccess={handleUploadSuccess} />
+          
         </div>
 
         <div className="flex justify-end p-4 flex-shrink-0">

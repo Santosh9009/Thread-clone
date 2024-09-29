@@ -33,6 +33,7 @@ export interface PostType {
   isRepost: boolean;
   originalThread?: any,
   isQuote:boolean,
+  photos:photo[];
 }
 
 
@@ -64,4 +65,9 @@ export interface ThreadsType {
   likes: User[];
   reposts: User[];
   createdAt: Date;
+}
+
+export interface photo {
+  url: string;
+  publicId: string;
 }

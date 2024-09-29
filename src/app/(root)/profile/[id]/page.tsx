@@ -32,6 +32,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
           username={user?.username || ""}
           followers={user?.followers || []}
           following={user?.following || []}
+          avatarUrl={user.avatarUrl}
         />
 
         <div className="flex mt-4 w-full">

@@ -55,6 +55,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
               originalThread={thread.originalThread}
               isRepost={thread.isRepost}
               isQuote={thread.isQuote}
+              photos={thread.photos}
             />
           );
         } else if (thread.isRepost && thread.originalThread) {

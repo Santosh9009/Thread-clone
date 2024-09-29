@@ -24,18 +24,21 @@ import { useSession } from "next-auth/react";
 import { useDebounceCallback } from "usehooks-ts";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
+import { ProfilePicUploadComponent } from "../uiCompoents/ProfilePicUpload";
 
 const UpdateUserSchema = z.object({
   username: z.string().max(20).optional(),
   name: z.string().max(20).optional(),
   bio: z.string().max(150).optional(),
-  profilePic: z.instanceof(File).optional(),
+  avatarUrl: z.string().url().optional(), 
+  avatarPublicId: z.string().optional(), 
 });
+
 
 export default function EditUserForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [profilePic, setProfilePic] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const [profilePic, setProfilePic] = useState<File | null>(null);
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [username, setUsername] = useState("");
   const [usernameMessage, setUsernameMessage] = useState("");
@@ -44,13 +47,23 @@ export default function EditUserForm() {
   const router = useRouter();
   const userId = session?.user._id;
 
+  
+
+
+  const handleProfilePicUploadSuccess = (uploadedFile: { secure_url: string; public_id: string }) => {
+    form.setValue("avatarUrl", uploadedFile.secure_url);
+    form.setValue("avatarPublicId", uploadedFile.public_id);
+  };
+
+
   const form = useForm<z.infer<typeof UpdateUserSchema>>({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
       username: "",
       name: "",
       bio: "",
-      profilePic: null || undefined,
+      avatarUrl:'',
+      avatarPublicId:'',
     },
   });
 
@@ -63,6 +76,8 @@ export default function EditUserForm() {
         name: data.name,
         bio: data.bio,
         isOnboarded: true,
+        avatarUrl: data.avatarUrl || '', 
+        avatarPublicId: data.avatarPublicId || '',
       });
 
       if (response.success) {
@@ -88,21 +103,21 @@ export default function EditUserForm() {
     }
   };
 
-  const handleProfilePicChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files?.[0];
-      setProfilePic(file);
-    }
-  };
+  // const handleProfilePicChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const file = event.target.files?.[0];
+  //     setProfilePic(file);
+  //   }
+  // };
 
-  const handleCancelProfilePic = () => {
-    setProfilePic(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
+  // const handleCancelProfilePic = () => {
+  //   setProfilePic(null);
+  //   if (fileInputRef.current) {
+  //     fileInputRef.current.value = "";
+  //   }
+  // };
 
   useEffect(() => {
     const checkUsername = async () => {
@@ -133,7 +148,7 @@ export default function EditUserForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 max-w-lg mx-auto px-10 md:px-0 py-10"
       >
-        <div className="flex flex-col items-center space-y-4">
+        {/* <div className="flex flex-col items-center space-y-4">
           <Avatar
             className="h-24 w-24"
             key={profilePic ? URL.createObjectURL(profilePic) : "dummy"}
@@ -165,7 +180,8 @@ export default function EditUserForm() {
               Cancel
             </button>
           )}
-        </div>
+        </div> */}
+        <ProfilePicUploadComponent onUploadSuccess={handleProfilePicUploadSuccess}/>
         <FormField
           control={form.control}
           name="username"

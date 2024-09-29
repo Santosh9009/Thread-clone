@@ -12,6 +12,7 @@ export interface User extends Document {
   following: mongoose.Types.ObjectId[];
   bio: string;
   avatarUrl: string;
+  avatarPublicId: string;
   createdAt: Date;
   isOnboarded: boolean;
   threads: mongoose.Types.ObjectId[];
@@ -60,6 +61,11 @@ const UserSchema: Schema<User> = new Schema({
     type: String,
     trim: true,
   },
+  avatarPublicId: {
+    type: String, 
+    trim: true,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,

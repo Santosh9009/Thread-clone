@@ -60,6 +60,7 @@ export default function LoadUserThreads({
             originalThread={thread.originalThread}
             isRepost={thread.isRepost}
             isQuote={thread.isQuote}
+            photos={thread.photos}
           />
         ) : (
           <ThreadCard
