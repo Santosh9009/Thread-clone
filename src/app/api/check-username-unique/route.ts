@@ -2,7 +2,6 @@ import UserModel from "@/lib/Model/User";
 import { UsernameSchema } from "@/ZodSchema/ValidationSchema";
 import dbConnect from "@/lib/dbConnect";
 import { NextRequest } from "next/server";
-import z from 'zod';
 
 export async function POST(request:NextRequest){
   

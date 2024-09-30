@@ -7,6 +7,8 @@ export interface User extends Document {
   password: string;
   verifyCode: string;
   verifyCodeExpiry: Date;
+  resetToken: string | undefined;
+  resetTokenExpiry: Date | undefined;
   isVerified: boolean;
   followers: mongoose.Types.ObjectId[];
   following: mongoose.Types.ObjectId[];
@@ -65,7 +67,14 @@ const UserSchema: Schema<User> = new Schema({
     type: String, 
     trim: true,
   },
-
+  resetToken: {
+    type: String,
+    required: false,
+  },
+  resetTokenExpiry: {
+    type: Date,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

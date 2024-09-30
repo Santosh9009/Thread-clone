@@ -10,17 +10,18 @@ import {
   Button,
 } from '@react-email/components';
 
-interface VerificationEmailProps {
+interface ResetPasswordEmailProps {
   username: string;
-  otp: string;
+  resetToken: string;
 }
 
-export default function VerificationEmail({ username, otp }: VerificationEmailProps) {
+export default function ResetPasswordEmail({ username, resetToken }: ResetPasswordEmailProps)
+ {
   const Url = process.env.NEXT_PUBLIC_URL
   return (
     <Html lang="en" dir="ltr">
       <Head>
-        <title>Verification Code</title>
+        <title>Reset Your Password</title>
         <Font
           fontFamily="Roboto"
           fallbackFontFamily="Verdana"
@@ -32,31 +33,30 @@ export default function VerificationEmail({ username, otp }: VerificationEmailPr
           fontStyle="normal"
         />
       </Head>
-      <Preview>Here&apos;s your verification code: {otp}</Preview>
+      <Preview>Here&apos;s your password reset code: {resetToken}</Preview>
       <Section>
         <Row>
           <Heading as="h2">Hello {username},</Heading>
         </Row>
         <Row>
           <Text>
-            Thank you for registering. Please use the following verification
-            code to complete your registration:
+            We received a request to reset your password. Please use the following code to reset your password:
           </Text>
         </Row>
         <Row>
-          <Text><b>CODE : {otp}</b></Text> 
+          <Text><b>Reset Code: {resetToken}</b></Text> 
         </Row>
         <Row>
           <Text>
-            If you did not request this code, please ignore this email.
+            If you did not request a password reset, please ignore this email.
           </Text>
         </Row>
         <Row>
           <Button
-            href={`${Url}/verify/${username}`}
+            href={`${Url}/reset-password/${username}`}
             style={{ color: '#61dafb' }}
           >
-            Verify here
+            Reset Password
           </Button>
         </Row>
       </Section>

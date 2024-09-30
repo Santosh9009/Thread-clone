@@ -24,3 +24,7 @@ export const UpdateSchema : z.ZodSchema = z.object({
   username:z.string().min(3).max(20).optional(),
   bio:z.string().max(150).optional()
 })
+
+export const emailSchema :z.ZodSchema = z.object({
+  email: z.string().email({message:"Invalid email address"}),
+})
