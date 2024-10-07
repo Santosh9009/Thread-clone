@@ -126,18 +126,18 @@ export async function fetchAllThreads(pageNumber: number): Promise<any> {
           select: "_id username parentId avatarUrl",
         },
       })
-      .populate({ path: "reposts", model: ThreadModel, select: "author " })
+      .populate({ path: "reposts", model: ThreadModel, select: "author" })
       .populate({
         path: "originalThread",
         model: ThreadModel,
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
-          { path: "author", model: UserModel, select: "username" },
+          { path: "author", model: UserModel, select: "username avatarUrl" },
           {
             path: "originalThread",
             model: ThreadModel,
             populate: [
-              { path: "author", model: UserModel, select: "username" },
+              { path: "author", model: UserModel, select: "username avatarUrl" },
             ],
           },
         ],
@@ -293,12 +293,12 @@ export async function UserThreads(userId: ObjectId, pageNumber: number) {
       .populate({
         path: "author",
         model: UserModel,
-        select: "username _id",
+        select: "username _id avatarUrl",
       })
       .populate({
         path: "originalThread",
         model: ThreadModel,
-        populate: { path: "author", model: UserModel, select: "username _id" },
+        populate: { path: "author", model: UserModel, select: "username _id avatarUrl" },
       })
       .limit(pageSize)
       .skip(skipAmount)
@@ -327,12 +327,12 @@ export async function UserComments(userId: ObjectId, pageNumber: number) {
         model: ThreadModel,
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
-          { path: "author", model: UserModel, select: "username" },
+          { path: "author", model: UserModel, select: "username avatarUrl" },
           {
             path: "originalThread",
             model: ThreadModel,
             populate: [
-              { path: "author", model: UserModel, select: "username" },
+              { path: "author", model: UserModel, select: "username avatarUrl" },
             ],
           },
         ],

@@ -46,7 +46,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
             // @ts-ignore
             id={thread._id}
             authorId={thread.author._id}
-            author={thread.author.username}
+            author={thread.author}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotes={thread.likes}
@@ -61,7 +61,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
           <RepostCard
             id={thread._id}
             authorId={thread.originalThread?.author._id}
-            author={thread.originalThread.author.username}
+            author={thread.originalThread.author}
             contentSnippet={thread.originalThread?.content}
             commentsCount={thread.originalThread.comments.length}
             upvotes={thread.originalThread?.likes}
@@ -78,7 +78,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
           <ThreadCard
             id={thread._id}
             // @ts-ignore
-            author={thread?.author.username}
+            author={thread?.author}
             authorId={thread.author._id}
             contentSnippet={thread?.content}
             commentsCount={thread?.comments.length}
@@ -101,7 +101,7 @@ async function Thread({ params }: { params: { id: ObjectId } }) {
             <ThreadCard
               key={index}
               id={comment?._id}
-              author={comment?.author.username}
+              author={comment?.author}
               authorId={comment.author._id}
               contentSnippet={comment?.content}
               commentsCount={comment.comments.length}

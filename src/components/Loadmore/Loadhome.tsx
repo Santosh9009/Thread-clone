@@ -46,7 +46,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
               key={index}
               id={thread._id}
               authorId={thread.author._id}
-              author={thread.author.username}
+              author={thread.author}
               contentSnippet={thread.content}
               commentsCount={thread.comments.length}
               upvotes={thread.likes}
@@ -65,7 +65,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
               key={index}
               id={thread._id}
               authorId={thread.originalThread?.author._id}
-              author={thread.originalThread.author.username}
+              author={thread.originalThread.author}
               contentSnippet={thread.originalThread?.content}
               commentsCount={thread.originalThread.comments.length}
               upvotes={thread.originalThread?.likes}
@@ -85,7 +85,7 @@ export default function Loadhome({threads,Next}:{threads:any[],Next:boolean}) {
               key={index}
               id={thread._id}
               authorId={thread.author._id}
-              author={thread.author.username}
+              author={thread.author}
               contentSnippet={thread.content}
               commentsCount={thread.comments.length}
               upvotes={thread.likes}

@@ -12,7 +12,7 @@ import { photo } from "@/types/Thread";
 interface ThreadCardProps {
   br?: boolean;
   id: any;
-  author: string;
+  author:{_id:string, avatarUrl:string,username:string};
   contentSnippet: string;
   commentsCount: number;
   upvotes: any[];
@@ -96,8 +96,10 @@ const RepostCard: React.FC<ThreadCardProps> = ({
       >
         <div className="flex items-start">
           <Image
-            src={DummyUserIcon}
-            alt={author || ""}
+          height={20}
+          width={20}
+            src={author.avatarUrl || DummyUserIcon}
+            alt={author.username || ""}
             className="w-10 rounded-full object-cover"
           />
           <div className="ml-4 flex-1">
@@ -107,7 +109,7 @@ const RepostCard: React.FC<ThreadCardProps> = ({
                   onClick={handleclick}
                   className="text-base font-semibold text-slate-200 hover:underline"
                 >
-                  {author && "@" + author}
+                  {author.username && "@" + author.username}
                 </button>
                 <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
               </div>
@@ -153,7 +155,9 @@ const RepostCard: React.FC<ThreadCardProps> = ({
               >
                 <div className="flex items-start">
                   <Image
-                    src={DummyUserIcon}
+                  height={20}
+                  width={20}
+                    src={quote.author.avatarUrl || DummyUserIcon}
                     alt={quote.author || ""}
                     className="w-10 rounded-full object-cover"
                   />

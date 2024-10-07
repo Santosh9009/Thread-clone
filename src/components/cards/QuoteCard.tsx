@@ -4,8 +4,6 @@ import Image from "next/image";
 import { ThreeDotIcon } from "../../../public/assests/Images";
 import DummyUserIcon from "../../../public/assests/profile-picture.png";
 import { timeAgo } from "@/helpers/CalculateTime";
-import Link from "next/link";
-
 import Threadbutton from "../uiCompoents/Threadbutton";
 import { useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
@@ -14,7 +12,7 @@ import { photo } from "@/types/Thread";
 interface ThreadCardProps {
   br?: boolean;
   id: any;
-  author: string;
+  author: any;
   contentSnippet: string;
   commentsCount: number;
   upvotes: any[]; // Assuming upvotes is an array of user ids
@@ -74,8 +72,10 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
     >
       <div className="flex items-start">
         <Image
-          src={DummyUserIcon}
-          alt={author || ""}
+          height={20}
+          width={20}
+          src={author.avatarUrl || DummyUserIcon.src}
+          alt={author.username || ""}
           className="w-10 rounded-full object-cover"
         />
         <div className="ml-4 flex-1">
@@ -85,7 +85,7 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
                 onClick={handleclick}
                 className="text-base font-semibold text-slate-200 hover:underline"
               >
-                {author && "@" + author}
+                {author.username && "@" + author.username}
               </button>
               <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
             </div>
@@ -130,7 +130,9 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
           >
             <div className="flex items-start">
               <Image
-                src={DummyUserIcon}
+              height={20}
+              width={20}
+                src={originalThread.author.avatarUrl || DummyUserIcon}
                 alt={originalThread.author || ""}
                 className="w-10 rounded-full object-cover"
               />

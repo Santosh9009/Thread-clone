@@ -20,7 +20,7 @@ interface photo {
 interface ThreadCardProps {
   br?: boolean;
   id: any;
-  author: string;
+  author: any;
   contentSnippet: string;
   commentsCount: number;
   upvotes: any[];
@@ -89,9 +89,11 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
         >
           <div className="flex items-start">
             <Image
-              src={DummyUserIcon}
-              alt={author || ""}
-              className="w-10 rounded-full object-cover"
+            width={20}
+            height={20}
+            src={author.avatarUrl || DummyUserIcon}
+            alt={author.username || ""}
+            className="w-10 rounded-full object-cover"
             />
             <div className="ml-4 flex-1">
               <div className="flex justify-between items-center">
@@ -100,7 +102,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
                     onClick={handleclick}
                     className="text-base font-semibold text-slate-200 hover:underline"
                   >
-                    {author && "@" + author}
+                    {author.username && "@" + author.username}
                   </button>
                   <p className="text-gray-400 text-sm">{timeAgo(timestamp)}</p>
                 </div>

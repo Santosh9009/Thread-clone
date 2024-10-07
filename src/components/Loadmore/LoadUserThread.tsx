@@ -51,7 +51,7 @@ export default function LoadUserThreads({
             key={index}
             id={thread._id}
             authorId={thread.author._id}
-            author={thread.author.username}
+            author={thread.author}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotes={thread.likes}
@@ -67,7 +67,7 @@ export default function LoadUserThreads({
             key={index}
             id={thread._id}
             authorId={thread.author._id}
-            author={thread.author.username}
+            author={thread.author}
             contentSnippet={thread.content}
             commentsCount={thread.comments.length}
             upvotes={thread.likes}
