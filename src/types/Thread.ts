@@ -16,6 +16,7 @@ export interface User {
   bio: string;
   name: string;
   isOnboarded: boolean;
+  avatarUrl:string,
 }
 
 export interface PostType {

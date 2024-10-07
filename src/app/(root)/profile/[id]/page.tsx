@@ -1,3 +1,4 @@
+"use client"
 import MainCardWrapper from "@/components/cards/MainCardWrapper";
 import { getUser } from "@/lib/actions/user.actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,28 +13,57 @@ import ProfileCard from "@/components/cards/Profilecard";
 import { ObjectId } from "mongodb";
 import LoadUserThreads from "@/components/Loadmore/LoadUserThread";
 import LoadReposts from "@/components/Loadmore/LoadRepost";
+import { useEffect, useState } from "react";
+import { User } from "@/types/Thread";
+import { ProfileSkeleton } from "@/components/uiCompoents/skeletonsUi/ProfileSkeleton";
 
-async function Profile({ params }: { params: { id: ObjectId } }) {
+function Profile({ params }: { params: { id: ObjectId } }) {
   const userId = params.id;
 
-  const { user } = await getUser(userId);
-  const { userThreads } = await UserThreads(userId, 1);
-  const { comments } = await UserComments(userId, 1);
-  const { Reposts } = await getUserReposts(userId, 1);
+  // const { user } = await getUser(userId);
+  // const { userThreads } = await UserThreads(userId, 1);
+  // const { comments } = await UserComments(userId, 1);
+  // const { Reposts } = await getUserReposts(userId, 1);
+
+
+  const [user, setUser] = useState<User | null>(null);
+  const [userThreads, setUserThreads] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [reposts, setReposts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const { user } = await getUser(userId);
+      const { userThreads } = await UserThreads(userId, 1);
+      const { comments } = await UserComments(userId, 1);
+      const { Reposts } = await getUserReposts(userId, 1);
+      setUser(user);
+      setUserThreads(userThreads);
+      setComments(comments);
+      setReposts(Reposts);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [userId]);
+
+  
 
   return (
     <div>
       <div className="md:h-[10vh]"></div>
       <MainCardWrapper>
-        <ProfileCard
+        {loading ? <ProfileSkeleton />:<ProfileCard
           authorId={userId.toString()}
           name={user?.name || ""}
           bio={user?.bio || ""}
           username={user?.username || ""}
           followers={user?.followers || []}
           following={user?.following || []}
-          avatarUrl={user.avatarUrl}
-        />
+          avatarUrl={user?.avatarUrl}
+        />}
 
         <div className="flex mt-4 w-full">
           <Tabs defaultValue="Threads" className="w-full">
@@ -74,8 +104,8 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
 
                 {/* User reposts */}
                 {tab.name === "Reposts" ? (
-                  Reposts && Reposts.length > 0 ? (
-                    <LoadReposts reposts={Reposts} userId={userId} />
+                  reposts && reposts.length > 0 ? (
+                    <LoadReposts reposts={reposts} userId={userId} />
                   ) : (
                     <div className="text-center py-3 text-slate-700">{tab.defaultValue}</div>
                   )

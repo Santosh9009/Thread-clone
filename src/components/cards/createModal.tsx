@@ -24,6 +24,7 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
   const [images, setImages] = useState<{ url: string; publicId: string }[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const session = useSession();
+  const [isClosing, setIsClosing] = useState(false); 
 
   // Resize textarea based on content
   useEffect(() => {
@@ -49,7 +50,7 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
         });
         setContent("");
         setImages([]); 
-        onClose(); 
+        handleCloseModal(); 
       } else {
         toast({
           title: "Failed",
@@ -66,22 +67,30 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
     }
   };
 
-  if (!isOpen) return null;
-
   const handleUploadSuccess = (uploadedFile: { secure_url: string; public_id: string }) => {
     const newImage = {
       url: uploadedFile.secure_url,
       publicId: uploadedFile.public_id,
     };
-    setImages([newImage]); // Only allow one image
+    setImages([newImage]); 
     console.log('Uploaded image:', newImage);
   };
 
   const handleClickOutside = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).classList.contains("modal-background")) {
-      onClose();
+      handleCloseModal(); 
     }
   };
+
+  const handleCloseModal = () => {
+    setIsClosing(true); 
+    setTimeout(() => {
+      onClose(); 
+      setIsClosing(false); 
+    }, 300); 
+  };
+
+  if (!isOpen && !isClosing) return null;
 
   return (
     <div
@@ -89,7 +98,9 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
       onClick={handleClickOutside}
     >
       <div
-        className="bg-[#181818] max-h-screen overflow-y-auto rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232] flex flex-col h-screen md:h-auto"
+        className={`bg-[#181818] max-h-screen overflow-y-auto rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232] flex flex-col h-screen md:h-auto transition-transform duration-300 ease-out ${
+          isClosing ? "slide-out-down" : "slide-in-up"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6 flex items-center justify-between flex-shrink-0">
@@ -105,7 +116,7 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
           </div>
           {/* Close Button */}
           <button
-            onClick={onClose}
+            onClick={handleCloseModal}
             className="text-gray-400 hover:text-white"
           >
             <X/>
@@ -129,9 +140,9 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
           <button
             onClick={handleCreateThread}
             className={`${
-              content || images.length > 0 ? "text-white" : "text-slate-600"
+              !content && images.length < 1 ? "text-slate-600" : "text-white"
             } px-4 py-1 rounded-lg border-[.05rem] border-[#323232]`}
-            disabled={!content && images.length === 0} // Disable if no content or images
+            disabled={!content && images.length < 1} 
           >
             Post
           </button>
@@ -140,3 +151,4 @@ export const CreateThreadCard: React.FC<CreateThreadCardProps> = ({
     </div>
   );
 };
+

@@ -18,7 +18,7 @@ interface Props {
   following: any[];
   authorId: string;
   bio: string;
-  avatarUrl: string;
+  avatarUrl?: string;
 }
 
 const MAX_BIO_LENGTH = 50;

@@ -25,7 +25,6 @@ const Bottombar: React.FC = () => {
   }, [pathname]);
 
   const handleButtonClick = (e: any) => {
-    // Show alert if user is not logged in when trying to access certain links
     if (!session?.user) {
       e.preventDefault();
       setIsAlertOpen(true);
@@ -45,37 +44,41 @@ const Bottombar: React.FC = () => {
 
   return (
     <>
-    <div className="fixed bottom-0 w-screen md:hidden backdrop-blur-md">
-      <div className="w-full h-[.05rem] bg-gray-600"></div>
-      <div className="flex justify-center items-center space-x-8 my-3">
-        {navLinks.map((link, index) => (
-          <div key={index} className="flex items-center">
-            <Link
-              href={link.route === "/profile" ? `${link.route}/${session?.user?._id}` : link.route}
-              passHref
-            >
-              <button
-                onClick={(e) => handleButtonClick(e)}
-                className={`${
-                  activeLink === link.route
-                    ? "bg-[#5051F9]"
-                    : "hover:bg-[#2b2b2b]"
-                } p-2 rounded-md flex items-center justify-center`}
+      <div className="fixed bottom-0 w-screen md:hidden backdrop-blur-md">
+        <div className="w-full h-[.05rem] bg-gray-600"></div>
+        <div className="flex justify-center items-center space-x-8 my-3">
+          {navLinks.map((link, index) => (
+            <div key={index} className="flex items-center">
+              <Link
+                href={
+                  link.route === "/profile"
+                    ? `${link.route}/${session?.user?._id}`
+                    : link.route
+                }
+                passHref
               >
-                <div className="w-5">{link.img()}</div>
-              </button>
-            </Link>
-          </div>
-        ))}
-        <button
-          onClick={()=>handleOpen()}
-          className="p-2 rounded-md flex items-center justify-center"
-        >
-          <Plus className="w-7 text-white" />
-        </button>
+                <button
+                  onClick={(e) => handleButtonClick(e)}
+                  className={`${
+                    activeLink === link.route
+                      ? "bg-[#5051F9] scale-110"
+                      : "hover:bg-[#2b2b2b]"
+                  } p-2 rounded-md flex items-center justify-center transition-all duration-300 ease-in-out`}
+                >
+                  <div className="w-5">{link.img()}</div>
+                </button>
+              </Link>
+            </div>
+          ))}
+          <button
+            onClick={() => handleOpen()}
+            className="p-2 rounded-md flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-105"
+          >
+            <Plus className="w-7 text-white" />
+          </button>
+        </div>
       </div>
-    </div>
-    {isModalOpen && (
+      {isModalOpen && (
         <CreateThreadCard
           isOpen={isModalOpen}
           onClose={handleCloseModal}
@@ -83,8 +86,7 @@ const Bottombar: React.FC = () => {
           authorId={session?.user?._id}
         />
       )}
-    {isAlertOpen && <Alert onClose={handleCloseAlert} />}
-
+      {isAlertOpen && <Alert onClose={handleCloseAlert} />}
     </>
   );
 };

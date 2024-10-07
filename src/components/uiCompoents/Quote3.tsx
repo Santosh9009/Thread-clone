@@ -25,6 +25,8 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
   const [images, setImages] = useState<{ url: string; publicId: string }[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const MAX_PHOTOS_DISPLAY = 4;
+  const [isClosing, setIsClosing] = useState(false); 
+
 
   useEffect(() => {
     if (isOpen) {
@@ -54,7 +56,7 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
         });
         setContent("");
         setImages([]);
-        onClose(); // Close the modal after posting
+        handleCloseModal();
       } else {
         throw new Error("Failed to post quote");
       }
@@ -79,13 +81,22 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
     console.log("Uploaded image:", newImage);
   };
 
-  if (!isOpen) return null;
 
   const handleClickOutside = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).classList.contains("modal-background")) {
-      onClose();
+      handleCloseModal();
     }
   };
+
+  const handleCloseModal = () => {
+    setIsClosing(true); 
+    setTimeout(() => {
+      onClose(); 
+      setIsClosing(false); 
+    }, 400); 
+  };
+
+  if (!isOpen && !isClosing) return null;
 
   return (
     <div
@@ -93,7 +104,7 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
       onClick={handleClickOutside}
     >
       <div
-        className="bg-[#181818] h-full md:h-auto max-h-screen rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232] flex flex-col overflow-hidden"
+        className={`bg-[#181818] h-full md:h-auto max-h-screen rounded-lg shadow-lg w-full max-w-lg border-[0.01rem] border-[#323232] flex flex-col overflow-hidden duration-300 ease-in-out ${isClosing?'slide-out-down':'slide-in-up'}`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -109,7 +120,7 @@ const AddQuote: React.FC<AddQuoteProps> = ({ isOpen, onClose, id }) => {
               @{session.data?.user.username}
             </h2>
           </div>
-          <button onClick={onClose} className="text-white">
+          <button onClick={handleCloseModal} className="text-white">
             <X />
           </button>
         </div>

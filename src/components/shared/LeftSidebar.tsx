@@ -14,9 +14,12 @@ export default function LeftSidebar() {
   const userId = session?.user._id;
 
   useEffect(() => {
-    // Update the active link based on the current pathname
-    const currentLink = navLinks.find(link =>(pathname.includes(link.route) && link.route.length > 1) ||pathname === link.route);
-    setActiveLink(currentLink?currentLink.route:"");
+    const currentLink = navLinks.find(
+      (link) =>
+        (pathname.includes(link.route) && link.route.length > 1) ||
+        pathname === link.route
+    );
+    setActiveLink(currentLink ? currentLink.route : "");
   }, [pathname]);
 
   return (
@@ -30,11 +33,17 @@ export default function LeftSidebar() {
 
             <div className="flex flex-col space-y-10">
               {navLinks.map((link, index) => (
-                <Link href={link.route==="/profile"?link.route+"/"+userId:link.route} key={index} passHref>
+                <Link
+                  href={link.route === "/profile" ? link.route + "/" + userId : link.route}
+                  key={index}
+                  passHref
+                >
                   <button
                     className={`${
-                      activeLink === link.route ? "bg-[#5051F9]" : "hover:bg-[#2b2b2b]"
-                    } p-3 rounded-md w-full text-left transition-colors duration-200 ease-in-out`}
+                      activeLink === link.route
+                        ? "bg-[#5051F9] scale-110" // Add scale effect on active
+                        : "hover:bg-[#2b2b2b]"
+                    } p-3 rounded-md w-full text-left transition-all duration-300 ease-in-out`}
                   >
                     <div className="w-5">{link.img()}</div>
                   </button>
