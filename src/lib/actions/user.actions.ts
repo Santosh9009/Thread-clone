@@ -121,7 +121,51 @@ export async function filterUser({
   }
 }
 
-const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
+// export const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
+//   try {
+//     const user = await UserModel.findById(userId);
+//     const targetUser = await UserModel.findById(targetUserId);
+
+//     if (!user || !targetUser) {
+//       throw new Error("User not found");
+//     }
+
+//     const isFollowing = user.following.some((id) => id.equals(targetUserId));
+
+//     if (isFollowing) {
+//       // Unfollow the user
+//       user.following = user.following.filter((id) => !id.equals(targetUserId));
+//       targetUser.followers = targetUser.followers.filter(
+//         (id) => !id.equals(userId)
+//       );
+//     } else {
+//       // Follow the user
+//       user.following.push(targetUserId);
+//       targetUser.followers.push(userId);
+//     }
+
+//     await user.save();
+//     await targetUser.save();
+
+//     if(!isFollowing){
+//       await logActivity({actorId:userId,type:'follow',recipientId:targetUserId});
+//     }
+
+//     const pathToRevalidate = `/profile/${userId}`;
+//     revalidatePath(pathToRevalidate);
+
+//     return { isFollowing }
+//   } catch (error: any) {
+//     return { error: error.message };
+//   }
+// };
+
+
+
+
+// get user followers
+
+export const followUser = async (userId: ObjectId, targetUserId: ObjectId) => {
   try {
     const user = await UserModel.findById(userId);
     const targetUser = await UserModel.findById(targetUserId);
@@ -130,40 +174,66 @@ const toggleFollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
       throw new Error("User not found");
     }
 
-    const isFollowing = user.following.some((id) => id.equals(targetUserId));
-
-    if (isFollowing) {
-      // Unfollow the user
-      user.following = user.following.filter((id) => !id.equals(targetUserId));
-      targetUser.followers = targetUser.followers.filter(
-        (id) => !id.equals(userId)
-      );
-    } else {
-      // Follow the user
-      user.following.push(targetUserId);
-      targetUser.followers.push(userId);
+    // Check if already following
+    const isAlreadyFollowing = user.following.some((id) => id.equals(targetUserId));
+    if (isAlreadyFollowing) {
+      throw new Error("Already following this user");
     }
+
+    // Add to following list of user and to followers list of targetUser
+    user.following.push(targetUserId);
+    targetUser.followers.push(userId);
 
     await user.save();
     await targetUser.save();
 
-    if(!isFollowing){
-      await logActivity({actorId:userId,type:'follow',recipientId:targetUserId});
-    }
+    // Log follow activity
+    await logActivity({ actorId: userId, type: 'follow', recipientId: targetUserId });
 
+    // Revalidate the profile path
     const pathToRevalidate = `/profile/${userId}`;
     revalidatePath(pathToRevalidate);
 
-    return { isFollowing }
+    return { success: true, message: "Followed successfully" };
   } catch (error: any) {
     return { error: error.message };
   }
 };
 
-export default toggleFollowUser;
+
+export const unfollowUser = async (userId: ObjectId, targetUserId: ObjectId) => {
+  try {
+    const user = await UserModel.findById(userId);
+    const targetUser = await UserModel.findById(targetUserId);
+
+    if (!user || !targetUser) {
+      throw new Error("User not found");
+    }
+
+    // Check if user is following
+    const isFollowing = user.following.some((id) => id.equals(targetUserId));
+    if (!isFollowing) {
+      throw new Error("Not following this user");
+    }
+
+    // Remove from following list of user and from followers list of targetUser
+    user.following = user.following.filter((id) => !id.equals(targetUserId));
+    targetUser.followers = targetUser.followers.filter((id) => !id.equals(userId));
+
+    await user.save();
+    await targetUser.save();
+
+    // Revalidate the profile path
+    const pathToRevalidate = `/profile/${userId}`;
+    revalidatePath(pathToRevalidate);
+
+    return { success: true, message: "Unfollowed successfully" };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
 
 
-// get user followers
 export async function getFollowers(userId: string, pageNumber: number) {
   dbConnect();
 

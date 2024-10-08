@@ -9,9 +9,10 @@ interface props {
   name: string;
   followers: any[];
   userId: string | unknown;
+  avatarUrl?:string,
 }
 
-export default function UserCard({ username, name, followers, userId }: props) {
+export default function UserCard({ username, name, followers, userId,avatarUrl }: props) {
   return (
     <>
       <div
@@ -19,7 +20,9 @@ export default function UserCard({ username, name, followers, userId }: props) {
         // onClick={handleProfileClick}
       >
         <Image
-          src={DummyUserIcon}
+          height={20}
+          width={20}
+          src={avatarUrl || DummyUserIcon}
           alt="User Avatar"
           className="w-10 h-10 rounded-full"
         />

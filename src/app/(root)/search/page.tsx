@@ -73,6 +73,7 @@ export default function Search() {
             {clients.length > 0
               ? clients.map((user, index) => (
                   <UserCard
+                  avatarUrl={user.avatarUrl}
                     key={index}
                     name={user.name}
                     username={user.username}

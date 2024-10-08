@@ -1,9 +1,7 @@
-import toggleFollowUser from "@/lib/actions/user.actions";
-import { ObjectId } from "mongodb";
+import { followUser, unfollowUser } from "@/lib/actions/user.actions";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import { error } from "console";
 
 const Follow = ({
   followers,
@@ -21,23 +19,48 @@ const Follow = ({
     setIsfollowed(!!result);
   }, [userId]);
 
-  const handlefollow = async () => {
-    toggleFollowUser(userId, targetId)
-      .then((res) => {
-        if (res.isFollowing) {
-          setIsfollowed(!isfollowed);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  // const handlefollow = async () => {
+  //   setIsfollowed(!isfollowed)
+  //   toggleFollowUser(userId, targetId)
+  //     .then((res) => {
+  //       if (res.isFollowing) {
+  //         setIsfollowed(!isfollowed);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+
+  const handleFollow = async () => {
+    // Optimistically toggle UI state
+    const newFollowState = !isfollowed;
+    setIsfollowed(newFollowState);
+  
+    try {
+      if (newFollowState) {
+        // Call follow API
+        const res = await followUser(userId, targetId);
+        if (!res.success) throw new Error(res.error); // Handle backend error
+      } else {
+        // Call unfollow API
+        const res = await unfollowUser(userId, targetId);
+        if (!res.success) throw new Error(res.error); // Handle backend error
+      }
+    } catch (error) {
+      // Revert UI in case of an error
+      console.log(error);
+      setIsfollowed(!newFollowState);
+    }
   };
+  
 
   return (
     <div className="w-full">
       <Button
         disabled={targetId === userId }
-        onClick={handlefollow}
+        onClick={handleFollow}
         className="w-full dark rounded-xl p-5"
       >
         {isfollowed ? "Following" : "Follow"}
