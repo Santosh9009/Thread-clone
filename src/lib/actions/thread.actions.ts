@@ -220,7 +220,7 @@ export async function getThread(threadId: ObjectId) {
         model: ThreadModel,
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
-          { path: "author", model: UserModel, select: "username" },
+          { path: "author", model: UserModel, select: "_id username" },
           {
             path: "originalThread",
             model: ThreadModel,
@@ -322,17 +322,18 @@ export async function UserComments(userId: ObjectId, pageNumber: number) {
       parentId: { $nin: [null] },
       author: userId,
     })
+    . populate({path:'author',model:UserModel,select:'username _id avatarUrl'})
       .populate({
         path: "parentId",
         model: ThreadModel,
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
-          { path: "author", model: UserModel, select: "username avatarUrl" },
+          { path: "author", model: UserModel, select: "username _id avatarUrl" },
           {
             path: "originalThread",
             model: ThreadModel,
             populate: [
-              { path: "author", model: UserModel, select: "username avatarUrl" },
+              { path: "author", model: UserModel, select: "username _id avatarUrl" },
             ],
           },
         ],
@@ -581,17 +582,17 @@ export async function getUserReposts(userId: ObjectId, pageNumber: number) {
       author: userId,
       isRepost: true,
     })
-      .populate("author", "_id username avatarUrl")
+      .populate({path:"author",model:UserModel,select: "_id username avatarUrl"})
       .populate({
         path: "originalThread",
         model: ThreadModel,
         populate: [
           { path: "reposts", model: ThreadModel, select: "author" },
-          { path: "author", model: UserModel, select: "_id username" },
+          { path: "author", model: UserModel, select: "_id username avatarUrl" },
           {
             path: "originalThread",
             model: ThreadModel,
-            populate: { path: "author", model: UserModel, select: "username" },
+            populate: { path: "author", model: UserModel, select: "username avatarUrl" },
           },
         ],
       })

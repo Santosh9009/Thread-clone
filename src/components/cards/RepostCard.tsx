@@ -28,7 +28,7 @@ interface ThreadCardProps {
 }
 
 const RepostCard: React.FC<ThreadCardProps> = ({
-  br = true,
+  br,
   id,
   author,
   authorId,
@@ -45,6 +45,7 @@ const RepostCard: React.FC<ThreadCardProps> = ({
   photos,
 }) => {
   const router = useRouter();
+  const border = br===false ? br : true;
   const quote = originalThread.originalThread;
   const MAX_PHOTOS_DISPLAY = 3;
 
@@ -55,20 +56,20 @@ const RepostCard: React.FC<ThreadCardProps> = ({
   }
 
   function handleUsernameClick(e: any) {
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     router.push(`/profile/${repostauthor._id}`);
   }
 
   function originalThreadclick(e: any) {
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     router.push(`/thread/${quote._id}`);
   }
 
   function quoteusernameclick(e: any) {
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     router.push(`/profile/${quote.author._id}`);
   }
 
@@ -91,7 +92,7 @@ const RepostCard: React.FC<ThreadCardProps> = ({
       <div
         onClick={() => router.push(`/thread/${id}`)}
         className={`bg-[#181818] overflow-hidden ${
-          br ? "border-b-[.05rem] border-[#323232]" : ""
+          border ? "border-b-[.05rem] border-[#323232]" : ""
         } py-4 px-8`}
       >
         <div className="flex items-start">

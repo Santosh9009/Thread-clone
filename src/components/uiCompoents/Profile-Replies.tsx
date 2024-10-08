@@ -28,6 +28,7 @@ export default function ProfileReplies({
       setLoading(true);
       try {
         const res = await UserComments(userId, page);
+        console.log(res.comments)
         if (res.comments.length > 0) {
           setData((prevData) => [...prevData, ...res.comments]);
           setPage((prevPage) => prevPage + 1);
@@ -57,9 +58,10 @@ export default function ProfileReplies({
                 // Differentiating the parent thread types
                 thread.parentId.isQuote && thread.parentId.originalThread ? (
                   <QuoteCard
+                    br={false}
                     id={thread.parentId._id}
                     authorId={thread.parentId.author._id}
-                    author={thread.parentId.author.username}
+                    author={thread.parentId.author}
                     contentSnippet={thread.parentId.content}
                     commentsCount={thread.parentId.comments.length}
                     upvotes={thread.parentId.likes}
@@ -72,9 +74,10 @@ export default function ProfileReplies({
                   />
                 ) : thread.parentId.isRepost && thread.parentId.originalThread ? (
                   <RepostCard
+                    br={false}
                     id={thread.parentId._id}
                     authorId={thread.parentId.originalThread?.author._id}
-                    author={thread.parentId.originalThread.author.username}
+                    author={thread.parentId.originalThread.author}
                     contentSnippet={thread.parentId.originalThread?.content}
                     commentsCount={thread.parentId.originalThread.comments.length}
                     upvotes={thread.parentId.originalThread?.likes}
@@ -88,9 +91,10 @@ export default function ProfileReplies({
                   />
                 ) : (
                   <ThreadCard
+                    br={false}
                     id={thread.parentId._id}
                     authorId={thread.parentId.author._id}
-                    author={thread.parentId.author.username}
+                    author={thread.parentId.author}
                     contentSnippet={thread.parentId.content}
                     commentsCount={thread.parentId.comments.length}
                     upvotes={thread.parentId.likes}
@@ -110,7 +114,7 @@ export default function ProfileReplies({
             {/* Reply Thread Card */}
             <ThreadCard
               id={thread._id}
-              author={user}
+              author={thread.author}
               authorId={thread.author._id}
               contentSnippet={thread.content}
               commentsCount={thread.comments.length}

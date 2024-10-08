@@ -68,7 +68,7 @@ async function Profile({ params }: { params: { id: ObjectId } }) {
                 {tab.name === "Replies" ? (
                   comments && comments.length > 0 ? (
                     <ProfileReplies
-                      user={user?.username || ""}
+                      user={user}
                       comments={comments}
                       userId={userId}
                     />

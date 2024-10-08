@@ -49,13 +49,13 @@ export default function LoadReposts({
           key={index}
           id={thread._id}
           authorId={thread.originalThread?.author._id}
-          author={thread.originalThread?.author?.username}
+          author={thread.originalThread?.author}
           contentSnippet={thread.originalThread?.content}
           commentsCount={thread.originalThread?.comments.length}
           upvotes={thread.originalThread?.likes}
           reposts={thread.originalThread?.reposts}
           timestamp={thread.originalThread?.createdAt}
-          repostauthor={thread.author.username}
+          repostauthor={thread.author}
           isRepost={thread.isRepost}
           repostTime={thread.createdAt}
           originalThread={thread.originalThread}

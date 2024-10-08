@@ -26,7 +26,7 @@ interface ThreadCardProps {
 }
 
 const QuoteCard: React.FC<ThreadCardProps> = ({
-  br = true,
+  br,
   id,
   author,
   authorId,
@@ -41,6 +41,7 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
   photos,
 }) => {
   const router = useRouter();
+  const border = br===false?br:true;
 
   const MAX_PHOTOS_DISPLAY = 4;
 
@@ -51,14 +52,15 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
   }
 
   function handleclick2(e: any) {
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(originalThread.author._id)
     router.push(`/profile/${originalThread.author._id}`);
   }
 
   function originalThreadclick(e: any) {
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     router.push(`/thread/${originalThread.id}`);
   }
 
@@ -67,7 +69,7 @@ const QuoteCard: React.FC<ThreadCardProps> = ({
     <div
       onClick={() => router.push(`/thread/${id}`)}
       className={`bg-[#181818] overflow-hidden ${
-        br ? "border-b-[.05rem] border-[#323232]" : ""
+        border ? "border-b-[.05rem] border-[#323232]" : ""
       } py-4 px-8`}
     >
       <div className="flex items-start">
